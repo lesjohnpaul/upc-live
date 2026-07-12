@@ -54,6 +54,10 @@ export type SliderActivity = {
   phase: 'before' | 'after';
   /** links the before/after pair */
   pairId: string;
+  min: number;
+  max: number;
+  minLabel?: string;
+  maxLabel?: string;
 };
 
 export type QnaActivity = {

@@ -1,11 +1,14 @@
 import type { Role, QuizActivity } from './types';
 import { ROLES } from './types';
 
+/**
+ * DB invariant: `responses` has UNIQUE(participant_id, activity_id) — clients
+ * upsert — so aggregators assume at most one row per participant per activity.
+ */
 export type ResponseRow = {
   participant_id: string;
   activity_id: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  payload: any;
+  payload: unknown;
 };
 
 export type ParticipantRow = {

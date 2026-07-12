@@ -152,6 +152,11 @@ describe('quizLeaderboard', () => {
     ]);
   });
 
+  it('ignores non-numeric answer elements', () => {
+    const responses = [row('p1', { answers: ['0', 1, 1] })]; // '0' !== 0 → only q2, q3 score
+    expect(quizLeaderboard(responses, quiz)).toEqual([{ participant_id: 'p1', score: 2 }]);
+  });
+
   it('handles malformed payloads and short answer arrays', () => {
     const responses = [
       row('p1', { answers: [0] }), // 1

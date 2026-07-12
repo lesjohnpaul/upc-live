@@ -1,4 +1,5 @@
 import type { Role } from './types';
+import { ROLES } from './types';
 
 export type StoredParticipant = {
   id: string;
@@ -12,7 +13,14 @@ export function getStoredParticipant(sessionCode: string): StoredParticipant | n
   if (typeof window === 'undefined') return null;
   try {
     const raw = window.localStorage.getItem(key(sessionCode));
-    return raw ? (JSON.parse(raw) as StoredParticipant) : null;
+    if (!raw) return null;
+    const parsed: unknown = JSON.parse(raw);
+    if (typeof parsed !== 'object' || parsed === null) return null;
+    const { id, role, nickname } = parsed as Record<string, unknown>;
+    if (typeof id !== 'string') return null;
+    if (nickname !== undefined && typeof nickname !== 'string') return null;
+    if (typeof role !== 'string' || !(role in ROLES)) return null;
+    return { id, role: role as Role, nickname: nickname as string };
   } catch {
     return null;
   }
