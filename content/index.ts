@@ -1,5 +1,17 @@
 import type { Activity, Module, SliderActivity } from '@/lib/types';
-import { demoModule } from './demo';
+import { module1 as upc1m1 } from './upc1/module-1';
+import { module2 as upc1m2 } from './upc1/module-2';
+import { module3 as upc1m3 } from './upc1/module-3';
+import { module4 as upc1m4 } from './upc1/module-4';
+import { module5 as upc1m5 } from './upc1/module-5';
+import { module6 as upc1m6 } from './upc1/module-6';
+import { module7 as upc1m7 } from './upc1/module-7';
+import { module1 as upc2m1 } from './upc2/module-1';
+import { module2 as upc2m2 } from './upc2/module-2';
+import { module3 as upc2m3 } from './upc2/module-3';
+import { module4 as upc2m4 } from './upc2/module-4';
+import { module5 as upc2m5 } from './upc2/module-5';
+import { module6 as upc2m6 } from './upc2/module-6';
 
 export type Day = {
   day: 1 | 2;
@@ -13,13 +25,13 @@ export const days: Day[] = [
     day: 1,
     course: 'upc1',
     courseTitle: 'Introduction to Prevention Science',
-    modules: [demoModule],
+    modules: [upc1m1, upc1m2, upc1m3, upc1m4, upc1m5, upc1m6, upc1m7],
   },
   {
     day: 2,
     course: 'upc2',
     courseTitle: 'Physiology and Pharmacology for Prevention Specialists',
-    modules: [],
+    modules: [upc2m1, upc2m2, upc2m3, upc2m4, upc2m5, upc2m6],
   },
 ];
 
