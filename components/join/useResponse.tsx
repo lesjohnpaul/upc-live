@@ -132,7 +132,7 @@ export function useResponse(
 export function SendStatus({
   state,
   retry,
-  sentLabel = 'Naitala ang sagot mo ✓',
+  sentLabel = 'Answer recorded ✓',
 }: {
   state: SendState;
   retry: () => void;
@@ -146,7 +146,7 @@ export function SendStatus({
         onClick={retry}
         className="mx-auto flex min-h-11 items-center gap-2 rounded-full bg-gold-400/20 px-5 font-sans text-sm font-bold text-gold-600 ring-1 ring-gold-500/50"
       >
-        Hindi naipadala — i-tap para subukan muli
+        Not sent — tap to try again
       </button>
     );
   return (
@@ -156,7 +156,7 @@ export function SendStatus({
         state === 'sending' ? 'text-forest-500' : 'text-forest-600'
       }`}
     >
-      {state === 'sending' ? 'Ipinapadala…' : sentLabel}
+      {state === 'sending' ? 'Sending…' : sentLabel}
     </p>
   );
 }

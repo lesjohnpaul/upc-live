@@ -5,7 +5,7 @@ export const ACTIVITY_META: Record<Activity['kind'], { icon: string; label: stri
   poll: { icon: '📊', label: 'Poll' },
   wordcloud: { icon: '💬', label: 'Word Cloud' },
   slider: { icon: '🎚️', label: 'Slider' },
-  dragdrop: { icon: '🧩', label: 'Pagbubukod' },
+  dragdrop: { icon: '🧩', label: 'Sorting' },
   quiz: { icon: '⚡', label: 'Quiz' },
   qna: { icon: '❓', label: 'Q&A' },
 };

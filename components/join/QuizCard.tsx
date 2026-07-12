@@ -81,7 +81,7 @@ export default function QuizCard({ activity, sessionId, participantId, tick }: P
           ⚡
         </p>
         <p role="status" className="font-sans text-sm font-bold text-forest-600">
-          Nilo-load ang quiz…
+          Loading quiz…
         </p>
       </div>
     );
@@ -93,9 +93,9 @@ export default function QuizCard({ activity, sessionId, participantId, tick }: P
         <h2 className="font-display text-2xl font-medium">{activity.title}</h2>
         <p className="font-display text-4xl">🎉</p>
         <p className="font-sans text-lg font-bold text-forest-800">
-          Tapos na! Antayin ang resulta sa screen.
+          All done! Watch the screen for the results.
         </p>
-        <SendStatus state={state} retry={retry} sentLabel="Naitala ang mga sagot mo ✓" />
+        <SendStatus state={state} retry={retry} sentLabel="Answers recorded ✓" />
       </div>
     );
   }
@@ -118,7 +118,7 @@ export default function QuizCard({ activity, sessionId, participantId, tick }: P
       </div>
 
       {/* progress dots */}
-      <div className="flex gap-2" aria-label={`Tanong ${current + 1} ng ${total}`}>
+      <div className="flex gap-2" aria-label={`Question ${current + 1} of ${total}`}>
         {activity.questions.map((_, i) => (
           <span
             key={i}
@@ -147,7 +147,7 @@ export default function QuizCard({ activity, sessionId, participantId, tick }: P
           </button>
         ))}
       </div>
-      <SendStatus state={state} retry={retry} sentLabel="Naitala ✓" />
+      <SendStatus state={state} retry={retry} sentLabel="Recorded ✓" />
     </div>
   );
 }

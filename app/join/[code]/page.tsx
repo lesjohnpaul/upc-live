@@ -1,7 +1,7 @@
 import { getSupabase } from '@/lib/supabase';
 import JoinFlow from '@/components/join/JoinFlow';
 
-export const metadata = { title: 'Sali — UPC Live' };
+export const metadata = { title: 'Join — UPC Live' };
 export const dynamic = 'force-dynamic';
 
 type SessionRow = {
@@ -35,18 +35,18 @@ export default async function JoinPage({ params }: { params: Promise<{ code: str
           UPC Live
         </p>
         <h1 className="mt-5 font-display text-3xl font-medium">
-          {fetchFailed ? 'May problema sa koneksyon' : `Hindi mahanap ang session “${raw}”`}
+          {fetchFailed ? 'Connection problem' : `Session “${raw}” not found`}
         </h1>
         <p className="mt-3 max-w-xs font-sans text-forest-700">
           {fetchFailed
-            ? 'Hindi kami makakonekta ngayon. Subukan muli sa ilang sandali.'
-            : 'Pakisuri ang QR code o ang link na binigay ng facilitator, at subukan muli.'}
+            ? 'We can’t connect right now. Try again in a moment.'
+            : 'Check the QR code or the link from your facilitator, then try again.'}
         </p>
         <a
           href=""
           className="mt-8 flex min-h-14 items-center rounded-full bg-gold-400/15 px-7 font-sans font-bold text-gold-600 ring-1 ring-gold-400/40"
         >
-          Subukan muli
+          Try again
         </a>
       </main>
     );

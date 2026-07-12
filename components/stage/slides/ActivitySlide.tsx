@@ -28,7 +28,7 @@ export default function ActivitySlide({
     return (
       <SlideShell>
         <Kicker>
-          Aktibidad · {meta.label}
+          Activity · {meta.label}
           <span className="inline-flex items-center gap-2 text-gold-300">
             <span aria-hidden className="size-2.5 animate-breathe rounded-full bg-gold-400" />
             LIVE
@@ -46,7 +46,7 @@ export default function ActivitySlide({
 
   return (
     <SlideShell>
-      <Kicker>Aktibidad · {meta.label}</Kicker>
+      <Kicker>Activity · {meta.label}</Kicker>
       <div className="mt-10 w-full max-w-4xl rounded-3xl bg-forest-900/80 p-[clamp(2rem,4vw,4rem)] text-center shadow-2xl shadow-forest-950/60 ring-1 ring-cream-100/10">
         <span aria-hidden className="text-[clamp(3rem,6vw,5rem)]">
           {meta.icon}
@@ -70,8 +70,8 @@ export default function ActivitySlide({
         <p className="mt-10 inline-flex items-center gap-3 rounded-full bg-cream-100/8 px-6 py-3 font-sans text-[clamp(0.95rem,1.4vw,1.3rem)] font-bold tracking-wide text-cream-100/70 ring-1 ring-cream-100/15">
           <span aria-hidden>{live?.offline ? '📡' : '🔒'}</span>
           {live?.offline
-            ? 'Offline — hindi makuha ang live na resulta'
-            : 'Naka-lock — buksan sa dashboard'}
+            ? 'Offline — live results unavailable'
+            : 'Locked — open from the dashboard'}
         </p>
       </div>
     </SlideShell>

@@ -133,7 +133,7 @@ function Onboarding({
         <h1 className="mt-3 font-display text-3xl font-medium leading-snug">
           {courseTitle ?? `Day ${session.day}`}
         </h1>
-        <p className="mt-2 font-sans text-forest-700">Maligayang pagdating! Ano ang papel mo?</p>
+        <p className="mt-2 font-sans text-forest-700">Welcome! What is your role?</p>
       </header>
 
       <div className="flex flex-col gap-3">
@@ -154,21 +154,21 @@ function Onboarding({
 
       <label className="flex flex-col gap-2">
         <span className="font-sans text-sm font-bold text-forest-700">
-          Palayaw <span className="font-normal text-forest-500">(opsyonal)</span>
+          Nickname <span className="font-normal text-forest-500">(optional)</span>
         </span>
         <input
           type="text"
           value={nickname}
           onChange={(e) => setNickname(e.target.value)}
           maxLength={20}
-          placeholder="Hal. Teacher Ana"
+          placeholder="e.g. Teacher Ana"
           className="min-h-14 rounded-2xl bg-cream-100 px-5 font-sans text-base text-forest-950 ring-1 ring-cream-300 placeholder:text-cream-500 focus:outline-none focus:ring-2 focus:ring-gold-500"
         />
       </label>
 
       {failed && (
         <p className="text-center font-sans text-sm font-bold text-clay-600">
-          Hindi nakapasok — mahina yata ang signal. Subukan muli.
+          Couldn’t join — the signal may be weak. Try again.
         </p>
       )}
 
@@ -178,8 +178,10 @@ function Onboarding({
         disabled={!role || busy}
         className="min-h-14 rounded-full bg-forest-700 px-6 font-sans text-lg font-bold text-cream-50 disabled:opacity-40"
       >
-        {busy ? 'Sumasali…' : failed ? 'Subukan muli' : 'Sali na!'}
+        {/* "Sali na!" is the one deliberate Taglish accent we keep */}
+        {busy ? 'Joining…' : failed ? 'Try again' : 'Sali na!'}
       </button>
+      <p className="-mt-3 text-center font-sans text-sm text-forest-600">Join the session</p>
     </main>
   );
 }
@@ -234,7 +236,7 @@ export default function JoinFlow({ session }: { session: Session }) {
     <main className="mx-auto flex min-h-svh w-full max-w-md flex-col px-5 pb-10">
       {!connected && (
         <div className="sticky top-0 z-10 -mx-5 bg-gold-400/25 px-5 py-2 text-center font-sans text-sm font-bold text-gold-600">
-          Kumokonekta muli…
+          Reconnecting…
         </div>
       )}
 

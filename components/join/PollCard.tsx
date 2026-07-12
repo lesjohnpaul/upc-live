@@ -51,7 +51,7 @@ export default function PollCard({ activity, sessionId, participantId, tick }: P
       <SendStatus state={state} retry={retry} />
       {state === 'sent' && (
         <p className="-mt-4 text-center font-sans text-sm text-forest-500">
-          Puwede mo pang palitan ang sagot habang bukas ang aktibidad.
+          You can still change your answer while the activity is open.
         </p>
       )}
     </div>

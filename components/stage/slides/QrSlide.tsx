@@ -46,7 +46,7 @@ export default function QrSlide({
         </>
       )}
       <p className="mt-3 font-sans text-[clamp(0.95rem,1.4vw,1.3rem)] opacity-70">
-        I-scan ang QR code o i-type ang link sa inyong phone
+        Scan the QR code or type the link on your phone
       </p>
     </SlideShell>
   );

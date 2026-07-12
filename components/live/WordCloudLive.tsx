@@ -24,7 +24,7 @@ export default function WordCloudLive({
     <div className="w-full max-w-5xl text-center">
       {words.length === 0 ? (
         <p className="py-16 font-sans text-[clamp(1.1rem,1.8vw,1.6rem)] text-cream-100/50">
-          Hinihintay ang mga unang salita…
+          Waiting for the first words…
         </p>
       ) : (
         <ul className="flex flex-wrap items-center justify-center gap-x-[1.2em] gap-y-2 py-6">

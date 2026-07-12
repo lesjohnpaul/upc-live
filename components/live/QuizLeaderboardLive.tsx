@@ -35,7 +35,7 @@ export default function QuizLeaderboardLive({
     <div className="w-full max-w-3xl text-center">
       {board.length === 0 ? (
         <p className="py-16 font-sans text-[clamp(1.1rem,1.8vw,1.6rem)] text-cream-100/50">
-          Hinihintay ang mga unang sagot…
+          Waiting for the first answers…
         </p>
       ) : (
         <ol className="space-y-2.5 text-left">

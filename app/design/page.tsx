@@ -37,7 +37,7 @@ export default function DesignPage() {
 
       {/* ---- STAGE: recap slide ---- */}
       <SlideShell>
-        <Kicker className="self-start">Bago tayo magpatuloy</Kicker>
+        <Kicker className="self-start">Before we continue</Kicker>
         <RecapCard
           className="mt-10"
           title="Module 3, in one breath"
@@ -58,8 +58,8 @@ export default function DesignPage() {
             <div className="mt-8 flex justify-start">
               <AnalogyCard
                 title="Ang Bakod at ang Ambulansya"
-                front="Isang barangay ang may bangin. Saan mo ilalagay ang pera: sa bakod sa taas, o sa ambulansya sa ibaba?"
-                back="Ang treatment ay ambulansya — kailangan, pero huli na. Ang prevention ay bakod: mas mura, mas maaga, mas marami ang naililigtas. Ang eskwela ang pinakamatibay na bakod natin."
+                front="A barangay has a cliff. Where do you put the money: a fence at the top, or an ambulance at the bottom?"
+                back="Treatment is the ambulance — necessary, but late. Prevention is the fence: cheaper, earlier, and it saves more people. The school is our sturdiest fence."
               />
             </div>
           </div>
@@ -77,8 +77,8 @@ export default function DesignPage() {
             <Kicker className="justify-start">Light-surface statement</Kicker>
             <div className="mt-8 [&_blockquote]:text-[clamp(1.8rem,3.5vw,3.5rem)]">
               <BigStatement>
-                Malamig sa mata, mabigat sa puso — light surfaces stay warm,
-                never clinical.
+                Easy on the eyes, heavy on the heart — light surfaces stay
+                warm, never clinical.
               </BigStatement>
             </div>
           </div>

@@ -1,10 +1,10 @@
 'use client';
 
-/** "23/40 nakasagot" — live answered-vs-joined counter under every result. */
+/** "23/40 answered" — live answered-vs-joined counter under every result. */
 export default function AnswerCount({
   answered,
   total,
-  label = 'nakasagot',
+  label = 'answered',
 }: {
   answered: number;
   total: number;

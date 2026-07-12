@@ -85,7 +85,7 @@ export default function StageDeck({ code, modules }: { code: string; modules: Mo
     return (
       <main className="flex min-h-svh flex-col items-center justify-center bg-forest-950 px-8 text-center text-cream-100">
         <p className="font-display text-[clamp(1.8rem,3.5vw,3rem)] font-medium">
-          Wala pang laman ang session na ito.
+          This session has no content yet.
         </p>
         <p className="mt-4 font-sans opacity-70">Session {code}</p>
       </main>

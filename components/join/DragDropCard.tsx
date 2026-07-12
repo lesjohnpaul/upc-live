@@ -53,7 +53,7 @@ export default function DragDropCard({ activity, sessionId, participantId, tick 
     <div className="flex flex-col gap-5">
       <h2 className="font-display text-2xl font-medium leading-snug">{activity.prompt}</h2>
       <p className="font-sans text-sm text-forest-600">
-        I-tap ang item, tapos i-tap ang tamang kahon. I-tap ang nailagay para ibalik.
+        Tap an item, then tap the right box. Tap a placed item to put it back.
       </p>
 
       {/* tray */}
@@ -84,7 +84,7 @@ export default function DragDropCard({ activity, sessionId, participantId, tick 
             key={b}
             role="button"
             tabIndex={selected !== null ? 0 : -1}
-            aria-label={`Ilagay sa ${bucket}`}
+            aria-label={`Place in ${bucket}`}
             onClick={() => place(b)}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
@@ -106,7 +106,7 @@ export default function DragDropCard({ activity, sessionId, participantId, tick 
                 <button
                   key={i}
                   type="button"
-                  aria-label={`Ibalik: ${item.label}`}
+                  aria-label={`Put back: ${item.label}`}
                   onClick={(e) => {
                     e.stopPropagation();
                     // while an item is selected, the whole bucket (chips
@@ -132,9 +132,9 @@ export default function DragDropCard({ activity, sessionId, participantId, tick 
       >
         {allPlaced
           ? state === 'sent'
-            ? 'Ipadala muli'
-            : 'Ipadala'
-          : `Maglagay pa ng ${trayItems.length}`}
+            ? 'Resend'
+            : 'Send'
+          : `Place ${trayItems.length} more`}
       </button>
       <SendStatus state={state} retry={retry} />
     </div>

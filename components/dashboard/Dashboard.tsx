@@ -33,8 +33,8 @@ export default function Dashboard({ code }: { code: string }) {
   if (!day) {
     return (
       <main className="flex min-h-svh flex-col items-center justify-center bg-cream-50 px-8 text-center">
-        <h1 className="font-display text-3xl font-medium">Hindi mahanap ang session “{code}”</h1>
-        <p className="mt-3 font-sans text-forest-700">Ang mga available na session ay UPC1 at UPC2.</p>
+        <h1 className="font-display text-3xl font-medium">Session “{code}” not found</h1>
+        <p className="mt-3 font-sans text-forest-700">Available sessions are UPC1 and UPC2.</p>
       </main>
     );
   }
@@ -64,7 +64,7 @@ export default function Dashboard({ code }: { code: string }) {
 
   const resetActivity = (activity: Activity) => {
     const n = countFor(activity.id);
-    if (!window.confirm(`Burahin ang ${n} sagot para sa "${activityPrompt(activity)}"?`)) return;
+    if (!window.confirm(`Delete ${n} answer(s) for "${activityPrompt(activity)}"?`)) return;
     void run(async () => {
       if (!session) return;
       const supabase = getSupabase();
@@ -86,11 +86,11 @@ export default function Dashboard({ code }: { code: string }) {
   const resetSession = () => {
     if (
       !window.confirm(
-        `Burahin ang LAHAT sa session ${code}: ${rows.length} sagot at ${participantCount} kalahok (kailangan nilang mag-scan muli)?`,
+        `Delete EVERYTHING in session ${code}: ${rows.length} answers and ${participantCount} participants (they will need to re-scan the QR code)?`,
       )
     )
       return;
-    if (!window.confirm('Sigurado ka? Hindi na ito maibabalik.')) return;
+    if (!window.confirm('Are you sure? This cannot be undone.')) return;
     void run(async () => {
       if (!session) return;
       const supabase = getSupabase();
@@ -152,11 +152,11 @@ export default function Dashboard({ code }: { code: string }) {
           <h1 className="mt-1 font-display text-3xl font-medium">Session {code}</h1>
         </div>
         <p className="rounded-full bg-forest-100 px-4 py-2 font-sans text-sm font-bold text-forest-800">
-          {participantCount} kalahok
+          {participantCount} participants
         </p>
         {(offline || !session) && (
           <p className="rounded-full bg-gold-400/25 px-4 py-2 font-sans text-sm font-bold text-gold-600">
-            {offline ? 'Kumokonekta muli…' : 'Kumukuha ng session…'}
+            {offline ? 'Reconnecting…' : 'Loading session…'}
           </p>
         )}
         <nav className="ml-auto flex gap-3 font-sans text-sm font-bold">
@@ -179,7 +179,7 @@ export default function Dashboard({ code }: { code: string }) {
             onClick={exportCsv}
             className="rounded-full bg-cream-200 px-5 py-2.5 text-forest-800 ring-1 ring-cream-300"
           >
-            I-export ang CSV
+            Export CSV
           </button>
         </nav>
       </header>
@@ -214,8 +214,8 @@ export default function Dashboard({ code }: { code: string }) {
                         <p className="truncate font-sans font-bold">{activityPrompt(activity)}</p>
                         <p className="font-sans text-xs text-forest-600">
                           {ACTIVITY_META[activity.kind].label}
-                          {isOpen && <span className="ml-2 font-bold text-gold-600">● BUKAS</span>}
-                          <span className="ml-2">{countFor(activity.id)} sagot</span>
+                          {isOpen && <span className="ml-2 font-bold text-gold-600">● OPEN</span>}
+                          <span className="ml-2">{countFor(activity.id)} answered</span>
                         </p>
                       </div>
                       <div className="flex gap-2 font-sans text-sm font-bold">
@@ -226,7 +226,7 @@ export default function Dashboard({ code }: { code: string }) {
                             onClick={() => void setActivity(null)}
                             className="rounded-full bg-forest-700 px-4 py-2 text-cream-50 disabled:opacity-40"
                           >
-                            I-lock
+                            Lock
                           </button>
                         ) : (
                           <button
@@ -235,7 +235,7 @@ export default function Dashboard({ code }: { code: string }) {
                             onClick={() => void setActivity(activity.id)}
                             className="rounded-full bg-gold-500 px-4 py-2 text-forest-950 disabled:opacity-40"
                           >
-                            Buksan
+                            Open
                           </button>
                         )}
                         <button
@@ -262,7 +262,7 @@ export default function Dashboard({ code }: { code: string }) {
           Q&A Triage
         </h2>
         {qnaRows.length === 0 ? (
-          <p className="mt-3 font-sans text-sm text-forest-600">Wala pang tanong.</p>
+          <p className="mt-3 font-sans text-sm text-forest-600">No questions yet.</p>
         ) : (
           <ul className="mt-3 space-y-2">
             {qnaRows.map((r) => {
@@ -294,7 +294,7 @@ export default function Dashboard({ code }: { code: string }) {
                         : 'bg-forest-700 text-cream-50'
                     }`}
                   >
-                    {answered ? 'Ibalik sa wall' : 'Sagot na ✓'}
+                    {answered ? 'Back to wall' : 'Answered ✓'}
                   </button>
                 </li>
               );
@@ -309,8 +309,8 @@ export default function Dashboard({ code }: { code: string }) {
           Danger Zone
         </h2>
         <p className="mt-2 font-sans text-sm text-forest-700">
-          I-lock ang session at burahin ang lahat ng sagot pati ang listahan ng kalahok — para sa
-          bagong takbo. Kailangang mag-scan muli ng lahat.
+          Lock the session and delete every answer plus the participant list — for a fresh run.
+          Everyone will need to re-scan the QR code.
         </p>
         <button
           type="button"
@@ -318,7 +318,7 @@ export default function Dashboard({ code }: { code: string }) {
           onClick={resetSession}
           className="mt-3 rounded-full bg-clay-600 px-5 py-2.5 font-sans text-sm font-bold text-cream-50 disabled:opacity-40"
         >
-          I-reset ang session
+          Reset session
         </button>
       </section>
     </main>

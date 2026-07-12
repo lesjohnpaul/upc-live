@@ -58,7 +58,7 @@ export default function PollResults({
                 </span>
                 <span className="flex-1">{option}</span>
                 {isCorrect && (
-                  <span aria-label="Tamang sagot" className="font-bold text-gold-300">
+                  <span aria-label="Correct answer" className="font-bold text-gold-300">
                     ✓
                   </span>
                 )}
@@ -79,7 +79,7 @@ export default function PollResults({
           aria-pressed={showRoles}
           className="rounded-full bg-cream-100/10 px-4 py-1.5 font-sans text-sm font-bold text-cream-100/80 ring-1 ring-cream-100/20 transition-colors hover:bg-cream-100/15"
         >
-          {showRoles ? 'Itago ang papel' : 'Ayon sa papel'}
+          {showRoles ? 'Hide roles' : 'By role'}
         </button>
       </div>
 

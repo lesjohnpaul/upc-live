@@ -35,7 +35,7 @@ export default function QnAWall({
     <div className="w-full max-w-6xl text-center">
       {visible.length === 0 ? (
         <p className="py-16 font-sans text-[clamp(1.1rem,1.8vw,1.6rem)] text-cream-100/50">
-          Hinihintay ang mga tanong…
+          Waiting for questions…
         </p>
       ) : (
         <div className="columns-1 gap-5 text-left md:columns-2 xl:columns-3 [&>*]:mb-5">
@@ -67,7 +67,7 @@ export default function QnAWall({
         </div>
       )}
       <div className="mt-4 flex justify-center">
-        <AnswerCount answered={rows.length} total={participantCount} label="nagtanong" />
+        <AnswerCount answered={rows.length} total={participantCount} label="asked" />
       </div>
     </div>
   );

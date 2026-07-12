@@ -18,7 +18,7 @@ function DragDropLive({ activity, sessionId }: { activity: DragDropActivity; ses
     <div className="flex flex-col items-center gap-4 py-10 text-center">
       <span aria-hidden className="text-[clamp(2.5rem,5vw,4rem)]">🧩</span>
       <p className="font-sans text-[clamp(1.1rem,1.8vw,1.6rem)] text-cream-100/70">
-        Nagbubukod pa ang mga kalahok…
+        Participants are still sorting…
       </p>
       <AnswerCount answered={rows.length} total={participantCount} />
     </div>
@@ -47,7 +47,7 @@ export default function LiveResults({
               aria-pressed={reveal}
               className="mt-5 rounded-full bg-gold-400/15 px-5 py-2 font-sans text-sm font-bold text-gold-300 ring-1 ring-gold-400/40 transition-colors hover:bg-gold-400/25"
             >
-              {reveal ? 'Itago ang sagot' : 'Ipakita ang tamang sagot'}
+              {reveal ? 'Hide answer' : 'Show correct answer'}
             </button>
           )}
         </>

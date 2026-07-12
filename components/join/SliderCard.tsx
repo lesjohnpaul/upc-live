@@ -61,7 +61,7 @@ export default function SliderCard({ activity, sessionId, participantId, tick }:
         }}
         className="min-h-14 rounded-full bg-forest-700 px-6 font-sans text-base font-bold text-cream-50"
       >
-        {state === 'sent' ? 'Ipadala muli' : 'Ipadala'}
+        {state === 'sent' ? 'Resend' : 'Send'}
       </button>
       <SendStatus state={state} retry={retry} />
     </div>

@@ -40,7 +40,7 @@ export default function WordCloudCard({ activity, sessionId, participantId, tick
           setWord(e.target.value);
         }}
         maxLength={30}
-        placeholder="Isang salita…"
+        placeholder="One word…"
         enterKeyHint="send"
         className="min-h-14 rounded-2xl bg-cream-100 px-5 font-sans text-lg text-forest-950 ring-1 ring-cream-300 placeholder:text-cream-500 focus:outline-none focus:ring-2 focus:ring-gold-500"
       />
@@ -49,9 +49,9 @@ export default function WordCloudCard({ activity, sessionId, participantId, tick
         disabled={!word.trim()}
         className="min-h-14 rounded-full bg-forest-700 px-6 font-sans text-base font-bold text-cream-50 disabled:opacity-40"
       >
-        {state === 'sent' ? 'Ipadala muli' : 'Ipadala'}
+        {state === 'sent' ? 'Resend' : 'Send'}
       </button>
-      <SendStatus state={state} retry={retry} sentLabel="Naitala ang salita mo ✓" />
+      <SendStatus state={state} retry={retry} sentLabel="Word recorded ✓" />
     </form>
   );
 }

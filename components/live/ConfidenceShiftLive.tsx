@@ -40,8 +40,8 @@ export function SliderAverageLive({
     <div className="flex w-full flex-col items-center text-center">
       <BigNumber value={liveAvg(rows)} gold />
       <p className="mt-4 font-sans text-[clamp(1rem,1.5vw,1.3rem)] text-cream-100/60">
-        {activity.min} = {activity.minLabel ?? 'pinakamababa'} · {activity.max} ={' '}
-        {activity.maxLabel ?? 'pinakamataas'}
+        {activity.min} = {activity.minLabel ?? 'lowest'} · {activity.max} ={' '}
+        {activity.maxLabel ?? 'highest'}
       </p>
       <div className="mt-4">
         <AnswerCount answered={rows.length} total={participantCount} />
@@ -73,7 +73,7 @@ export default function ConfidenceShiftLive({
       <div className="flex items-center justify-center gap-[clamp(2rem,5vw,5rem)]">
         <div>
           <p className="font-sans text-sm font-bold uppercase tracking-[0.24em] text-cream-100/50">
-            Bago
+            Before
           </p>
           <BigNumber value={shift.beforeAvg} />
           <AnswerCount answered={beforeLive.rows.length} total={beforeLive.participantCount} />
@@ -90,7 +90,7 @@ export default function ConfidenceShiftLive({
 
         <div>
           <p className="font-sans text-sm font-bold uppercase tracking-[0.24em] text-gold-300/80">
-            Pagkatapos
+            After
           </p>
           <BigNumber value={shift.afterAvg} gold />
           <AnswerCount answered={afterLive.rows.length} total={afterLive.participantCount} />

@@ -10,7 +10,7 @@ export default function StageChooserPage() {
         UPC Live · Stage
       </p>
       <h1 className="mt-6 font-display text-[clamp(2rem,4vw,3.5rem)] font-medium">
-        Pumili ng session
+        Choose a session
       </h1>
       <div className="mt-10 flex flex-col gap-4 sm:flex-row">
         {days.map((day) => (

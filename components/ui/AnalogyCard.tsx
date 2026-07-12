@@ -58,7 +58,7 @@ export default function AnalogyCard({
           />
           <span className="flex flex-1 flex-col justify-end p-8">
             <span className="font-sans text-xs font-bold uppercase tracking-[0.25em] text-gold-400">
-              Analohiya
+              Analogy
             </span>
             <span className="mt-2 font-display text-[clamp(1.6rem,2.6vw,2.4rem)] font-medium leading-tight [text-wrap:balance]">
               {title}
@@ -74,7 +74,7 @@ export default function AnalogyCard({
           className={`${face} justify-center bg-cream-100 p-8 text-forest-950 shadow-2xl shadow-forest-950/60 [transform:rotateY(180deg)]`}
         >
           <span className="font-sans text-xs font-bold uppercase tracking-[0.25em] text-gold-600">
-            Ang punto
+            The point
           </span>
           <span className="mt-4 font-display text-[clamp(1.2rem,1.9vw,1.7rem)] leading-snug [text-wrap:balance]">
             {back}

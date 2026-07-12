@@ -16,16 +16,16 @@ export default async function StagePage({ params }: { params: Promise<{ code: st
           UPC Live
         </p>
         <h1 className="mt-6 font-display text-[clamp(2rem,4vw,3.5rem)] font-medium">
-          Hindi mahanap ang session &ldquo;{raw}&rdquo;
+          Session &ldquo;{raw}&rdquo; not found
         </h1>
         <p className="mt-4 max-w-md font-sans opacity-70">
-          Pakisuri ang session code. Ang mga available na session ay UPC1 (Day 1) at UPC2 (Day 2).
+          Check the session code. Available sessions are UPC1 (Day 1) and UPC2 (Day 2).
         </p>
         <Link
           href="/stage"
           className="mt-8 rounded-full bg-gold-400/15 px-6 py-3 font-sans font-bold text-gold-300 ring-1 ring-gold-400/40"
         >
-          Pumili ng session
+          Choose a session
         </Link>
       </main>
     );

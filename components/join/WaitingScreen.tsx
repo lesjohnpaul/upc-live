@@ -15,7 +15,7 @@ export default function WaitingScreen({ participant }: { participant: StoredPart
       </div>
 
       <p className="max-w-xs font-display text-2xl font-medium leading-snug text-forest-900">
-        Hintayin ang susunod na aktibidad…
+        Waiting for the next activity…
       </p>
 
       <div className="flex flex-col items-center gap-2">
