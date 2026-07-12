@@ -15,9 +15,17 @@ type Props = {
  * One question at a time. Each answer is upserted immediately (partial
  * `{answers}` array) so a disconnect mid-quiz keeps earlier answers.
  * Timeout records -1 and auto-advances.
+ *
+ * Nothing renders / no countdown arms until hydration `settled` — otherwise a
+ * reload mid-quiz starts at Q1 and the first send clobbers real answers.
  */
 export default function QuizCard({ activity, sessionId, participantId, tick }: Props) {
-  const { remote, state, send, retry } = useResponse(sessionId, participantId, activity.id, tick);
+  const { remote, settled, state, send, retry } = useResponse(
+    sessionId,
+    participantId,
+    activity.id,
+    tick,
+  );
   const [answers, setAnswers] = useState<number[]>([]);
   const touched = useRef(false);
   const total = activity.questions.length;
@@ -31,36 +39,53 @@ export default function QuizCard({ activity, sessionId, participantId, tick }: P
     }
   }, [remote, total]);
 
-  const answer = (choice: number) => {
+  // forIndex pins the answer to the question it was given for — a stale
+  // timeout or double-tap for an already-answered question is dropped
+  const answer = (choice: number, forIndex: number) => {
     touched.current = true;
     setAnswers((prev) => {
-      if (prev.length >= total) return prev;
+      if (prev.length !== forIndex || prev.length >= total) return prev;
       const next = [...prev, choice];
-      void send({ answers: next });
+      send({ answers: next });
       return next;
     });
   };
 
-  // per-question countdown
+  // per-question countdown — armed only once hydration settled
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
   useEffect(() => {
     const secs = question?.seconds;
     // eslint-disable-next-line react-hooks/set-state-in-effect -- timer restarts per question
     setTimeLeft(secs ?? null);
-    if (!secs) return;
+    if (!settled || !secs) return;
     const started = Date.now();
+    const forIndex = current;
     const id = setInterval(() => {
       const left = secs - Math.floor((Date.now() - started) / 1000);
       if (left <= 0) {
         clearInterval(id);
-        answer(-1);
+        answer(-1, forIndex);
       } else {
         setTimeLeft(left);
       }
     }, 1000);
     return () => clearInterval(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- restart only when the question changes
-  }, [current, question?.seconds]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- restart only when the question changes or hydration settles
+  }, [current, question?.seconds, settled]);
+
+  if (!settled) {
+    return (
+      <div className="flex flex-col items-center gap-5 text-center">
+        <h2 className="font-display text-2xl font-medium">{activity.title}</h2>
+        <p className="animate-breathe font-display text-4xl" aria-hidden>
+          ⚡
+        </p>
+        <p role="status" className="font-sans text-sm font-bold text-forest-600">
+          Nilo-load ang quiz…
+        </p>
+      </div>
+    );
+  }
 
   if (!question) {
     return (
@@ -115,7 +140,7 @@ export default function QuizCard({ activity, sessionId, participantId, tick }: P
           <button
             key={i}
             type="button"
-            onClick={() => answer(i)}
+            onClick={() => answer(i, current)}
             className="min-h-14 rounded-2xl bg-cream-100 px-5 py-3 text-left font-sans text-base font-bold text-forest-900 ring-1 ring-cream-300 transition-colors active:bg-cream-200"
           >
             {opt}
