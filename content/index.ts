@@ -1,4 +1,5 @@
 import type { Module } from '@/lib/types';
+import { demoModule } from './demo';
 
 export type Day = {
   day: 1 | 2;
@@ -12,7 +13,7 @@ export const days: Day[] = [
     day: 1,
     course: 'upc1',
     courseTitle: 'Introduction to Prevention Science',
-    modules: [],
+    modules: [demoModule],
   },
   {
     day: 2,
