@@ -8,13 +8,6 @@ export const demoModule: Module = {
   title: 'Demo: Ang Agham ng Pag-iwas',
   tagline: 'Isang paglalakbay sa prevention science — bago tayo tumalon sa mga totoong module.',
   minutes: 25,
-  analogy: {
-    title: 'Ang Bakod at ang Ambulansya',
-    front:
-      'Isang barangay ang may bangin. Naglagay sila ng bakod sa taas — o ambulansya sa ibaba. Alin ang pipiliin ninyo?',
-    back:
-      'Ang prevention science ay ang paggawa ng bakod bago pa mahulog ang tao. Ang treatment ang ambulansya. Kailangan pareho — pero mas mura ang bakod, at mas marami itong naililigtas.',
-  },
   slides: [
     {
       kind: 'title',

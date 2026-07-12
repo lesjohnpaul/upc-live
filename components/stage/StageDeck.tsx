@@ -30,6 +30,7 @@ export default function StageDeck({ code, modules }: { code: string; modules: Mo
     const match = window.location.hash.match(/^#m(\d+)-s(\d+)$/);
     if (!match) return;
     const i = flat.findIndex((f) => f.m === Number(match[1]) && f.s === Number(match[2]));
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- SSR boundary: location.hash only exists on the client, restore must run post-mount
     if (i >= 0) setIndex(i);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -50,6 +51,7 @@ export default function StageDeck({ code, modules }: { code: string; modules: Mo
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return; // don't hijack browser shortcuts (Cmd+N etc.)
       if (e.key === 'n' || e.key === 'N') {
         setOverlayOpen((o) => !o);
         return;

@@ -34,17 +34,19 @@ export default function StatBlock({
 }: StatBlockProps) {
   const reduce = useReducedMotion();
   const [prefix, target, decimals, suffix] = splitValue(value);
-  const [n, setN] = useState(reduce || target === null ? target : 0);
+  // always start at 0 so server and client first paint agree (useReducedMotion
+  // is unknowable during SSR); the effect snaps to the final value instantly
+  // for reduced-motion users via a zero-duration animation.
+  const [n, setN] = useState(target === null ? null : 0);
 
   useEffect(() => {
-    if (reduce || target === null) return;
+    if (target === null) return;
     const controls = animate(0, target, {
-      duration: 1.6,
+      duration: reduce ? 0 : 1.6,
       ease: [0.22, 1, 0.36, 1],
       onUpdate: (v) => setN(parseFloat(v.toFixed(decimals))),
     });
     return () => controls.stop();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [target, decimals, reduce]);
 
   return (

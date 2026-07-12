@@ -17,6 +17,7 @@ export default function QrSlide({
   const [joinUrl, setJoinUrl] = useState<string | null>(null);
   useEffect(() => {
     const base = process.env.NEXT_PUBLIC_BASE_URL || window.location.origin;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- SSR boundary: window.location.origin fallback only exists on the client
     setJoinUrl(`${base.replace(/\/$/, '')}/join/${code}`);
   }, [code]);
 
@@ -28,21 +29,21 @@ export default function QrSlide({
           {slide.title}
         </h2>
       )}
-      <div className="mt-10 rounded-3xl bg-cream-50 p-[3vmin] shadow-2xl shadow-forest-950/60">
-        {joinUrl && (
-          <QRCodeSVG
-            value={joinUrl}
-            className="size-[min(40vh,40vw)]"
-            bgColor="transparent"
-            fgColor="oklch(0.185 0.032 165)"
-            level="M"
-          />
-        )}
-      </div>
       {joinUrl && (
-        <p className="mt-8 font-sans text-[clamp(1.3rem,2.4vw,2.4rem)] font-bold tracking-wide text-gold-300">
-          {joinUrl.replace(/^https?:\/\//, '')}
-        </p>
+        <>
+          <div className="mt-10 rounded-3xl bg-cream-50 p-[3vmin] shadow-2xl shadow-forest-950/60">
+            <QRCodeSVG
+              value={joinUrl}
+              className="size-[min(40vh,40vw)]"
+              bgColor="transparent"
+              fgColor="oklch(0.185 0.032 165)"
+              level="M"
+            />
+          </div>
+          <p className="mt-8 font-sans text-[clamp(1.3rem,2.4vw,2.4rem)] font-bold tracking-wide text-gold-300">
+            {joinUrl.replace(/^https?:\/\//, '')}
+          </p>
+        </>
       )}
       <p className="mt-3 font-sans text-[clamp(0.95rem,1.4vw,1.3rem)] opacity-70">
         I-scan ang QR code o i-type ang link sa inyong phone
