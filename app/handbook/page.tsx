@@ -82,7 +82,9 @@ export default function HandbookPage() {
                 /dashboard/UPC1
               </Link>
               . The control panel: open, lock, and reset activities; triage Q&amp;A; export the
-              CSV. Runs on a second device — the tech buddy&apos;s laptop or a phone.
+              CSV. Runs on a second device — the tech buddy&apos;s laptop or a phone. It now asks
+              for the <strong>facilitator password</strong> before it opens (once per device — the
+              session is remembered for two weeks).
             </li>
             <li>
               <strong>Facilitator&apos;s Guide</strong> —{' '}
