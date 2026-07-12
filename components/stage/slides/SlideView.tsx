@@ -2,6 +2,7 @@
 
 import type { Slide } from '@/lib/types';
 import type { StageLive } from '@/components/live/useSessionState';
+import WelcomeSlide from './WelcomeSlide';
 import TitleSlide from './TitleSlide';
 import StatementSlide from './StatementSlide';
 import StatSlide from './StatSlide';
@@ -23,6 +24,8 @@ export default function SlideView({
   live?: StageLive;
 }) {
   switch (slide.kind) {
+    case 'welcome':
+      return <WelcomeSlide slide={slide} />;
     case 'title':
       return <TitleSlide slide={slide} />;
     case 'statement':

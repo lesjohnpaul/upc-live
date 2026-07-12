@@ -83,6 +83,7 @@ type SlideBase = {
 
 export type Slide = SlideBase &
   (
+    | { kind: 'welcome'; dayLabel: string; title: string; subtitle?: string; presenter: string } // animated walk-in/hold screen
     | { kind: 'title'; kicker?: string; title: string; subtitle?: string; image?: string }
     | { kind: 'statement'; text: string; attribution?: string; image?: string }
     | { kind: 'stat'; value: string; label: string; context?: string; source?: string }

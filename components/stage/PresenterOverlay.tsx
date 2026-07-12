@@ -72,6 +72,7 @@ export default function PresenterOverlay({
           Module {moduleIndex + 1}/{moduleCount}
         </span>
         <span className="opacity-60">{code}</span>
+        <span className="opacity-40 normal-case tracking-normal">Q qr · T timer</span>
         <button
           type="button"
           onClick={onClose}

@@ -17,6 +17,14 @@ export const module1: Module = {
   images: ['/images/upc2-m1/concept.jpg'],
   slides: [
     {
+      kind: 'welcome',
+      dayLabel: 'Day 2',
+      title: 'Physiology & Pharmacology',
+      subtitle: 'UPC Division Echo Training',
+      presenter: 'with Jessica C. Oliver',
+      note: 'Walk-in / hold screen for Day 2. Leave this up while the room refills — it animates on its own. Advance to the title slide when you are ready to begin.',
+    },
+    {
       kind: 'title',
       kicker: 'Day 2 · Opening',
       title: 'Welcome Back: Why the Brain Matters',

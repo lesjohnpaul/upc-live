@@ -140,6 +140,24 @@ export default function HandbookPage() {
             the current slide&apos;s note — participants only see the projected slide.
           </p>
           <p>
+            Join QR anytime: <Kbd>Q</Kbd> opens a big join-QR overlay on top of any slide — the
+            latecomer rescue. <Kbd>Esc</Kbd> or a click anywhere closes it.
+          </p>
+          <p>
+            Countdown timer: <Kbd>T</Kbd> opens the activity timer — pick a 3 / 5 / 10 / 15 minute
+            preset or type custom minutes and hit Start. Closing the modal does <em>not</em> stop
+            the timer: a small MM:SS chip stays bottom-left; press <Kbd>T</Kbd> (or click the chip)
+            to reopen. At zero the stage flashes gold with “Time!”.
+          </p>
+          <p>
+            Activity slides also show two faint pills bottom-right — <strong>⊞ QR</strong> and{' '}
+            <strong>◷ Timer</strong> — the same two tools for mouse-only moments.
+          </p>
+          <p>
+            Each day opens on an animated <strong>welcome hold screen</strong>. Leave it up while
+            participants walk in, then advance as usual when you are ready to start.
+          </p>
+          <p>
             No keyboard handy? Click the <strong>left or right edge</strong> of the screen (outer
             20%) to go back or forward.
           </p>

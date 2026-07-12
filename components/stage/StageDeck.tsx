@@ -7,6 +7,8 @@ import { useSessionState, type StageLive } from '@/components/live/useSessionSta
 import ProgressRail from '@/components/ui/ProgressRail';
 import SlideView from './slides/SlideView';
 import PresenterOverlay from './PresenterOverlay';
+import QrOverlay from './QrOverlay';
+import CountdownModal from './CountdownModal';
 
 type FlatSlide = { m: number; s: number };
 
@@ -25,6 +27,8 @@ export default function StageDeck({ code, modules }: { code: string; modules: Mo
   const [index, setIndex] = useState(0);
   const [dir, setDir] = useState(1);
   const [overlayOpen, setOverlayOpen] = useState(false);
+  const [qrOpen, setQrOpen] = useState(false);
+  const [timerOpen, setTimerOpen] = useState(false);
   const { session, offline } = useSessionState(code);
   const live: StageLive = {
     sessionId: session?.id ?? null,
@@ -59,12 +63,29 @@ export default function StageDeck({ code, modules }: { code: string; modules: Mo
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return; // don't hijack browser shortcuts (Cmd+N etc.)
+      // ignore shortcuts while typing (e.g. the timer's custom-minutes input)
+      if (
+        e.target instanceof HTMLElement &&
+        (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')
+      )
+        return;
       if (e.key === 'n' || e.key === 'N') {
         setOverlayOpen((o) => !o);
         return;
       }
+      if (e.key === 'q' || e.key === 'Q') {
+        setQrOpen((o) => !o);
+        return;
+      }
+      if (e.key === 't' || e.key === 'T') {
+        setTimerOpen((o) => !o);
+        return;
+      }
       if (e.key === 'Escape') {
-        setOverlayOpen(false);
+        // close topmost layer first: QR → timer modal → presenter overlay
+        if (qrOpen) setQrOpen(false);
+        else if (timerOpen) setTimerOpen(false);
+        else setOverlayOpen(false);
         return;
       }
       // let Space/Enter activate focused buttons (e.g. analogy card flip)
@@ -79,7 +100,7 @@ export default function StageDeck({ code, modules }: { code: string; modules: Mo
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [go]);
+  }, [go, qrOpen, timerOpen]);
 
   if (flat.length === 0) {
     return (
@@ -131,6 +152,35 @@ export default function StageDeck({ code, modules }: { code: string; modules: Mo
           slides: m.slides.length,
         }))}
         current={index}
+      />
+
+      {/* latecomer-rescue pills — activity slides only, above the click zones */}
+      {slide.kind === 'activity' && (
+        <div className="absolute bottom-5 right-5 z-40 flex gap-2">
+          <button
+            type="button"
+            onClick={() => setQrOpen(true)}
+            className="rounded-full bg-cream-50/10 px-4 py-1.5 font-sans text-sm text-cream-200/60 ring-1 ring-cream-100/10 backdrop-blur-sm transition hover:bg-cream-50/20 hover:text-cream-100 focus-visible:bg-cream-50/20 focus-visible:text-cream-100 focus-visible:outline-none focus-visible:ring-gold-400/60"
+          >
+            ⊞ QR
+          </button>
+          <button
+            type="button"
+            onClick={() => setTimerOpen(true)}
+            className="rounded-full bg-cream-50/10 px-4 py-1.5 font-sans text-sm text-cream-200/60 ring-1 ring-cream-100/10 backdrop-blur-sm transition hover:bg-cream-50/20 hover:text-cream-100 focus-visible:bg-cream-50/20 focus-visible:text-cream-100 focus-visible:outline-none focus-visible:ring-gold-400/60"
+          >
+            ◷ Timer
+          </button>
+        </div>
+      )}
+
+      {qrOpen && <QrOverlay code={code} onClose={() => setQrOpen(false)} />}
+
+      {/* always mounted so the countdown survives modal close */}
+      <CountdownModal
+        open={timerOpen}
+        onClose={() => setTimerOpen(false)}
+        onOpen={() => setTimerOpen(true)}
       />
 
       {overlayOpen && (

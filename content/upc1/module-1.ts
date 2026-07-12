@@ -18,6 +18,14 @@ export const module1: Module = {
   images: ['/images/upc1-m1/hero.jpg', '/images/upc1-m1/concept.jpg'],
   slides: [
     {
+      kind: 'welcome',
+      dayLabel: 'Day 1',
+      title: 'Introduction to Prevention Science',
+      subtitle: 'UPC Division Echo Training',
+      presenter: 'with Jessica C. Oliver',
+      note: 'Walk-in / hold screen. Leave this up while participants arrive and settle — it animates on its own. Advance to the title slide when you are ready to begin.',
+    },
+    {
       kind: 'title',
       kicker: 'Day 1 · Opening',
       title: "Welcome & Why We're Here",

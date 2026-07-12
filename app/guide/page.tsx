@@ -14,6 +14,7 @@ export const metadata: Metadata = {
 /* ---------- content helpers (all static, generated from content/) ---------- */
 
 const SLIDE_KIND: Record<Slide['kind'], string> = {
+  welcome: 'Welcome',
   title: 'Title',
   statement: 'Statement',
   stat: 'Stat',
@@ -27,6 +28,7 @@ const SLIDE_KIND: Record<Slide['kind'], string> = {
 
 function slideText(slide: Slide): string {
   switch (slide.kind) {
+    case 'welcome':
     case 'title':
       return slide.title;
     case 'statement':

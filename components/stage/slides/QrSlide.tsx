@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import type { Slide } from '@/lib/types';
 import SlideShell from '@/components/ui/SlideShell';
 import Kicker from '@/components/ui/Kicker';
+import { useJoinUrl } from '@/lib/joinUrl';
 
 export default function QrSlide({
   slide,
@@ -13,13 +13,7 @@ export default function QrSlide({
   slide: Extract<Slide, { kind: 'qr' }>;
   code: string;
 }) {
-  /* resolved on the client to avoid SSR/env mismatch */
-  const [joinUrl, setJoinUrl] = useState<string | null>(null);
-  useEffect(() => {
-    const base = process.env.NEXT_PUBLIC_BASE_URL || window.location.origin;
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- SSR boundary: window.location.origin fallback only exists on the client
-    setJoinUrl(`${base.replace(/\/$/, '')}/join/${code}`);
-  }, [code]);
+  const joinUrl = useJoinUrl(code);
 
   return (
     <SlideShell>
