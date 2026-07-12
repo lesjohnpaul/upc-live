@@ -144,10 +144,10 @@ export const module6: Module = {
     {
       kind: 'activity',
       activity: {
-        id: 'upc2-m6-confidence-after',
+        id: 'upc2-m6-readiness',
         kind: 'slider',
-        phase: 'after',
-        pairId: 'upc2-confidence',
+        phase: 'before',
+        pairId: 'upc2-m6-readiness',
         prompt: 'After two full days: how ready are you to lead prevention work in your school?',
         min: 1,
         max: 10,
