@@ -1,6 +1,7 @@
 'use client';
 
 import type { Slide } from '@/lib/types';
+import type { StageLive } from '@/components/live/useSessionState';
 import TitleSlide from './TitleSlide';
 import StatementSlide from './StatementSlide';
 import StatSlide from './StatSlide';
@@ -12,7 +13,15 @@ import ActivitySlide from './ActivitySlide';
 import QrSlide from './QrSlide';
 
 /** Dispatches a slide to its per-kind renderer. */
-export default function SlideView({ slide, code }: { slide: Slide; code: string }) {
+export default function SlideView({
+  slide,
+  code,
+  live,
+}: {
+  slide: Slide;
+  code: string;
+  live?: StageLive;
+}) {
   switch (slide.kind) {
     case 'title':
       return <TitleSlide slide={slide} />;
@@ -29,7 +38,7 @@ export default function SlideView({ slide, code }: { slide: Slide; code: string 
     case 'recap':
       return <RecapSlide slide={slide} />;
     case 'activity':
-      return <ActivitySlide slide={slide} />;
+      return <ActivitySlide slide={slide} live={live} />;
     case 'qr':
       return <QrSlide slide={slide} code={code} />;
   }

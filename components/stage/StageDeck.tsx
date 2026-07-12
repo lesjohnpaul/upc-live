@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import type { Module } from '@/lib/types';
+import { useSessionState, type StageLive } from '@/components/live/useSessionState';
 import ProgressRail from '@/components/ui/ProgressRail';
 import SlideView from './slides/SlideView';
 import PresenterOverlay from './PresenterOverlay';
@@ -24,6 +25,12 @@ export default function StageDeck({ code, modules }: { code: string; modules: Mo
   const [index, setIndex] = useState(0);
   const [dir, setDir] = useState(1);
   const [overlayOpen, setOverlayOpen] = useState(false);
+  const { session, offline } = useSessionState(code);
+  const live: StageLive = {
+    sessionId: session?.id ?? null,
+    activeId: session?.active_activity ?? null,
+    offline,
+  };
 
   // restore position from URL hash (#m0-s3) on mount
   useEffect(() => {
@@ -102,7 +109,7 @@ export default function StageDeck({ code, modules }: { code: string; modules: Mo
           transition={{ duration: reduce ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
           className="absolute inset-0"
         >
-          <SlideView slide={slide} code={code} />
+          <SlideView slide={slide} code={code} live={live} />
         </motion.div>
       </AnimatePresence>
 

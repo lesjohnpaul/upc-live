@@ -1,4 +1,4 @@
-import type { Activity, Module } from '@/lib/types';
+import type { Activity, Module, SliderActivity } from '@/lib/types';
 import { demoModule } from './demo';
 
 export type Day = {
@@ -29,5 +29,20 @@ export function findActivity(id: string): Activity | null {
     for (const mod of day.modules)
       for (const slide of mod.slides)
         if (slide.kind === 'activity' && slide.activity.id === id) return slide.activity;
+  return null;
+}
+
+/** Find one phase of a before/after slider pair (used by the confidence shift view). */
+export function findSliderPair(pairId: string, phase: 'before' | 'after'): SliderActivity | null {
+  for (const day of days)
+    for (const mod of day.modules)
+      for (const slide of mod.slides)
+        if (
+          slide.kind === 'activity' &&
+          slide.activity.kind === 'slider' &&
+          slide.activity.pairId === pairId &&
+          slide.activity.phase === phase
+        )
+          return slide.activity;
   return null;
 }

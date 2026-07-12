@@ -1,26 +1,48 @@
 'use client';
 
-import type { Activity, Slide } from '@/lib/types';
+import type { Slide } from '@/lib/types';
 import SlideShell from '@/components/ui/SlideShell';
 import Kicker from '@/components/ui/Kicker';
-
-const ACTIVITY_META: Record<Activity['kind'], { icon: string; label: string }> = {
-  poll: { icon: '📊', label: 'Poll' },
-  wordcloud: { icon: '💬', label: 'Word Cloud' },
-  slider: { icon: '🎚️', label: 'Slider' },
-  dragdrop: { icon: '🧩', label: 'Pagbubukod' },
-  quiz: { icon: '⚡', label: 'Quiz' },
-  qna: { icon: '❓', label: 'Q&A' },
-};
+import { ACTIVITY_META, activityPrompt } from '@/components/live/activityMeta';
+import LiveResults from '@/components/live/LiveResults';
+import type { StageLive } from '@/components/live/useSessionState';
 
 /**
- * Placeholder panel for activity slides — the live layer swaps this
- * component for real-time results in the next task.
+ * Activity slide: when this activity is the session's open one, render the
+ * live results layer; otherwise a locked placeholder. Renders fine with zero
+ * network — `live.offline` just swaps the hint text, deck nav is untouched.
  */
-export default function ActivitySlide({ slide }: { slide: Extract<Slide, { kind: 'activity' }> }) {
+export default function ActivitySlide({
+  slide,
+  live,
+}: {
+  slide: Extract<Slide, { kind: 'activity' }>;
+  live?: StageLive;
+}) {
   const { activity } = slide;
   const meta = ACTIVITY_META[activity.kind];
-  const prompt = activity.kind === 'quiz' ? activity.title : activity.prompt;
+  const prompt = activityPrompt(activity);
+  const isOpen = !!live?.sessionId && live.activeId === activity.id;
+
+  if (isOpen && live.sessionId) {
+    return (
+      <SlideShell>
+        <Kicker>
+          Aktibidad · {meta.label}
+          <span className="inline-flex items-center gap-2 text-gold-300">
+            <span aria-hidden className="size-2.5 animate-breathe rounded-full bg-gold-400" />
+            LIVE
+          </span>
+        </Kicker>
+        <p className="mx-auto mt-6 max-w-[36ch] text-center font-display text-[clamp(1.5rem,2.6vw,2.5rem)] font-medium leading-tight [text-wrap:balance]">
+          {prompt}
+        </p>
+        <div className="mt-8 flex w-full flex-col items-center">
+          <LiveResults activity={activity} sessionId={live.sessionId} />
+        </div>
+      </SlideShell>
+    );
+  }
 
   return (
     <SlideShell>
@@ -45,8 +67,11 @@ export default function ActivitySlide({ slide }: { slide: Extract<Slide, { kind:
             ))}
           </ul>
         )}
-        <p className="mt-10 inline-flex items-center gap-3 rounded-full bg-gold-400/15 px-6 py-3 font-sans text-[clamp(0.95rem,1.4vw,1.3rem)] font-bold tracking-wide text-gold-300 ring-1 ring-gold-400/40">
-          <span aria-hidden>📱</span> Sagutin sa inyong phone
+        <p className="mt-10 inline-flex items-center gap-3 rounded-full bg-cream-100/8 px-6 py-3 font-sans text-[clamp(0.95rem,1.4vw,1.3rem)] font-bold tracking-wide text-cream-100/70 ring-1 ring-cream-100/15">
+          <span aria-hidden>{live?.offline ? '📡' : '🔒'}</span>
+          {live?.offline
+            ? 'Offline — hindi makuha ang live na resulta'
+            : 'Naka-lock — buksan sa dashboard'}
         </p>
       </div>
     </SlideShell>

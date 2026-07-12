@@ -164,6 +164,21 @@ export const demoModule: Module = {
       note: 'Triage questions: answer 2-3 now, park the rest for the end-of-day open forum.',
     },
     {
+      kind: 'activity',
+      activity: {
+        id: 'demo-slider-after',
+        kind: 'slider',
+        phase: 'after',
+        pairId: 'demo-confidence',
+        prompt: 'Ngayong tapos na ang demo: gaano ka na kakumpiyansa na maipapaliwanag mo ang prevention science?',
+        min: 1,
+        max: 10,
+        minLabel: 'Hindi pa handa',
+        maxLabel: 'Handang-handa',
+      },
+      note: 'The payoff moment — the stage shows the before → after confidence shift as the answers arrive.',
+    },
+    {
       kind: 'recap',
       title: 'Ang demo, sa isang hininga',
       points: [
