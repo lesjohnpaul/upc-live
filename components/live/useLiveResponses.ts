@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import type { RealtimeChannel } from '@supabase/supabase-js';
 import { getSupabase } from '@/lib/supabase';
+import { resilientChannel } from '@/lib/realtime';
+import { mergeSnapshot } from '@/lib/aggregate';
 import type { Role } from '@/lib/types';
 
 export type LiveResponse = {
@@ -14,14 +15,17 @@ export type LiveResponse = {
 
 export type LiveParticipant = { id: string; role: Role; nickname: string };
 
+const rowKey = (r: LiveResponse) => `${r.participant_id} ${r.activity_id}`;
+
 /**
  * Live responses + participants for one activity (or the whole session when
  * `activityId` is omitted — the dashboard uses that). Initial fetch, then a
  * postgres_changes subscription maintains rows in state: INSERT/UPDATE upsert
- * the row (unique per participant+activity), DELETE triggers a refetch (the
- * old record only carries its PK), participants INSERT keeps the live count.
- * Weak-internet armor mirrors the join surface: unique channel topic per
- * attempt, backoff reconnect, refetch on visibilitychange and on resubscribe.
+ * the row (unique per participant+activity), DELETE triggers a debounced
+ * refetch (the old record only carries its PK), participants INSERT keeps the
+ * live count. Events that arrive while a snapshot query is in flight are
+ * buffered and win over the snapshot, so a slow refetch can't roll back newer
+ * realtime rows. Reconnect armor lives in lib/realtime.
  */
 export function useLiveResponses(sessionId: string | null, activityId?: string) {
   const [rows, setRows] = useState<LiveResponse[]>([]);
@@ -32,11 +36,13 @@ export function useLiveResponses(sessionId: string | null, activityId?: string) 
     if (!sessionId) return;
     const supabase = getSupabase();
     let cancelled = false;
-    let retries = 0;
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    let channel: RealtimeChannel | null = null;
+    let fetchSeq = 0;
+    let buffer: LiveResponse[] | null = null; // events seen while a snapshot is in flight
+    let deleteTimer: ReturnType<typeof setTimeout> | undefined;
 
     const refetch = async () => {
+      const seq = ++fetchSeq;
+      buffer ??= [];
       try {
         let query = supabase
           .from('responses')
@@ -47,26 +53,30 @@ export function useLiveResponses(sessionId: string | null, activityId?: string) 
           query,
           supabase.from('participants').select('id, role, nickname').eq('session_id', sessionId),
         ]);
-        if (cancelled) return;
+        if (cancelled || seq !== fetchSeq) return; // superseded by a newer refetch
+        const events = buffer ?? [];
+        buffer = null;
         if (res.error || ppl.error) {
           setOffline(true);
           return;
         }
-        setRows(res.data as LiveResponse[]);
+        setRows(mergeSnapshot(res.data as LiveResponse[], events));
         setParticipants(ppl.data as LiveParticipant[]);
         setOffline(false);
       } catch {
-        if (!cancelled) setOffline(true);
+        if (!cancelled && seq === fetchSeq) {
+          buffer = null;
+          setOffline(true);
+        }
       }
     };
 
     const upsertRow = (raw: unknown) => {
       const row = raw as LiveResponse;
       if (activityId && row.activity_id !== activityId) return;
+      buffer?.push(row);
       setRows((cur) => {
-        const i = cur.findIndex(
-          (x) => x.participant_id === row.participant_id && x.activity_id === row.activity_id,
-        );
+        const i = cur.findIndex((x) => rowKey(x) === rowKey(row));
         if (i === -1) return [...cur, row];
         const next = cur.slice();
         next[i] = row;
@@ -74,62 +84,56 @@ export function useLiveResponses(sessionId: string | null, activityId?: string) 
       });
     };
 
-    const subscribe = () => {
-      // unique topic per attempt: a shared topic gets torn down by the other
-      // subscriber's cleanup (StrictMode double-mount, reconnect races)
-      channel = supabase
-        .channel(`live-${activityId ?? 'all'}-${Date.now()}-${Math.random().toString(36).slice(2)}`)
-        .on(
-          'postgres_changes',
-          { event: 'INSERT', schema: 'public', table: 'responses', filter: `session_id=eq.${sessionId}` },
-          (p) => upsertRow(p.new),
-        )
-        .on(
-          'postgres_changes',
-          { event: 'UPDATE', schema: 'public', table: 'responses', filter: `session_id=eq.${sessionId}` },
-          (p) => upsertRow(p.new),
-        )
-        .on(
-          // DELETE old records only carry the PK (no session/activity filter
-          // possible) — a dashboard reset is rare, so just refetch
-          'postgres_changes',
-          { event: 'DELETE', schema: 'public', table: 'responses' },
-          () => void refetch(),
-        )
-        .on(
-          'postgres_changes',
-          { event: 'INSERT', schema: 'public', table: 'participants', filter: `session_id=eq.${sessionId}` },
-          (p) => {
-            const row = p.new as LiveParticipant;
-            setParticipants((cur) => (cur.some((x) => x.id === row.id) ? cur : [...cur, row]));
-          },
-        )
-        .subscribe((status) => {
-          if (cancelled) return;
-          if (status === 'SUBSCRIBED') {
-            retries = 0;
-            setOffline(false);
-            void refetch(); // catch anything missed while disconnected
-          } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
-            setOffline(true);
-            if (channel) void supabase.removeChannel(channel);
-            channel = null;
-            timer = setTimeout(subscribe, Math.min(1000 * 2 ** retries++, 15000));
-          }
-        });
-    };
+    const cleanupChannel = resilientChannel(
+      `live-${activityId ?? 'all'}`,
+      (channel) => {
+        channel
+          .on(
+            'postgres_changes',
+            { event: 'INSERT', schema: 'public', table: 'responses', filter: `session_id=eq.${sessionId}` },
+            (p) => upsertRow(p.new),
+          )
+          .on(
+            'postgres_changes',
+            { event: 'UPDATE', schema: 'public', table: 'responses', filter: `session_id=eq.${sessionId}` },
+            (p) => upsertRow(p.new),
+          )
+          .on(
+            // DELETE old records only carry the PK (no session/activity filter
+            // possible) — debounce so a bulk reset triggers one refetch
+            'postgres_changes',
+            { event: 'DELETE', schema: 'public', table: 'responses' },
+            () => {
+              if (deleteTimer) clearTimeout(deleteTimer);
+              deleteTimer = setTimeout(() => void refetch(), 300);
+            },
+          )
+          .on(
+            'postgres_changes',
+            { event: 'INSERT', schema: 'public', table: 'participants', filter: `session_id=eq.${sessionId}` },
+            (p) => {
+              const row = p.new as LiveParticipant;
+              setParticipants((cur) => (cur.some((x) => x.id === row.id) ? cur : [...cur, row]));
+            },
+          );
+      },
+      (connected) => {
+        if (cancelled) return;
+        setOffline(!connected);
+        if (connected) void refetch(); // catch anything missed while disconnected
+      },
+    );
 
     void refetch();
-    subscribe();
     const onVisible = () => {
       if (document.visibilityState === 'visible') void refetch();
     };
     document.addEventListener('visibilitychange', onVisible);
     return () => {
       cancelled = true;
-      if (timer) clearTimeout(timer);
+      if (deleteTimer) clearTimeout(deleteTimer);
       document.removeEventListener('visibilitychange', onVisible);
-      if (channel) void supabase.removeChannel(channel);
+      cleanupChannel();
     };
   }, [sessionId, activityId]);
 

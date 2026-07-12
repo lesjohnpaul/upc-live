@@ -5,6 +5,7 @@ import {
   wordCloudCounts,
   quizLeaderboard,
   confidenceShift,
+  mergeSnapshot,
   type ResponseRow,
   type ParticipantRow,
 } from './aggregate';
@@ -193,5 +194,23 @@ describe('confidenceShift', () => {
     const before = [row('p1', { value: 3 }), row('p2', {}), row('p3', { value: 'high' })];
     const after = [row('p1', { value: 5 })];
     expect(confidenceShift(before, after)).toEqual({ beforeAvg: 3, afterAvg: 5, delta: 2 });
+  });
+});
+
+describe('mergeSnapshot', () => {
+  it('events win over the snapshot on key conflicts, new keys append', () => {
+    const snapshot = [row('p1', { choice: 0 }), row('p2', { choice: 1 })];
+    const events = [row('p2', { choice: 3 }), row('p3', { choice: 2 })];
+    expect(mergeSnapshot(snapshot, events)).toEqual([
+      row('p1', { choice: 0 }),
+      row('p2', { choice: 3 }),
+      row('p3', { choice: 2 }),
+    ]);
+  });
+
+  it('same participant on different activities are distinct keys', () => {
+    const snapshot = [row('p1', { choice: 0 }, 'a1')];
+    const events = [row('p1', { word: 'x' }, 'a2')];
+    expect(mergeSnapshot(snapshot, events)).toHaveLength(2);
   });
 });

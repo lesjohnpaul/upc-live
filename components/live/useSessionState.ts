@@ -1,8 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import type { RealtimeChannel } from '@supabase/supabase-js';
 import { getSupabase } from '@/lib/supabase';
+import { resilientChannel } from '@/lib/realtime';
 
 export type LiveSession = {
   id: string;
@@ -19,11 +19,10 @@ export type StageLive = {
 };
 
 /**
- * Fetches the session row by code and tracks `active_activity` via realtime,
- * with the same weak-internet armor as the join surface: unique channel topic
- * per attempt (StrictMode double-mount kills shared topics), exponential
- * backoff on channel failure, and refetch on visibilitychange + resubscribe.
- * Fetch failures never throw — they surface as `offline` and retry.
+ * Fetches the session row by code and tracks `active_activity` via realtime.
+ * The initial fetch retries with backoff and never throws — failures surface
+ * as `offline`. Subscription reconnect armor lives in lib/realtime; a refetch
+ * runs on every (re)subscribe and on visibilitychange.
  */
 export function useSessionState(code: string) {
   const [session, setSession] = useState<LiveSession | null>(null);
@@ -34,12 +33,8 @@ export function useSessionState(code: string) {
     let cancelled = false;
     let retries = 0;
     let timer: ReturnType<typeof setTimeout> | undefined;
-    let channel: RealtimeChannel | null = null;
+    let cleanupChannel: (() => void) | null = null;
     let sessionId: string | null = null;
-
-    const schedule = (fn: () => void) => {
-      timer = setTimeout(fn, Math.min(1000 * 2 ** retries++, 15000));
-    };
 
     const refetch = async (id: string) => {
       try {
@@ -56,37 +51,33 @@ export function useSessionState(code: string) {
     };
 
     const subscribe = (id: string) => {
-      channel = supabase
-        .channel(`session-${id}-${Date.now()}-${Math.random().toString(36).slice(2)}`)
-        .on(
-          'postgres_changes',
-          { event: 'UPDATE', schema: 'public', table: 'sessions', filter: `id=eq.${id}` },
-          (payload) => {
-            const next = (payload.new as { active_activity: string | null }).active_activity;
-            setSession((s) => (s ? { ...s, active_activity: next } : s));
-          },
-        )
-        .subscribe((status) => {
+      cleanupChannel = resilientChannel(
+        `session-${id}`,
+        (channel) => {
+          channel.on(
+            'postgres_changes',
+            { event: 'UPDATE', schema: 'public', table: 'sessions', filter: `id=eq.${id}` },
+            (payload) => {
+              const next = (payload.new as { active_activity: string | null }).active_activity;
+              setSession((s) => (s ? { ...s, active_activity: next } : s));
+            },
+          );
+        },
+        (connected) => {
           if (cancelled) return;
-          if (status === 'SUBSCRIBED') {
-            retries = 0;
-            setOffline(false);
-            void refetch(id); // catch anything missed while disconnected
-          } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
-            setOffline(true);
-            if (channel) void supabase.removeChannel(channel);
-            channel = null;
-            schedule(() => subscribe(id));
-          }
-        });
+          setOffline(!connected);
+          if (connected) void refetch(id); // catch anything missed while disconnected
+        },
+      );
     };
 
     const load = async () => {
+      if (timer) clearTimeout(timer); // one retry chain only (visibilitychange can re-enter)
       try {
         const { data, error } = await supabase
           .from('sessions')
           .select('id, code, day, active_activity')
-          .ilike('code', code)
+          .eq('code', code.toUpperCase())
           .maybeSingle();
         if (cancelled) return;
         if (error) throw error;
@@ -98,7 +89,7 @@ export function useSessionState(code: string) {
       } catch {
         if (cancelled) return;
         setOffline(true);
-        schedule(() => void load());
+        timer = setTimeout(() => void load(), Math.min(1000 * 2 ** retries++, 15000));
       }
     };
 
@@ -113,7 +104,7 @@ export function useSessionState(code: string) {
       cancelled = true;
       if (timer) clearTimeout(timer);
       document.removeEventListener('visibilitychange', onVisible);
-      if (channel) void supabase.removeChannel(channel);
+      cleanupChannel?.();
     };
   }, [code]);
 

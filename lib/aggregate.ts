@@ -97,3 +97,18 @@ export function confidenceShift(
   const afterAvg = avg(after);
   return { beforeAvg, afterAvg, delta: afterAvg - beforeAvg };
 }
+
+/**
+ * Merge a fetched snapshot with realtime events that were applied while the
+ * snapshot query was in flight — events are newer, so they win on key
+ * conflicts (unique per participant+activity). Used by useLiveResponses so a
+ * slow refetch can't roll back rows that already arrived over the socket.
+ */
+export function mergeSnapshot<T extends { participant_id: string; activity_id: string }>(
+  snapshot: T[],
+  events: T[]
+): T[] {
+  const merged = new Map(snapshot.map((r) => [`${r.participant_id} ${r.activity_id}`, r]));
+  for (const r of events) merged.set(`${r.participant_id} ${r.activity_id}`, r);
+  return [...merged.values()];
+}

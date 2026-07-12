@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import type { RealtimeChannel } from '@supabase/supabase-js';
 import { getSupabase } from '@/lib/supabase';
+import { resilientChannel } from '@/lib/realtime';
 import { ROLES, type Activity, type Role } from '@/lib/types';
 import {
   getStoredParticipant,
@@ -23,9 +23,9 @@ type Session = { id: string; code: string; day: number; active_activity: string 
 
 /**
  * Tracks sessions.active_activity via realtime, with weak-internet armor:
- * re-fetch on visibilitychange (phones lock/unlock constantly), and on
- * channel failure retry the subscription with exponential backoff. `tick`
- * increments on every successful re-fetch so cards re-pull their own response.
+ * re-fetch on visibilitychange (phones lock/unlock constantly) and on every
+ * (re)subscribe; reconnect logic lives in lib/realtime. `tick` increments on
+ * every successful re-fetch so cards re-pull their own response.
  */
 function useActiveActivity(session: Session) {
   const [activeId, setActiveId] = useState<string | null>(session.active_activity);
@@ -33,61 +33,50 @@ function useActiveActivity(session: Session) {
   const [tick, setTick] = useState(0);
 
   useEffect(() => {
-    const supabase = getSupabase();
     let cancelled = false;
-    let retries = 0;
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    let channel: RealtimeChannel | null = null;
 
     const refetch = async () => {
-      const { data, error } = await supabase
-        .from('sessions')
-        .select('active_activity')
-        .eq('id', session.id)
-        .maybeSingle();
-      if (!cancelled && !error && data) {
-        setActiveId(data.active_activity);
-        setTick((t) => t + 1);
+      try {
+        const { data, error } = await getSupabase()
+          .from('sessions')
+          .select('active_activity')
+          .eq('id', session.id)
+          .maybeSingle();
+        if (!cancelled && !error && data) {
+          setActiveId(data.active_activity);
+          setTick((t) => t + 1);
+        }
+      } catch {
+        // weak wifi: stay on the current view; the next reconnect refetches
       }
     };
 
-    const subscribe = () => {
-      // unique topic per attempt: a shared topic gets torn down by the other
-      // subscriber's cleanup (StrictMode double-mount, reconnect races)
-      channel = supabase
-        .channel(`join-${session.id}-${Date.now()}-${Math.random().toString(36).slice(2)}`)
-        .on(
+    const cleanupChannel = resilientChannel(
+      `join-${session.id}`,
+      (channel) => {
+        channel.on(
           'postgres_changes',
           { event: 'UPDATE', schema: 'public', table: 'sessions', filter: `id=eq.${session.id}` },
           (payload) => {
             setActiveId((payload.new as { active_activity: string | null }).active_activity);
           },
-        )
-        .subscribe((status) => {
-          if (cancelled) return;
-          if (status === 'SUBSCRIBED') {
-            retries = 0;
-            setConnected(true);
-            void refetch(); // catch anything missed while disconnected
-          } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
-            setConnected(false);
-            if (channel) void supabase.removeChannel(channel);
-            channel = null;
-            timer = setTimeout(subscribe, Math.min(1000 * 2 ** retries++, 15000));
-          }
-        });
-    };
+        );
+      },
+      (isConnected) => {
+        if (cancelled) return;
+        setConnected(isConnected);
+        if (isConnected) void refetch(); // catch anything missed while disconnected
+      },
+    );
 
-    subscribe();
     const onVisible = () => {
       if (document.visibilityState === 'visible') void refetch();
     };
     document.addEventListener('visibilitychange', onVisible);
     return () => {
       cancelled = true;
-      if (timer) clearTimeout(timer);
       document.removeEventListener('visibilitychange', onVisible);
-      if (channel) void supabase.removeChannel(channel);
+      cleanupChannel();
     };
   }, [session.id]);
 
