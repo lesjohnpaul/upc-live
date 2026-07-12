@@ -12,8 +12,16 @@ import { useLiveResponses, type LiveResponse } from '@/components/live/useLiveRe
 type QnaPayload = { question?: unknown; answered?: unknown };
 
 function csvEscape(value: string): string {
-  return `"${value.replace(/"/g, '""')}"`;
+  // leading = + - @ would execute as a formula in Excel — nicknames and
+  // payloads are participant-controlled
+  const safe = /^[=+\-@]/.test(value) ? `'${value}` : value;
+  return `"${safe.replace(/"/g, '""')}"`;
 }
+
+/** In-flight phone upserts land within this window; deleting sooner resurrects rows. */
+const RESET_SETTLE_MS = 1500;
+
+const settle = () => new Promise((resolve) => setTimeout(resolve, RESET_SETTLE_MS));
 
 /** Facilitator control panel: open/lock/reset activities, Q&A triage, CSV export. */
 export default function Dashboard({ code }: { code: string }) {
@@ -59,7 +67,15 @@ export default function Dashboard({ code }: { code: string }) {
     if (!window.confirm(`Burahin ang ${n} sagot para sa "${activityPrompt(activity)}"?`)) return;
     void run(async () => {
       if (!session) return;
-      await getSupabase()
+      const supabase = getSupabase();
+      if (activeId === activity.id) {
+        // lock first and let in-flight phone upserts land, or they resurrect
+        // rows right after the delete
+        setActive(null);
+        await supabase.from('sessions').update({ active_activity: null }).eq('id', session.id);
+        await settle();
+      }
+      await supabase
         .from('responses')
         .delete()
         .eq('session_id', session.id)
@@ -68,14 +84,22 @@ export default function Dashboard({ code }: { code: string }) {
   };
 
   const resetSession = () => {
-    if (!window.confirm(`Burahin ang LAHAT ng ${rows.length} sagot sa session ${code}?`)) return;
+    if (
+      !window.confirm(
+        `Burahin ang LAHAT sa session ${code}: ${rows.length} sagot at ${participantCount} kalahok (kailangan nilang mag-scan muli)?`,
+      )
+    )
+      return;
     if (!window.confirm('Sigurado ka? Hindi na ito maibabalik.')) return;
     void run(async () => {
       if (!session) return;
       const supabase = getSupabase();
-      await supabase.from('responses').delete().eq('session_id', session.id);
+      // lock first — phones stop sending — then wait out in-flight upserts
       setActive(null);
       await supabase.from('sessions').update({ active_activity: null }).eq('id', session.id);
+      await settle();
+      await supabase.from('responses').delete().eq('session_id', session.id);
+      await supabase.from('participants').delete().eq('session_id', session.id);
     });
   };
 
@@ -285,7 +309,8 @@ export default function Dashboard({ code }: { code: string }) {
           Danger Zone
         </h2>
         <p className="mt-2 font-sans text-sm text-forest-700">
-          Burahin ang lahat ng sagot at i-lock ang session — para sa bagong takbo.
+          I-lock ang session at burahin ang lahat ng sagot pati ang listahan ng kalahok — para sa
+          bagong takbo. Kailangang mag-scan muli ng lahat.
         </p>
         <button
           type="button"

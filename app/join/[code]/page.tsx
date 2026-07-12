@@ -20,7 +20,7 @@ export default async function JoinPage({ params }: { params: Promise<{ code: str
     const { data, error } = await getSupabase()
       .from('sessions')
       .select('id, code, day, active_activity')
-      .ilike('code', raw)
+      .eq('code', raw.toUpperCase()) // codes are stored uppercase; eq avoids ilike pattern chars
       .maybeSingle();
     if (error) fetchFailed = true;
     session = data;

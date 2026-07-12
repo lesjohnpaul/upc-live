@@ -20,7 +20,7 @@ export function getStoredParticipant(sessionCode: string): StoredParticipant | n
     if (typeof id !== 'string') return null;
     if (nickname !== undefined && typeof nickname !== 'string') return null;
     if (typeof role !== 'string' || !(role in ROLES)) return null;
-    return { id, role: role as Role, nickname: nickname as string };
+    return { id, role: role as Role, nickname: nickname ?? '' };
   } catch {
     return null;
   }
