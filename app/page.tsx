@@ -1,65 +1,81 @@
-import Image from "next/image";
+import Link from 'next/link';
+import { days } from '@/content';
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <main className="flex min-h-svh flex-col items-center justify-center bg-forest-950 px-6 py-16 text-cream-100">
+      {/* wordmark */}
+      <header className="text-center">
+        <p className="flex items-center justify-center gap-3 font-sans text-xs font-bold uppercase tracking-[0.32em] text-gold-400">
+          <span aria-hidden className="h-px w-10 bg-gold-400/70" />
+          DepEd Division Echo Training
+          <span aria-hidden className="h-px w-10 bg-gold-400/70" />
+        </p>
+        <h1 className="mt-6 font-display text-[clamp(3.5rem,10vw,7rem)] font-medium leading-none tracking-tight">
+          UPC <span className="italic text-gold-300">Live</span>
+        </h1>
+        <p className="mx-auto mt-5 max-w-xl font-sans text-lg text-cream-100/80">
+          Universal Prevention Curriculum — Division Echo Training
+        </p>
+        <p className="mt-2 font-sans text-sm font-bold uppercase tracking-[0.2em] text-cream-100/60">
+          Presented by Jessica C. Oliver
+        </p>
+      </header>
+
+      {/* day cards */}
+      <div className="mt-14 grid w-full max-w-3xl gap-5 sm:grid-cols-2">
+        {days.map((day) => (
+          <Link
+            key={day.course}
+            href={`/stage/${day.course.toUpperCase()}`}
+            className="group rounded-3xl bg-forest-900 p-8 ring-1 ring-cream-100/10 transition-all hover:ring-gold-400/60 hover:shadow-[0_0_40px_-12px_var(--color-gold-500)]"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+            <p className="font-sans text-xs font-bold uppercase tracking-[0.24em] text-gold-300">
+              Day {day.day} · {day.course.toUpperCase()}
+            </p>
+            <h2 className="mt-3 font-display text-2xl font-medium leading-snug">
+              {day.courseTitle}
+            </h2>
+            <p className="mt-3 font-sans text-sm text-cream-100/60">
+              {day.modules.length} modules ·{' '}
+              {Math.round(day.modules.reduce((sum, m) => sum + m.minutes, 0) / 60)} hours
+            </p>
+            <p className="mt-5 font-sans text-sm font-bold text-gold-400 transition-transform group-hover:translate-x-1">
+              Open the stage →
+            </p>
+          </Link>
+        ))}
+      </div>
+
+      {/* quieter secondary links */}
+      <nav className="mt-12 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 font-sans text-sm text-cream-100/60">
+        <Link href="/guide" className="transition-colors hover:text-gold-300">
+          Facilitator&apos;s Guide
+        </Link>
+        <Link href="/handbook" className="transition-colors hover:text-gold-300">
+          User&apos;s Handbook
+        </Link>
+        <span className="flex items-center gap-2">
+          Dashboards:
+          <Link href="/dashboard/UPC1" className="transition-colors hover:text-gold-300">
+            UPC1
+          </Link>
+          ·
+          <Link href="/dashboard/UPC2" className="transition-colors hover:text-gold-300">
+            UPC2
+          </Link>
+        </span>
+        <span className="flex items-center gap-2">
+          Join:
+          <Link href="/join/UPC1" className="transition-colors hover:text-gold-300">
+            UPC1
+          </Link>
+          ·
+          <Link href="/join/UPC2" className="transition-colors hover:text-gold-300">
+            UPC2
+          </Link>
+        </span>
+      </nav>
+    </main>
   );
 }
