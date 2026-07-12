@@ -1,26 +1,74 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  /* ---- UPC Live palette: forest at lamplight ---- */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Deep botanical greens. 950 is the stage canvas — never pure black. */
+  --color-forest-950: oklch(0.185 0.032 165);
+  --color-forest-900: oklch(0.235 0.042 162);
+  --color-forest-800: oklch(0.295 0.052 160);
+  --color-forest-700: oklch(0.37 0.062 158);
+  --color-forest-600: oklch(0.46 0.078 156);
+  --color-forest-500: oklch(0.57 0.095 154);
+  --color-forest-400: oklch(0.67 0.095 152);
+  --color-forest-300: oklch(0.78 0.075 150);
+  --color-forest-200: oklch(0.875 0.048 148);
+  --color-forest-100: oklch(0.935 0.028 146);
+  --color-forest-50: oklch(0.97 0.014 145);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Warm rice-paper creams. 50 is the light canvas — never pure white. */
+  --color-cream-50: oklch(0.982 0.008 95);
+  --color-cream-100: oklch(0.962 0.013 93);
+  --color-cream-200: oklch(0.928 0.019 91);
+  --color-cream-300: oklch(0.875 0.024 89);
+  --color-cream-400: oklch(0.775 0.028 87);
+  --color-cream-500: oklch(0.66 0.03 85);
+
+  /* Sampaguita gold — restrained, for emphasis only. */
+  --color-gold-200: oklch(0.895 0.065 88);
+  --color-gold-300: oklch(0.845 0.092 84);
+  --color-gold-400: oklch(0.775 0.115 79);
+  --color-gold-500: oklch(0.69 0.125 73);
+  --color-gold-600: oklch(0.59 0.115 68);
+
+  /* Supporting hues for role identity — same warmth, different leaves. */
+  --color-clay-200: oklch(0.87 0.045 45);
+  --color-clay-400: oklch(0.72 0.085 42);
+  --color-clay-600: oklch(0.55 0.095 40);
+  --color-spruce-200: oklch(0.885 0.04 195);
+  --color-spruce-400: oklch(0.70 0.075 200);
+  --color-spruce-600: oklch(0.52 0.075 205);
+
+  /* ---- Typography ---- */
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-sans: var(--font-alegreya), system-ui, sans-serif;
+
+  /* Fluid stage type — readable from the back row. */
+  --text-statement: clamp(2.75rem, 6.5vw, 7rem);
+  --text-statement--line-height: 1.08;
+  --text-stat: clamp(5rem, 14vw, 15rem);
+  --text-stat--line-height: 0.95;
+
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-cream-50);
+  color: var(--color-forest-950);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-gold-300);
+  color: var(--color-forest-950);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
