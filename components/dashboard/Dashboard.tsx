@@ -10,6 +10,7 @@ import { useSessionState } from '@/components/live/useSessionState';
 import { useLiveResponses, type LiveResponse } from '@/components/live/useLiveResponses';
 
 type QnaPayload = { question?: unknown; answered?: unknown };
+type FeedbackPayload = { stars?: Record<string, number>; comment?: string };
 
 function csvEscape(value: string): string {
   // leading = + - @ would execute as a formula in Excel — nicknames and
@@ -141,6 +142,25 @@ export default function Dashboard({ code }: { code: string }) {
   const qnaRows = rows
     .filter((r) => qnaIds.has(r.activity_id) && typeof (r.payload as QnaPayload)?.question === 'string')
     .sort((a, b) => b.created_at.localeCompare(a.created_at));
+
+  const feedbackIds = new Set(
+    day.modules.flatMap((m) =>
+      m.slides.flatMap((s) =>
+        s.kind === 'activity' && s.activity.kind === 'feedback' ? [s.activity.id] : [],
+      ),
+    ),
+  );
+  const feedbackRows = rows
+    .filter((r) => feedbackIds.has(r.activity_id))
+    .sort((a, b) => b.created_at.localeCompare(a.created_at));
+  const allStars = feedbackRows.flatMap((r) =>
+    Object.values((r.payload as FeedbackPayload)?.stars ?? {}).filter(
+      (n): n is number => typeof n === 'number' && n > 0,
+    ),
+  );
+  const feedbackAvg = allStars.length
+    ? allStars.reduce((a, b) => a + b, 0) / allStars.length
+    : 0;
 
   return (
     <main className="mx-auto min-h-svh w-full max-w-5xl bg-cream-50 px-6 py-8 text-forest-950">
@@ -302,6 +322,52 @@ export default function Dashboard({ code }: { code: string }) {
           </ul>
         )}
       </section>
+
+      {/* speaker feedback — the comments never go on the projector, only here */}
+      {feedbackRows.length > 0 && (
+        <section className="mt-10">
+          <div className="flex flex-wrap items-baseline gap-4">
+            <h2 className="font-sans text-sm font-bold uppercase tracking-[0.2em] text-forest-600">
+              Speaker Feedback
+            </h2>
+            <p className="font-sans text-sm text-forest-600">
+              <span className="font-display text-xl font-medium text-forest-900">
+                {feedbackAvg.toFixed(1)}
+              </span>{' '}
+              / 5 average · {feedbackRows.length} of {participantCount} responded
+            </p>
+          </div>
+          <ul className="mt-3 space-y-2">
+            {feedbackRows.map((r) => {
+              const payload = r.payload as FeedbackPayload;
+              const comment = (payload.comment ?? '').trim();
+              const mine = Object.values(payload.stars ?? {}).filter((n) => n > 0);
+              const mineAvg = mine.length ? mine.reduce((a, b) => a + b, 0) / mine.length : 0;
+              const p = byId.get(r.participant_id);
+              return (
+                <li
+                  key={`${r.participant_id}-${r.activity_id}`}
+                  className="flex items-start gap-4 rounded-2xl bg-cream-100 px-5 py-3.5 ring-1 ring-cream-300"
+                >
+                  <span className="shrink-0 rounded-full bg-gold-400/20 px-3 py-1 font-sans text-sm font-bold text-gold-600">
+                    {mineAvg ? `★ ${mineAvg.toFixed(1)}` : '★ —'}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    {comment ? (
+                      <p className="font-sans text-forest-900">{comment}</p>
+                    ) : (
+                      <p className="font-sans italic text-forest-500">Stars only, no comment.</p>
+                    )}
+                    <p className="mt-1 font-sans text-xs text-forest-600">
+                      {p ? p.nickname || ROLES[p.role] : '—'}
+                    </p>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      )}
 
       {/* danger zone */}
       <section className="mt-10 rounded-2xl bg-clay-400/10 p-5 ring-1 ring-clay-400/30">

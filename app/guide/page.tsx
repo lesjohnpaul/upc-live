@@ -17,6 +17,7 @@ const SLIDE_KIND: Record<Slide['kind'], string> = {
   welcome: 'Welcome',
   title: 'Title',
   statement: 'Statement',
+  finale: 'Finale',
   stat: 'Stat',
   bullets: 'Bullets',
   image: 'Image',
@@ -33,6 +34,10 @@ function slideText(slide: Slide): string {
       return slide.title;
     case 'statement':
       return slide.text;
+    case 'finale':
+      return `${slide.headline} — ${slide.text}`;
+    case 'finale':
+      return slide.headline;
     case 'stat':
       return `${slide.value} — ${slide.label}`;
     case 'bullets':

@@ -1,10 +1,9 @@
 'use client';
 
-import { QRCodeSVG } from 'qrcode.react';
 import type { Slide } from '@/lib/types';
 import SlideShell from '@/components/ui/SlideShell';
 import Kicker from '@/components/ui/Kicker';
-import { useJoinUrl } from '@/lib/joinUrl';
+import JoinQr from '@/components/ui/JoinQr';
 
 export default function QrSlide({
   slide,
@@ -13,8 +12,6 @@ export default function QrSlide({
   slide: Extract<Slide, { kind: 'qr' }>;
   code: string;
 }) {
-  const joinUrl = useJoinUrl(code);
-
   return (
     <SlideShell>
       <Kicker>Session {code}</Kicker>
@@ -23,22 +20,9 @@ export default function QrSlide({
           {slide.title}
         </h2>
       )}
-      {joinUrl && (
-        <>
-          <div className="mt-10 rounded-3xl bg-cream-50 p-[3vmin] shadow-2xl shadow-forest-950/60">
-            <QRCodeSVG
-              value={joinUrl}
-              className="size-[min(40vh,40vw)]"
-              bgColor="transparent"
-              fgColor="oklch(0.185 0.032 165)"
-              level="M"
-            />
-          </div>
-          <p className="mt-8 font-sans text-[clamp(1.3rem,2.4vw,2.4rem)] font-bold tracking-wide text-gold-300">
-            {joinUrl.replace(/^https?:\/\//, '')}
-          </p>
-        </>
-      )}
+      <div className="mt-10">
+        <JoinQr code={code} />
+      </div>
       <p className="mt-3 font-sans text-[clamp(0.95rem,1.4vw,1.3rem)] opacity-70">
         Scan the QR code or type the link on your phone
       </p>

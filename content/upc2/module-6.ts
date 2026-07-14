@@ -176,6 +176,176 @@ export const module6: Module = {
       note: 'The last chance. Answer honestly; if you do not know, say so and point them to a resource. Pull in any parked questions from earlier sessions.',
     },
     {
+      kind: 'activity',
+      activity: {
+        id: 'upc2-m6-letter-1',
+        kind: 'reflection',
+        title: 'Your Letter',
+        intro:
+          'Ten questions. No wrong answers, nothing scored, nothing goes on the wall. Answer honestly and I will write you a letter to take home.',
+        questions: [
+          {
+            kind: 'choice',
+            prompt: 'Which moment from these two days is still sitting with you?',
+            options: [
+              {
+                label: 'The fence at the top of the cliff, and how late we usually arrive.',
+                weight: { fence_builder: 3 },
+                line: 'You are still thinking about the fence at the top of the cliff, and how much of our lateness is a choice we are allowed to unmake.',
+              },
+              {
+                label: 'The hijacked brain. It is biology, not weakness.',
+                weight: { truth_teller: 2, anchor: 1 },
+                line: 'The hijacked brain stayed with you. You will never hear the word “choice” quite the same way again.',
+              },
+              {
+                label: '“Abuser” versus “a student with a substance concern.”',
+                weight: { truth_teller: 3 },
+                line: 'One small phrase is still turning over in your mind, because you saw that the words we reach for are the first door we open, or quietly close.',
+              },
+              {
+                label: 'The empty chair. The student nobody asked about.',
+                weight: { first_responder: 3, anchor: 1 },
+                line: 'You keep returning to the empty chair. That feeling is not guilt. It is the beginning of attention.',
+              },
+            ],
+          },
+          {
+            kind: 'choice',
+            prompt: 'When you picture the student you are doing this for, who is it?',
+            options: [
+              { label: 'A student I already worry about.', weight: { first_responder: 3 } },
+              { label: 'A student I have not met yet.', weight: { fence_builder: 3 } },
+              {
+                label: 'A student I once failed to notice.',
+                weight: { anchor: 2, first_responder: 1 },
+              },
+              { label: 'Every one of them.', weight: { igniter: 2, bridge: 1 } },
+            ],
+          },
+          {
+            kind: 'choice',
+            prompt: 'The hardest part of Monday morning will be…',
+            options: [
+              {
+                label: 'Finding the time.',
+                weight: { fence_builder: 1, anchor: 1 },
+                line: 'Time will be the hard part. Nobody who ever built anything in a school had enough of it. They began anyway, inside the fifteen minutes they had.',
+              },
+              {
+                label: 'Convincing my colleagues.',
+                weight: { igniter: 2 },
+                line: 'You are bracing to convince the people around you. Take heart. They already quietly suspect what you are about to tell them. They have simply never been given the words.',
+              },
+              {
+                label: 'Knowing what to say to the student.',
+                weight: { anchor: 2, bridge: 1 },
+                line: 'You are afraid of not knowing what to say. Here is the thing nobody put on a slide: you do not need the right words. You need to stay in the room. The words arrive after the staying.',
+              },
+              {
+                label: 'The paperwork and the plan.',
+                weight: { fence_builder: 2 },
+                line: 'You named the plan as the hardest part, and you were right. A plan is where good intentions either quietly die or finally become real, and you decide which.',
+              },
+            ],
+          },
+          {
+            kind: 'choice',
+            prompt: 'When a student is struggling, my first instinct is to…',
+            options: [
+              { label: 'Sit with them.', weight: { anchor: 3 } },
+              { label: 'Find the person who can help.', weight: { bridge: 3 } },
+              {
+                label: 'Change what the school does about it.',
+                weight: { fence_builder: 2, igniter: 1 },
+              },
+              { label: 'Notice, before anyone else does.', weight: { first_responder: 3 } },
+            ],
+          },
+          {
+            kind: 'choice',
+            prompt: 'Before this training, if I am honest, I…',
+            options: [
+              {
+                label: 'Thought this was somebody else’s job.',
+                weight: { igniter: 1, fence_builder: 1 },
+              },
+              { label: 'Cared, but did not know where to start.', weight: { bridge: 2 } },
+              { label: 'Cared, but felt alone in it.', weight: { anchor: 2, igniter: 1 } },
+              { label: 'Was afraid of saying the wrong thing.', weight: { truth_teller: 3 } },
+            ],
+          },
+          {
+            kind: 'choice',
+            prompt: 'The first person I will bring into this…',
+            options: [
+              { label: 'My principal.', weight: { fence_builder: 2, igniter: 1 } },
+              { label: 'A fellow teacher.', weight: { igniter: 3 } },
+              { label: 'The counselor or the nurse.', weight: { bridge: 3 } },
+              { label: 'The students themselves.', weight: { anchor: 2, truth_teller: 1 } },
+            ],
+          },
+          {
+            kind: 'choice',
+            prompt: 'The thing I will change in how I speak…',
+            options: [
+              { label: 'I will stop saying “addict.”', weight: { truth_teller: 3 } },
+              { label: 'I will stop lecturing and start asking.', weight: { anchor: 2, bridge: 1 } },
+              { label: 'I will say the hard thing out loud.', weight: { igniter: 3 } },
+              { label: 'I will say less, and listen far more.', weight: { anchor: 3 } },
+            ],
+          },
+          {
+            kind: 'choice',
+            prompt: 'One year from now, I want to be the person who…',
+            options: [
+              { label: 'Built something that outlasted me.', weight: { fence_builder: 3 } },
+              { label: 'Caught one student in time.', weight: { first_responder: 3 } },
+              {
+                label: 'Changed how this school talks about it.',
+                weight: { truth_teller: 2, igniter: 1 },
+              },
+              { label: 'Simply kept showing up.', weight: { anchor: 3 } },
+            ],
+          },
+          {
+            kind: 'text',
+            prompt:
+              'One sentence to the student you are doing this for. They will never read it, but write it anyway.',
+            placeholder: 'Say it the way you would actually say it.',
+            maxLength: 180,
+          },
+          {
+            kind: 'choice',
+            prompt: 'Finish the sentence. I am not the expert, but I am…',
+            options: [
+              {
+                label: '…the fence.',
+                weight: { fence_builder: 4 },
+                line: 'You said you are the fence. Keep saying it. A fence does not soften a fall. It means the fall never has to happen.',
+              },
+              {
+                label: '…the bridge.',
+                weight: { bridge: 4 },
+                line: 'You said you are the bridge. A bridge carries nobody. It simply refuses to let the distance win.',
+              },
+              {
+                label: '…the anchor.',
+                weight: { anchor: 4 },
+                line: 'You said you are the anchor. The anchor is the least dramatic thing on the ship, and the only reason the ship is still there in the morning.',
+              },
+              {
+                label: '…the one who noticed.',
+                weight: { first_responder: 4 },
+                line: 'You said you are the one who noticed. Every story of a life that turned around begins with that sentence.',
+              },
+            ],
+          },
+        ],
+      },
+      note: 'THE SEND-OFF GIFT. Say: "Last thing — and this one is for you, not for me." No timers, no scores, nothing goes on the wall. They answer ten questions, type their first name, and the app writes each of them a personal letter signed by you, which they can save as an image and share. Give them a full 3–4 minutes and let the room go quiet. Watch their faces when the letters open — that is the moment. Then take the stage back for the final two slides.',
+    },
+    {
       kind: 'statement',
       text: 'The fence does not get built by this seminar. It gets built by the people in this room, on Monday morning.',
       attribution: 'Jessica C. Oliver',
@@ -183,10 +353,30 @@ export const module6: Module = {
       note: 'Thank them by name where you can. Make it clear the responsibility — and the power — now sits with them, not the trainer.',
     },
     {
-      kind: 'statement',
-      text: 'Maraming salamat. You came as teachers and nurses and counselors. You leave as the fence. Go build it.',
-      attribution: 'Jessica C. Oliver — UPC 2, Complete',
-      note: 'Certificate energy. Say it slowly, let the send-off land, then invite the applause. This is the final slide of the whole seminar — end on their names and their mission, not yours.',
+      kind: 'finale',
+      headline: 'Maraming Salamat',
+      text: 'You came as teachers and nurses and counselors. You leave as the fence. Go build it.',
+      attribution: 'Jessica C. Oliver',
+      badge: 'UPC 2 · Complete',
+      note: 'Certificate energy. The headline writes itself letter by letter and the room quietens — say nothing for the first four seconds and let it. Then say it slowly, let the send-off land, and invite the applause. This is the final slide of the whole seminar — end on their names and their mission, not yours.',
+    },
+    {
+      kind: 'activity',
+      activity: {
+        id: 'upc2-m6-feedback-1',
+        kind: 'feedback',
+        title: 'Before you go — how did we do?',
+        intro: 'Two minutes, honestly. This one is for the trainer, not for you.',
+        dimensions: [
+          { id: 'overall', label: 'The two days, overall' },
+          { id: 'clarity', label: 'The trainer explained things clearly' },
+          { id: 'usefulness', label: 'I can actually use this on Monday' },
+          { id: 'pacing', label: 'The pacing felt right' },
+        ],
+        commentPrompt: 'What should we keep, and what should we change?',
+        commentPlaceholder: 'Say it plainly. It only helps if it is honest.',
+      },
+      note: 'AFTER the applause. Say: "One last thing — same QR, same phone. Tell me the truth about these two days." Open it from the dashboard; the QR stays on screen for anyone who closed the tab. The star averages appear live on the wall — the written comments never do, so people can be honest. Read those later on the dashboard or in the CSV export.',
     },
   ],
   notes: {

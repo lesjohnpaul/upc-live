@@ -3,6 +3,7 @@
 import type { Slide } from '@/lib/types';
 import SlideShell from '@/components/ui/SlideShell';
 import Kicker from '@/components/ui/Kicker';
+import JoinQr from '@/components/ui/JoinQr';
 import { ACTIVITY_META, activityPrompt } from '@/components/live/activityMeta';
 import LiveResults from '@/components/live/LiveResults';
 import type { StageLive } from '@/components/live/useSessionState';
@@ -14,15 +15,56 @@ import type { StageLive } from '@/components/live/useSessionState';
  */
 export default function ActivitySlide({
   slide,
+  code,
   live,
 }: {
   slide: Extract<Slide, { kind: 'activity' }>;
+  code: string;
   live?: StageLive;
 }) {
   const { activity } = slide;
   const meta = ACTIVITY_META[activity.kind];
   const prompt = activityPrompt(activity);
   const isOpen = !!live?.sessionId && live.activeId === activity.id;
+
+  /**
+   * Feedback is the closing slide and doubles as the rescue QR: phones that
+   * closed the tab after the letter need a way back in, so the code stays on
+   * screen whether the activity is locked or open.
+   */
+  if (activity.kind === 'feedback') {
+    return (
+      <SlideShell>
+        <Kicker>
+          Activity · {meta.label}
+          {isOpen && (
+            <span className="inline-flex items-center gap-2 text-gold-300">
+              <span aria-hidden className="size-2.5 animate-breathe rounded-full bg-gold-400" />
+              LIVE
+            </span>
+          )}
+        </Kicker>
+        <h2 className="mx-auto mt-6 max-w-[24ch] text-center font-display text-[clamp(1.8rem,3.6vw,3.4rem)] font-medium leading-tight tracking-tight [text-wrap:balance]">
+          {prompt}
+        </h2>
+        <div className="mt-10 flex w-full flex-col items-center justify-center gap-[clamp(2rem,5vw,5rem)] lg:flex-row lg:items-center">
+          <JoinQr code={code} size="size-[min(30vh,30vw)]" />
+          <div className="flex w-full max-w-3xl justify-center">
+            {isOpen && live.sessionId ? (
+              <LiveResults activity={activity} sessionId={live.sessionId} />
+            ) : (
+              <p className="inline-flex items-center gap-3 rounded-full bg-cream-100/8 px-6 py-3 text-center font-sans text-[clamp(0.95rem,1.4vw,1.3rem)] font-bold tracking-wide text-cream-100/70 ring-1 ring-cream-100/15">
+                <span aria-hidden>{live?.offline ? '📡' : '🔒'}</span>
+                {live?.offline
+                  ? 'Offline — live results unavailable'
+                  : 'Locked — open from the dashboard'}
+              </p>
+            )}
+          </div>
+        </div>
+      </SlideShell>
+    );
+  }
 
   if (isOpen && live.sessionId) {
     return (

@@ -18,6 +18,8 @@ import SliderCard from './SliderCard';
 import DragDropCard from './DragDropCard';
 import QuizCard from './QuizCard';
 import QnACard from './QnACard';
+import FeedbackCard from './FeedbackCard';
+import ReflectionCard from './ReflectionCard';
 
 type Session = { id: string; code: string; day: number; active_activity: string | null };
 
@@ -190,11 +192,13 @@ function ActivityCard({
   activity,
   sessionId,
   participantId,
+  role,
   tick,
 }: {
   activity: Activity;
   sessionId: string;
   participantId: string;
+  role: Role;
   tick: number;
 }) {
   const props = { sessionId, participantId, tick };
@@ -211,6 +215,10 @@ function ActivityCard({
       return <QuizCard activity={activity} {...props} />;
     case 'qna':
       return <QnACard activity={activity} {...props} />;
+    case 'feedback':
+      return <FeedbackCard activity={activity} {...props} />;
+    case 'reflection':
+      return <ReflectionCard activity={activity} role={role} {...props} />;
   }
 }
 
@@ -259,6 +267,7 @@ export default function JoinFlow({ session }: { session: Session }) {
           activity={activity}
           sessionId={session.id}
           participantId={participant.id}
+          role={participant.role}
           tick={tick}
         />
       ) : (

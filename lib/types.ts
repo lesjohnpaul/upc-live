@@ -66,13 +66,75 @@ export type QnaActivity = {
   prompt: string;
 };
 
+/**
+ * Closing feedback for the trainer. Star-rated dimensions plus one free-text
+ * box. Payload: `{ stars: Record<dimensionId, 1..5>, comment: string }`.
+ * The stage shows averages only — comments are for the dashboard and the CSV,
+ * never the projector.
+ */
+export type FeedbackActivity = {
+  id: string;
+  kind: 'feedback';
+  title: string;
+  intro?: string;
+  dimensions: { id: string; label: string }[];
+  commentPrompt: string;
+  commentPlaceholder?: string;
+};
+
+// --- Reflection → personalised letter ---
+
+export type Archetype =
+  | 'fence_builder'
+  | 'first_responder'
+  | 'bridge'
+  | 'truth_teller'
+  | 'anchor'
+  | 'igniter';
+
+export const ARCHETYPES: Record<Archetype, string> = {
+  fence_builder: 'The Fence-Builder',
+  first_responder: 'The First Responder',
+  bridge: 'The Bridge',
+  truth_teller: 'The Truth-Teller',
+  anchor: 'The Anchor',
+  igniter: 'The Igniter',
+};
+
+export type ReflectionOption = {
+  label: string;
+  /** archetype points awarded when chosen */
+  weight?: Partial<Record<Archetype, number>>;
+  /**
+   * Sentence woven into the letter when chosen. Options carry their own prose
+   * so the composer never has to know which question index meant what —
+   * add/reorder questions freely without touching lib/letter.ts.
+   */
+  line?: string;
+};
+
+export type ReflectionQuestion =
+  | { kind: 'choice'; prompt: string; options: ReflectionOption[] }
+  /** free text, quoted verbatim in the letter */
+  | { kind: 'text'; prompt: string; placeholder?: string; maxLength?: number };
+
+export type ReflectionActivity = {
+  id: string;
+  kind: 'reflection';
+  title: string;
+  intro?: string;
+  questions: ReflectionQuestion[];
+};
+
 export type Activity =
   | PollActivity
   | WordCloudActivity
   | DragDropActivity
   | QuizActivity
   | SliderActivity
-  | QnaActivity;
+  | QnaActivity
+  | FeedbackActivity
+  | ReflectionActivity;
 
 // --- Slides ---
 
@@ -86,6 +148,14 @@ export type Slide = SlideBase &
     | { kind: 'welcome'; dayLabel: string; title: string; subtitle?: string; presenter: string } // animated walk-in/hold screen
     | { kind: 'title'; kicker?: string; title: string; subtitle?: string; image?: string }
     | { kind: 'statement'; text: string; attribution?: string; image?: string }
+    | {
+        kind: 'finale';
+        headline: string;
+        text: string;
+        attribution?: string;
+        badge?: string;
+        image?: string;
+      } // closing send-off: letter-by-letter headline, embers, shimmer
     | { kind: 'stat'; value: string; label: string; context?: string; source?: string }
     | { kind: 'bullets'; title: string; bullets: string[]; image?: string }
     | { kind: 'image'; image: string; caption?: string }

@@ -5,6 +5,7 @@ import type { StageLive } from '@/components/live/useSessionState';
 import WelcomeSlide from './WelcomeSlide';
 import TitleSlide from './TitleSlide';
 import StatementSlide from './StatementSlide';
+import FinaleSlide from './FinaleSlide';
 import StatSlide from './StatSlide';
 import BulletsSlide from './BulletsSlide';
 import ImageSlide from './ImageSlide';
@@ -30,6 +31,8 @@ export default function SlideView({
       return <TitleSlide slide={slide} />;
     case 'statement':
       return <StatementSlide slide={slide} />;
+    case 'finale':
+      return <FinaleSlide slide={slide} />;
     case 'stat':
       return <StatSlide slide={slide} />;
     case 'bullets':
@@ -41,7 +44,7 @@ export default function SlideView({
     case 'recap':
       return <RecapSlide slide={slide} />;
     case 'activity':
-      return <ActivitySlide slide={slide} live={live} />;
+      return <ActivitySlide slide={slide} code={code} live={live} />;
     case 'qr':
       return <QrSlide slide={slide} code={code} />;
   }

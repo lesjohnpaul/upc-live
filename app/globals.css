@@ -42,6 +42,7 @@
   /* ---- Typography ---- */
   --font-display: var(--font-fraunces), Georgia, serif;
   --font-sans: var(--font-alegreya), system-ui, sans-serif;
+  --font-hand: var(--font-caveat), "Segoe Script", cursive;
 
   /* Fluid stage type — readable from the back row. */
   --text-statement: clamp(2.75rem, 6.5vw, 7rem);
