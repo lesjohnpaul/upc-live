@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { getSupabase } from '@/lib/supabase';
 import { ROLES, type Activity } from '@/lib/types';
 import { days } from '@/content';
+import { demoModule } from '@/content/demo';
 import { ACTIVITY_META, activityPrompt } from '@/components/live/activityMeta';
 import { useSessionState } from '@/components/live/useSessionState';
 import { useLiveResponses, type LiveResponse } from '@/components/live/useLiveResponses';
@@ -29,7 +30,10 @@ export default function Dashboard({ code }: { code: string }) {
   const { session, offline, setActive } = useSessionState(code);
   const { rows, participants, participantCount } = useLiveResponses(session?.id ?? null);
   const [busy, setBusy] = useState(false);
-  const day = days.find((d) => d.course.toUpperCase() === code);
+  const day =
+    code === 'DEMO'
+      ? { modules: [demoModule] }
+      : days.find((d) => d.course.toUpperCase() === code);
 
   if (!day) {
     return (

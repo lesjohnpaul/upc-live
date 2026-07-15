@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# UPC Live
 
-## Getting Started
+A live, phone-based audience-response platform for a two-day **Universal
+Prevention Curriculum** echo training run for a DepEd division. It turns a
+static seminar into one connected experience — the projector, every
+participant's phone, and the facilitator's control panel, synced live.
 
-First, run the development server:
+**[▶ Try the public demo](https://jessica-oliver-upc.vercel.app/demo)** · **[Why I built it →](docs/WHY.md)**
+
+> The demo runs entirely on seeded mock data. It never touches the real
+> seminar's database — see [How the demo stays safe](#how-the-demo-stays-safe).
+
+## What it does
+
+- **Stage** — the projector view the presenter drives with arrow keys: animated
+  slides, a flip-card analogy, count-up stats, an embered finale, and live
+  activity results that fill in as answers arrive.
+- **Join** — participants scan a QR code, pick a role (head teacher / nurse /
+  counselor / admin), and answer from their phone. No app, no account.
+- **Dashboard** — the facilitator opens and locks one activity at a time,
+  triages Q&A, watches responses land in real time, reads speaker feedback, and
+  exports everything to CSV.
+
+Eight activity types: poll, word cloud, drag-and-drop sort, timed quiz with
+leaderboard, before/after confidence slider, live Q&A wall, star-rated speaker
+feedback, and a reflection that composes a **private personalized letter** for
+each participant.
+
+Built to survive weak venue wifi: reconnect armor on every realtime
+subscription, optimistic serialized upserts on every answer, and a presenter
+deck that works with zero network.
+
+## Stack
+
+Next.js (App Router) · Supabase (Postgres + realtime) · Tailwind CSS · Framer
+Motion · deployed on Vercel.
+
+The data model is three tables: `sessions`, `participants`, and `responses`
+(one row per participant per activity, upserted).
+
+## Run it locally
 
 ```bash
+npm install
+cp .env.example .env.local   # fill in your Supabase project + dashboard passwords
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open <http://localhost:3000>. The `/demo` routes work without any Supabase
+configuration — they run on the in-memory mock.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Purpose |
+| --- | --- |
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon key |
+| `NEXT_PUBLIC_BASE_URL` | Base URL used to build join QR codes |
+| `DASHBOARD_PASSWORDS` | Comma-separated facilitator passwords (server-only) gating `/dashboard/[code]` |
 
-## Learn More
+## How the demo stays safe
 
-To learn more about Next.js, take a look at the following resources:
+Every Supabase call in the app goes through a single `getSupabase()` accessor.
+On any `/demo` path in the browser it returns an **in-memory mock client**
+([`lib/demo/`](lib/demo)) instead of the real one, seeded with fake participants
+and responses. Because the demo makes no network call, the real UPC1/UPC2
+seminar records are physically unreachable from it. The real `/dashboard/[code]`
+routes keep their server-side password gate untouched.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Layout
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+app/            routes: home, /stage, /join, /dashboard, /demo, /guide, /handbook
+components/     stage/ join/ live/ dashboard/ ui/ — the surfaces
+content/        the curriculum as typed modules + slides + activities
+lib/            supabase client, realtime armor, aggregation, letter composer
+lib/demo/       in-memory mock client that powers the public demo
+```
 
-## Deploy on Vercel
+## Tests
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npx vitest run
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Covers response aggregation, the letter composer, and the demo mock client.

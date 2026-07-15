@@ -47,8 +47,16 @@ export default function Home() {
         ))}
       </div>
 
+      {/* public demo — safe to share, runs on mock data */}
+      <Link
+        href="/demo"
+        className="mt-10 rounded-full bg-gold-400/15 px-6 py-3 font-sans text-sm font-bold text-gold-300 ring-1 ring-gold-400/40 transition-colors hover:bg-gold-400/25"
+      >
+        Explore the live demo →
+      </Link>
+
       {/* quieter secondary links */}
-      <nav className="mt-12 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 font-sans text-sm text-cream-100/60">
+      <nav className="mt-8 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 font-sans text-sm text-cream-100/60">
         <Link href="/guide" className="transition-colors hover:text-gold-300">
           Facilitator&apos;s Guide
         </Link>
