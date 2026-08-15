@@ -3,8 +3,25 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import type { ToleranceActivity } from '@/lib/types';
-import { REWARD_BASE, isToleranceReached, rewardForTap, urgeForTap } from '@/lib/tolerance';
+import {
+  REWARD_BASE,
+  TOLERANCE_TAPS,
+  isToleranceReached,
+  rewardForTap,
+  urgeForTap,
+} from '@/lib/tolerance';
 import { SendStatus, useResponse } from './useResponse';
+
+/**
+ * The tap where urge overtakes payout — the crossing the two meters draw, and
+ * the one mid-run beat worth announcing. Derived rather than written as 6, so
+ * it follows DECAY/URGE_RATE if the curves get tuned in rehearsal.
+ */
+const CROSSING_TAP = (() => {
+  for (let n = 1; n < TOLERANCE_TAPS; n++)
+    if (urgeForTap(n) > rewardForTap(n) / REWARD_BASE) return n;
+  return TOLERANCE_TAPS;
+})();
 
 type Props = {
   activity: ToleranceActivity;
@@ -42,22 +59,34 @@ export default function ToleranceCard({ activity, sessionId, participantId, tick
   const tapsRef = useRef(0);
   const touched = useRef(false);
   const startedAt = useRef<number | null>(null);
+  const revealRef = useRef<HTMLHeadingElement>(null);
+
+  /** what a prior run on this phone left behind; 0 when this is a first arrival */
+  const priorTaps = typeof remote?.taps === 'number' ? remote.taps : 0;
 
   useEffect(() => {
-    const prior = remote?.taps;
-    if (!touched.current && typeof prior === 'number' && prior > 0) {
-      tapsRef.current = prior;
-      setTaps(prior);
+    if (!touched.current && priorTaps > 0) {
+      tapsRef.current = priorTaps;
+      setTaps(priorTaps);
     }
-  }, [remote]);
+  }, [priorTaps]);
 
   const done = isToleranceReached(taps);
+
+  // The button they were activating is gone at the reveal, so focus would fall
+  // to <body> and the payoff would land in silence. Move it to the headline,
+  // once, on the flip.
+  useEffect(() => {
+    if (done) revealRef.current?.focus();
+  }, [done]);
   /** what another tap would pay — the bar the urge is racing */
   const nextReward = rewardForTap(taps);
   /** what the tap they just made paid */
   const lastReward = rewardForTap(Math.max(0, taps - 1));
   const urge = urgeForTap(taps);
-  const flashOpacity = 0.35 + 0.65 * (lastReward / REWARD_BASE);
+  /* floor is 0.5, not 0.35: this runs on their own phones, possibly dimmed, in
+     a bright function room. The font-size multiplier carries the shrink. */
+  const flashOpacity = 0.5 + 0.5 * (lastReward / REWARD_BASE);
 
   const tap = () => {
     if (!settled || isToleranceReached(tapsRef.current)) return;
@@ -76,8 +105,12 @@ export default function ToleranceCard({ activity, sessionId, participantId, tick
   };
 
   // `settled` gates input: a card that accepted taps before hydration resolved
-  // could overwrite a finished row with a fresh, shorter run.
-  if (!settled) {
+  // could overwrite a finished row with a fresh, shorter run. Hold one beat
+  // longer while a restore is still landing, or a rejoin paints the tap screen
+  // for a frame — and a tap in that frame discards the restore for good.
+  // `taps === 0` stands in for "the restore hasn't run yet": tapping sets
+  // touched and taps together, so this cannot outlast either outcome.
+  if (!settled || (priorTaps > 0 && taps === 0)) {
     return (
       <div className="flex flex-col items-center gap-5 py-10 text-center">
         <p className="animate-breathe font-display text-4xl" aria-hidden>
@@ -107,7 +140,11 @@ export default function ToleranceCard({ activity, sessionId, participantId, tick
           <p className="text-base font-bold uppercase tracking-[0.28em] text-[var(--fg-muted)]">
             {activity.title}
           </p>
-          <h2 className="font-catalyst-display text-[clamp(2.25rem,9vw,3.5rem)] font-extrabold leading-[1.05] tracking-tight [text-wrap:balance]">
+          <h2
+            ref={revealRef}
+            tabIndex={-1}
+            className="font-catalyst-display text-[clamp(2.25rem,9vw,3.5rem)] font-extrabold leading-[1.05] tracking-tight outline-none [text-wrap:balance]"
+          >
             {activity.revealHeadline}
           </h2>
 
@@ -149,7 +186,14 @@ export default function ToleranceCard({ activity, sessionId, participantId, tick
       </h2>
 
       <div className="flex flex-col gap-2">
-        <Meter label="Payout" value={nextReward / REWARD_BASE} color="var(--accent)" reduce={reduce} />
+        {/* "Next", because this is what another tap would pay — the big number
+            below reports what the last one did */}
+        <Meter
+          label="Next payout"
+          value={nextReward / REWARD_BASE}
+          color="var(--accent)"
+          reduce={reduce}
+        />
         <Meter label="Urge" value={urge} color="var(--accent-hot)" reduce={reduce} />
       </div>
 
@@ -190,9 +234,14 @@ export default function ToleranceCard({ activity, sessionId, participantId, tick
         {taps} {taps === 1 ? 'tap' : 'taps'}
       </p>
       {/* the mechanic is size and colour, which a screen reader cannot see —
-          this is the same lesson in words */}
+          this is the same lesson in words. Only on the beats that teach: the
+          first tap and the crossing. Announcing all twenty queues up faster
+          than they play, so by tap 20 you are hearing tap 5. The third beat,
+          the collapse, is the reveal taking focus — this region is unmounted
+          by then. */}
       <p role="status" className="sr-only">
         {taps > 0 &&
+          (taps === 1 || taps === CROSSING_TAP) &&
           `Tap ${taps} paid ${Math.round(lastReward)}. Urge ${Math.round(urge * 100)} percent.`}
       </p>
     </div>

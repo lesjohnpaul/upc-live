@@ -3,7 +3,6 @@
 import type { ToleranceActivity } from '@/lib/types';
 import { TOLERANCE_TAPS } from '@/lib/tolerance';
 import { useLiveResponses } from './useLiveResponses';
-import AnswerCount from './AnswerCount';
 
 type Payload = { peakReward?: number; finalReward?: number };
 
@@ -44,14 +43,13 @@ export default function ToleranceLive({
         have felt it
       </p>
       {pct !== null && (
-        <p className="max-w-[26ch] font-catalyst-body text-stage-min leading-snug text-[var(--fg-muted)]">
-          {/* every player stops at the same tap, so the ordinal is fixed;
-              16th and 20th both take "th" */}
-          Their {TOLERANCE_TAPS}th tap paid{' '}
+        /* the sentence carrying the insight, so it reads from the back row —
+           phrased without an ordinal so TOLERANCE_TAPS stays free to tune */
+        <p className="max-w-[26ch] font-catalyst-body text-stage-body leading-snug text-[var(--fg)]">
+          Tap {TOLERANCE_TAPS} paid{' '}
           <strong className="font-bold text-[var(--accent-hot)]">{pct}%</strong> of their first.
         </p>
       )}
-      <AnswerCount answered={rows.length} total={participantCount} />
     </div>
   );
 }
