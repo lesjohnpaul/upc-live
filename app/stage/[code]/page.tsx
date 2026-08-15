@@ -19,7 +19,8 @@ export default async function StagePage({ params }: { params: Promise<{ code: st
           Session &ldquo;{raw}&rdquo; not found
         </h1>
         <p className="mt-4 max-w-md font-sans opacity-70">
-          Check the session code. Available sessions are UPC1 (Day 1) and UPC2 (Day 2).
+          Check the session code. Available sessions:{' '}
+          {days.map((d) => `${d.course.toUpperCase()} (Day ${d.day})`).join(', ')}.
         </p>
         <Link
           href="/stage"

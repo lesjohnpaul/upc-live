@@ -270,18 +270,35 @@ export const module1: Module = {
       title: 'Lead with Purpose',
       note: 'The turn. Say it before the next slide: "Here is the part nobody told you. You are not being recruited today. You already have this job, and you have had it your whole life."',
     },
+    // The mandate beat, split three ways. BulletsSlide renders its list at a
+    // fixed clamp (28px at 1920) no matter how few bullets it holds, so six
+    // duties on one bullets slide was the least legible thing in the deck.
+    // The number and the one duty that matters therefore move onto `stat` and
+    // `statement`, which render at 240px and 112px; the remaining five stay a
+    // light supporting list.
+    {
+      kind: 'stat',
+      value: '6',
+      label: 'duties your Student Council already has',
+      source: 'DDB Board Regulation No. 5, s. 2007 §8.6',
+      note: 'The reveal. Say it before the counter finishes: "You are not being recruited today. Barkada Kontra Droga already assigns six duties to every Student Council in this country, and yours is one of them." Do not list them yet — the next slide shows five and holds one back on purpose.',
+    },
     {
       kind: 'bullets',
-      title: 'Your six duties',
+      title: 'The other five',
       bullets: [
         'Encourage participation',
         'Integrate into SSLG programs',
         'Initiate activities',
-        'Conduct echo-seminars',
         'Life-skills training',
         'Support the BKD Center',
       ],
-      note: 'DDB Board Regulation No. 5, s. 2007 §8.6 assigns these six to Student Councils — Barkada Kontra Droga. Read them out; do not elaborate on all six. Land on "conduct echo-seminar": every president in this room is expected to bring this back and teach it. Advisers: DepEd Memorandum 200, s. 2016 makes the school head fully responsible for the NDEP and directs schools to establish BKD chapters through student organizations — so the president is not asking you for a favour.',
+      note: 'Read these five out; do not elaborate on any of them. The regulation\'s own wording is: encourage participation, integrate BKD into existing SSLG programs, initiate BKD activities in their schools, provide life-skills training, and support the BKD Center. Then say "I left one out" and advance — the sixth line on the list is the one this whole symposium is about.',
+    },
+    {
+      kind: 'statement',
+      text: 'Duty four: conduct an echo-seminar.',
+      note: 'The turn. Pause five seconds before you speak. Then: "Conduct an echo-seminar or training on the prevention and control of dangerous drugs among the student populace. That is the regulation\'s wording, and that is exactly what this hour is asking you to go home and do." Every president in this room is already expected to bring this back and teach it. Advisers: DepEd Memorandum 200, s. 2016 makes the school head fully responsible for the NDEP and directs schools to establish BKD chapters through student organizations — so the president is not asking you for a favour.',
     },
     {
       kind: 'stat',
@@ -347,7 +364,7 @@ export const module1: Module = {
       ],
       emphasize: [
         'Act 0 in full. The concession ("adults have been overstating this") is what buys the rest of the hour — never trim it to save time.',
-        'The six duties and the 2007 stat. This is the entire ask: they already hold the mandate, so the close is a reminder, not a recruitment.',
+        'The mandate beat — the "6", the five, "duty four", and the 2007 stat. This is the entire ask: they already hold the mandate, so the close is a reminder, not a recruitment. If you trim anything here, trim the list of five, never "duty four".',
         'Build Your Barkada. If only one thing survives the hour, it is a written 90-day commitment with an adviser\'s signature attached.',
       ],
     },
