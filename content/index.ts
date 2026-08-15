@@ -13,10 +13,11 @@ import { module3 as upc2m3 } from './upc2/module-3';
 import { module4 as upc2m4 } from './upc2/module-4';
 import { module5 as upc2m5 } from './upc2/module-5';
 import { module6 as upc2m6 } from './upc2/module-6';
+import { module1 as catalyst1 } from './catalyst/module-1';
 
 export type Day = {
-  day: 1 | 2;
-  course: 'upc1' | 'upc2';
+  day: 1 | 2 | 3;
+  course: 'upc1' | 'upc2' | 'catalyst';
   courseTitle: string;
   modules: Module[];
 };
@@ -33,6 +34,12 @@ export const days: Day[] = [
     course: 'upc2',
     courseTitle: 'Physiology and Pharmacology for Prevention Specialists',
     modules: [upc2m1, upc2m2, upc2m3, upc2m4, upc2m5, upc2m6],
+  },
+  {
+    day: 3,
+    course: 'catalyst',
+    courseTitle: 'The Catalyst',
+    modules: [catalyst1],
   },
 ];
 
