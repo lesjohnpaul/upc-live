@@ -157,6 +157,19 @@ export const demoModule: Module = {
     {
       kind: 'activity',
       activity: {
+        id: 'demo-tolerance',
+        kind: 'tolerance',
+        title: 'Beat the Brain',
+        tapLabel: 'TAP',
+        revealHeadline: 'That’s tolerance.',
+        revealBody:
+          'Nothing about the button changed. Your brain did. It turned down the reward and turned up the wanting — so you worked harder for less and barely noticed the trade. That is what a substance does, only it happens to a real person over months, not to a phone over twenty taps.',
+      },
+      note: 'Let them tap in silence. When the room goes quiet, ask: at what point did you notice you were working harder for less?',
+    },
+    {
+      kind: 'activity',
+      activity: {
         id: 'demo-qna',
         kind: 'qna',
         prompt: 'What questions do you have about prevention science? Type them on your phone.',

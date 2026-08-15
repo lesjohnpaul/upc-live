@@ -8,15 +8,17 @@ export const ACTIVITY_META: Record<Activity['kind'], { icon: string; label: stri
   dragdrop: { icon: '🧩', label: 'Sorting' },
   quiz: { icon: '⚡', label: 'Quiz' },
   qna: { icon: '❓', label: 'Q&A' },
+  tolerance: { icon: '🧠', label: 'Beat the Brain' },
   feedback: { icon: '⭐', label: 'Feedback' },
   reflection: { icon: '✉️', label: 'Letter' },
 };
 
-/** Display prompt for any activity kind (quiz/reflection/feedback use their title). */
+/** Display prompt for any activity kind (title-bearing kinds use their title). */
 export function activityPrompt(activity: Activity): string {
   return activity.kind === 'quiz' ||
     activity.kind === 'reflection' ||
-    activity.kind === 'feedback'
+    activity.kind === 'feedback' ||
+    activity.kind === 'tolerance'
     ? activity.title
     : activity.prompt;
 }

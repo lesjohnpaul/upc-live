@@ -92,6 +92,22 @@ export type QnaActivity = {
 };
 
 /**
+ * Beat the Brain. The participant taps for a shrinking reward while the urge
+ * meter climbs; at TOLERANCE_TAPS the card names what they just felt.
+ * Payload: `{ taps, peakReward, finalReward, seconds }`.
+ */
+export type ToleranceActivity = {
+  id: string;
+  kind: 'tolerance';
+  title: string;
+  /** button label, e.g. "TAP" */
+  tapLabel: string;
+  /** shown full-screen once the curve has crossed */
+  revealHeadline: string;
+  revealBody: string;
+};
+
+/**
  * Closing feedback for the trainer. Star-rated dimensions plus one free-text
  * box. Payload: `{ stars: Record<dimensionId, 1..5>, comment: string }`.
  * The stage shows averages only — comments are for the dashboard and the CSV,
@@ -158,6 +174,7 @@ export type Activity =
   | QuizActivity
   | SliderActivity
   | QnaActivity
+  | ToleranceActivity
   | FeedbackActivity
   | ReflectionActivity;
 

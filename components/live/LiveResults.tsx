@@ -8,6 +8,7 @@ import QuizLeaderboardLive from './QuizLeaderboardLive';
 import ConfidenceShiftLive, { SliderAverageLive } from './ConfidenceShiftLive';
 import QnAWall from './QnAWall';
 import FeedbackLive from './FeedbackLive';
+import ToleranceLive from './ToleranceLive';
 import { useLiveResponses } from './useLiveResponses';
 import AnswerCount from './AnswerCount';
 
@@ -97,6 +98,8 @@ export default function LiveResults({
       );
     case 'qna':
       return <QnAWall activity={activity} sessionId={sessionId} />;
+    case 'tolerance':
+      return <ToleranceLive activity={activity} sessionId={sessionId} />;
     case 'feedback':
       return <FeedbackLive activity={activity} sessionId={sessionId} />;
     case 'dragdrop':
