@@ -13,6 +13,9 @@ const hue: Record<Role, string> = {
   nurse_dentist: 'bg-spruce-400/15 text-spruce-600 ring-spruce-400/40',
   counselor: 'bg-clay-400/15 text-clay-600 ring-clay-400/40',
   admin: 'bg-forest-400/15 text-forest-600 ring-forest-400/40',
+  // Catalyst roles never share a room with the four above, so reusing hues is safe.
+  student_leader: 'bg-spruce-400/15 text-spruce-600 ring-spruce-400/40',
+  adviser: 'bg-clay-400/15 text-clay-600 ring-clay-400/40',
 };
 
 const dot: Record<Role, string> = {
@@ -20,9 +23,11 @@ const dot: Record<Role, string> = {
   nurse_dentist: 'bg-spruce-400',
   counselor: 'bg-clay-400',
   admin: 'bg-forest-500',
+  student_leader: 'bg-spruce-400',
+  adviser: 'bg-clay-400',
 };
 
-/** Pill identifying one of the four participant roles. */
+/** Pill identifying one participant role. */
 export default function RoleBadge({ role, className = '' }: RoleBadgeProps) {
   return (
     <span

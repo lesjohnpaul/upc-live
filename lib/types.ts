@@ -23,6 +23,15 @@ export const COURSE_ROLES: Record<string, Role[]> = {
   catalyst: ['student_leader', 'adviser'],
 };
 
+/**
+ * Roles for a course id or session code (`UPC1`, `catalyst`, …). Anything
+ * unrecognised (DEMO, a typo'd URL) gets the original adult four, so a student
+ * role can never leak into a UPC session.
+ */
+export function rolesFor(course?: string): Role[] {
+  return COURSE_ROLES[course?.toLowerCase() ?? ''] ?? COURSE_ROLES.upc1;
+}
+
 // --- Activities ---
 
 export type PollActivity = {

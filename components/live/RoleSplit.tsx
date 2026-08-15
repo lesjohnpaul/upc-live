@@ -10,6 +10,9 @@ const roleBar: Record<Role, string> = {
   nurse_dentist: 'bg-spruce-400',
   counselor: 'bg-clay-400',
   admin: 'bg-forest-400',
+  // Catalyst roles never share a room with the four above, so reusing hues is safe.
+  student_leader: 'bg-spruce-400',
+  adviser: 'bg-clay-400',
 };
 
 const roleText: Record<Role, string> = {
@@ -17,6 +20,8 @@ const roleText: Record<Role, string> = {
   nurse_dentist: 'text-spruce-200',
   counselor: 'text-clay-200',
   admin: 'text-forest-300',
+  student_leader: 'text-spruce-200',
+  adviser: 'text-clay-200',
 };
 
 /** Compact grouped bars: per role, the distribution across poll options. */

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { getSupabase } from '@/lib/supabase';
 import { resilientChannel } from '@/lib/realtime';
-import { ROLES, type Activity, type Role } from '@/lib/types';
+import { ROLES, rolesFor, type Activity, type Role } from '@/lib/types';
 import {
   getStoredParticipant,
   storeParticipant,
@@ -91,6 +91,9 @@ const roleHue: Record<Role, string> = {
   nurse_dentist: 'bg-spruce-400/15 text-spruce-600 ring-spruce-400/40',
   counselor: 'bg-clay-400/15 text-clay-600 ring-clay-400/40',
   admin: 'bg-forest-400/15 text-forest-600 ring-forest-400/40',
+  // Catalyst roles never share a room with the four above, so reusing hues is safe.
+  student_leader: 'bg-spruce-400/15 text-spruce-600 ring-spruce-400/40',
+  adviser: 'bg-clay-400/15 text-clay-600 ring-clay-400/40',
 };
 
 function Onboarding({
@@ -106,6 +109,8 @@ function Onboarding({
   const [failed, setFailed] = useState(false);
   const courseTitle = days.find((d) => d.course.toUpperCase() === session.code.toUpperCase())
     ?.courseTitle;
+  // the session code IS the course id (UPC1 / UPC2 / CATALYST); unknown → adult four
+  const roles = rolesFor(session.code);
 
   const join = async () => {
     if (!role || busy) return;
@@ -139,7 +144,7 @@ function Onboarding({
       </header>
 
       <div className="flex flex-col gap-3">
-        {(Object.keys(ROLES) as Role[]).map((r) => (
+        {roles.map((r) => (
           <button
             key={r}
             type="button"

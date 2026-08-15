@@ -39,8 +39,12 @@ export type Letter = {
   signatureSub: string;
 };
 
-/** One line. They already know their own job; this just names it back to them. */
-const ROLE_OPENING: Record<Role, string> = {
+/**
+ * One line. They already know their own job; this just names it back to them.
+ * ponytail: Partial — this letter lives in UPC 2 module 6 and is written for the
+ * adult four. A role without an opening simply gets one paragraph fewer.
+ */
+const ROLE_OPENING: Partial<Record<Role, string>> = {
   head_teacher:
     'You walked in already carrying other people’s classrooms as well as your own. You walk out carrying something more.',
   nurse_dentist:
@@ -143,13 +147,14 @@ export function composeLetter({
 
   const name = firstName.trim();
   const praise = ARCHETYPE_PRAISE[archetype];
+  const opening = ROLE_OPENING[role];
   return {
     greeting: name ? `Dear ${name},` : 'Dear friend,',
     archetype,
     archetypeTitle: ARCHETYPES[archetype],
     traits: ARCHETYPE_TRAITS[archetype],
     // praise first: the letter should land as warmth before it lands as weight
-    paragraphs: [praise, ROLE_OPENING[role], ...lines],
+    paragraphs: opening ? [praise, opening, ...lines] : [praise, ...lines],
     praise,
     quote,
     closing: CLOSING,

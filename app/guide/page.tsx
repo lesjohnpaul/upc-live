@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import type { Role, Slide } from '@/lib/types';
-import { ROLES } from '@/lib/types';
+import type { Slide } from '@/lib/types';
+import { rolesFor } from '@/lib/types';
 import { days } from '@/content';
 import { ACTIVITY_META, activityPrompt } from '@/components/live/activityMeta';
 import RoleBadge from '@/components/ui/RoleBadge';
@@ -393,7 +393,7 @@ export default function GuidePage() {
                 <section className="mt-8">
                   <SectionLabel>Role examples</SectionLabel>
                   <div className="mt-3 grid gap-4 sm:grid-cols-2">
-                    {(Object.keys(ROLES) as Role[]).map((role) => (
+                    {rolesFor(mod.course).map((role) => (
                       <div
                         key={role}
                         className="rounded-2xl bg-cream-100 p-5 ring-1 ring-cream-300"
