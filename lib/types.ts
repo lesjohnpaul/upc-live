@@ -1,10 +1,26 @@
-export type Role = 'head_teacher' | 'nurse_dentist' | 'counselor' | 'admin';
+export type Role =
+  | 'head_teacher'
+  | 'nurse_dentist'
+  | 'counselor'
+  | 'admin'
+  // The Catalyst (symposium) audience — SSLG pairs, one of each per school.
+  | 'student_leader'
+  | 'adviser';
 
 export const ROLES: Record<Role, string> = {
   head_teacher: 'Head Teacher',
   nurse_dentist: 'Nurse / Dentist',
   counselor: 'Guidance Counselor',
   admin: 'Admin Officer',
+  student_leader: 'SSLG President',
+  adviser: 'SSLG Adviser',
+};
+
+/** Roles offered on the join screen, per course. */
+export const COURSE_ROLES: Record<string, Role[]> = {
+  upc1: ['head_teacher', 'nurse_dentist', 'counselor', 'admin'],
+  upc2: ['head_teacher', 'nurse_dentist', 'counselor', 'admin'],
+  catalyst: ['student_leader', 'adviser'],
 };
 
 // --- Activities ---
@@ -182,14 +198,14 @@ export type FacilitatorNotes = {
     emphasize: string[];
   };
   fiveEs: FiveEs;
-  examples: Record<Role, string>;
+  examples: Partial<Record<Role, string>>;
   policyAlignment: { order: string; connection: string }[];
   processingQuestions: string[];
 };
 
 export type Module = {
   id: string;
-  course: 'upc1' | 'upc2';
+  course: 'upc1' | 'upc2' | 'catalyst';
   number: number;
   title: string;
   tagline: string;
