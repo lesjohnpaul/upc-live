@@ -11,14 +11,10 @@ export const ACTIVITY_META: Record<Activity['kind'], { icon: string; label: stri
   tolerance: { icon: '🧠', label: 'Beat the Brain' },
   feedback: { icon: '⭐', label: 'Feedback' },
   reflection: { icon: '✉️', label: 'Letter' },
+  plan: { icon: '🤝', label: 'Commitment' },
 };
 
 /** Display prompt for any activity kind (title-bearing kinds use their title). */
 export function activityPrompt(activity: Activity): string {
-  return activity.kind === 'quiz' ||
-    activity.kind === 'reflection' ||
-    activity.kind === 'feedback' ||
-    activity.kind === 'tolerance'
-    ? activity.title
-    : activity.prompt;
+  return 'title' in activity ? activity.title : activity.prompt;
 }

@@ -6,11 +6,10 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { MockClient } from './mockClient';
 import { TOLERANCE_TAPS, rewardForTap } from '../tolerance';
+import type { Role } from '../types';
 
 export const DEMO_SESSION_ID = 'demo-session';
 export const DEMO_CODE = 'DEMO';
-
-type Role = 'head_teacher' | 'nurse_dentist' | 'counselor' | 'admin';
 
 const PEOPLE: { nickname: string; role: Role }[] = [
   { nickname: 'Teacher Ana', role: 'head_teacher' },
@@ -38,6 +37,72 @@ const QUESTIONS = [
   'How do we start a prevention huddle without scaring the students?',
   'Is there a cheaper alternative to after-school programs for small schools?',
   'How do we measure protective factors during the annual health check?',
+];
+
+/**
+ * Build Your Barkada seed: nine schools, each an SSLG pair on two phones, so
+ * the wall has to page. One pair writes to the 140-character ceiling and one
+ * school has only the student answering — both are the layouts most likely to
+ * break on a projector, so they belong in the rehearsal data.
+ */
+const SCHOOLS: { school: string; student: string; adviser?: string; when: string }[] = [
+  {
+    school: 'Bagong Silang National High School',
+    student: 'A monthly BKD peer-mentoring circle every second Friday, run by the SSLG officers.',
+    adviser: 'I will sign the activity permit for the whole quarter in one go, not per session.',
+    when: 'Within 2 weeks',
+  },
+  {
+    school: 'Sto. Niño Integrated School',
+    student: 'An echo-seminar for all Grade 7 sections on what we learned here today.',
+    adviser: 'I will give them the 2nd period of Homeroom Guidance so nobody misses class for it.',
+    when: 'This quarter',
+  },
+  {
+    school: 'Mataas na Paaralang Neptali A. Gonzales',
+    // both at the 140-character ceiling — the tallest card the wall can ever get
+    student:
+      'A “Barkada Kontra Droga” corner in the library that our officers restock weekly, plus a suggestion box we read aloud at SSLG meetings.',
+    adviser:
+      'I will unblock the library space, fund the first month of printing, and sit in the first three meetings so this does not die by week four.',
+    when: 'Before December',
+  },
+  {
+    school: 'Pinagbuhatan High School',
+    student: 'A drug-free pledge wall during Intramurals, signed by every homeroom.',
+    adviser: 'I will fund the tarpaulin and get us a booth beside the registration table.',
+    when: 'Within 2 weeks',
+  },
+  {
+    school: 'Rizal Experimental Station High School',
+    student: 'Weekly 15-minute SSLG segment in the flag ceremony on refusal skills.',
+    adviser: 'I will put it on the official flag ceremony programme so it cannot be skipped.',
+    when: 'This quarter',
+  },
+  {
+    school: 'San Joaquin-Kalawaan High School',
+    student: 'Train ten Grade 10 peer facilitators so this does not stop when we graduate.',
+    adviser: 'I will name a co-adviser from Grade 9 so there is somebody after me.',
+    when: 'Before December',
+  },
+  {
+    school: 'Nagpayong High School',
+    student: 'An anonymous “ask anything” box answered by the guidance counselor every month.',
+    adviser: 'I will book the counselor one hour a month and protect it in her schedule.',
+    when: 'This quarter',
+  },
+  {
+    school: 'Manggahan High School',
+    student: 'A sports clinic every Saturday morning so there is somewhere to be.',
+    adviser: 'I will secure the covered court permit and the first-aid kit.',
+    when: 'Within 2 weeks',
+  },
+  // adviser has not answered yet — the wall must still show the school
+  {
+    school: 'Kalawaan National High School',
+    student: 'A film showing plus open forum for Grades 9 and 10 during Drug Abuse Prevention Week.',
+    when: 'Before December',
+  },
 ];
 
 function buildSeed(client: MockClient) {
@@ -87,6 +152,22 @@ function buildSeed(client: MockClient) {
       2,
     ),
   );
+
+  // Build Your Barkada: two extra participants per school, an SSLG pair, so the
+  // wall can label whose commitment is whose.
+  SCHOOLS.forEach(({ school, student, adviser, when }, s) => {
+    const base = PEOPLE.length + s * 2;
+    const join = (i: number, role: Role, nickname: string) =>
+      db.participants.push({ id: pid(i), session_id: DEMO_SESSION_ID, role, nickname });
+
+    join(base, 'student_leader', `SSLG ${school.split(' ')[0]}`);
+    push(base, 'demo-plan', { school, commitment: student, when }, 1);
+    if (adviser) {
+      join(base + 1, 'adviser', `Adviser ${school.split(' ')[0]}`);
+      // typed on a different phone — casing/spacing must still match on the wall
+      push(base + 1, 'demo-plan', { school: school.toUpperCase(), commitment: adviser, when }, 1);
+    }
+  });
 }
 
 let singleton: MockClient | null = null;

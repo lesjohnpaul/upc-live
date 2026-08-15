@@ -123,6 +123,23 @@ export type FeedbackActivity = {
   commentPlaceholder?: string;
 };
 
+/**
+ * Build Your Barkada — each SSLG pair drafts a 90-day commitment. Prompts
+ * differ by role: the student names the activity, the adviser names what they
+ * will sign, fund, or unblock. Payload: `{ school, commitment, when }`.
+ */
+export type PlanActivity = {
+  id: string;
+  kind: 'plan';
+  title: string;
+  intro?: string;
+  schoolPrompt: string;
+  prompts: { student_leader: string; adviser: string };
+  whenPrompt: string;
+  /** e.g. ['Within 2 weeks', 'This quarter', 'Before December'] */
+  whenOptions: string[];
+};
+
 // --- Reflection → personalised letter ---
 
 export type Archetype =
@@ -176,7 +193,8 @@ export type Activity =
   | QnaActivity
   | ToleranceActivity
   | FeedbackActivity
-  | ReflectionActivity;
+  | ReflectionActivity
+  | PlanActivity;
 
 // --- Slides ---
 

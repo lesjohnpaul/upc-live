@@ -179,6 +179,25 @@ export const demoModule: Module = {
     {
       kind: 'activity',
       activity: {
+        id: 'demo-plan',
+        kind: 'plan',
+        title: 'Build Your Barkada',
+        intro:
+          'DDB Board Regulation No. 5, s. 2007 §8.6 already gives your Student Council this job — including “initiate BKD activities in their schools.” You have held this since 2007. Ninety days. One activity. Write it down.',
+        schoolPrompt: 'Which school are you from?',
+        prompts: {
+          student_leader:
+            'What is the ONE activity you will run in your school in the next 90 days?',
+          adviser: 'What will you sign, fund, or unblock so it actually happens?',
+        },
+        whenPrompt: 'When does it start?',
+        whenOptions: ['Within 2 weeks', 'This quarter', 'Before December'],
+      },
+      note: 'The pair fills this in together — but on two phones, with two different prompts. Read three schools aloud off the wall before moving on.',
+    },
+    {
+      kind: 'activity',
+      activity: {
         id: 'demo-slider-after',
         kind: 'slider',
         phase: 'after',

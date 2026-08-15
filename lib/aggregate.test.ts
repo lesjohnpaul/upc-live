@@ -5,6 +5,7 @@ import {
   wordCloudCounts,
   quizLeaderboard,
   confidenceShift,
+  groupBySchool,
   mergeSnapshot,
   type ResponseRow,
   type ParticipantRow,
@@ -194,6 +195,45 @@ describe('confidenceShift', () => {
     const before = [row('p1', { value: 3 }), row('p2', {}), row('p3', { value: 'high' })];
     const after = [row('p1', { value: 5 })];
     expect(confidenceShift(before, after)).toEqual({ beforeAvg: 3, afterAvg: 5, delta: 2 });
+  });
+});
+
+describe('groupBySchool', () => {
+  const people: ParticipantRow[] = [
+    { id: 'p1', role: 'student_leader' },
+    { id: 'p2', role: 'adviser' },
+  ];
+
+  it('lands a pair who typed the school differently on one card, student first', () => {
+    const plans = groupBySchool(
+      [
+        row('p2', { school: 'bagong  silang nhs ', commitment: 'I will fund the tarpaulins' }),
+        row('p1', { school: 'Bagong Silang NHS', commitment: 'Weekly BKD peer session' }),
+      ],
+      people,
+    );
+    expect(plans).toHaveLength(1);
+    expect(plans[0].entries.map((e) => e.role)).toEqual(['student_leader', 'adviser']);
+    // the display name keeps the spelling, the key does the matching
+    expect(plans[0].name).toBe('bagong silang nhs');
+  });
+
+  it('drops drafts with no school or no commitment, and sorts schools by name', () => {
+    const plans = groupBySchool(
+      [
+        row('p1', { school: 'Zaragoza NHS', commitment: 'Echo-seminar in November' }),
+        row('p2', { school: '   ', commitment: 'no school yet' }),
+        row('p1', { school: 'Angeles NHS', commitment: '  ' }),
+        row('p2', { school: 'Angeles NHS' }),
+      ],
+      people,
+    );
+    expect(plans.map((p) => p.name)).toEqual(['Zaragoza NHS']);
+  });
+
+  it('keeps a commitment whose responder is not in the participants list', () => {
+    const plans = groupBySchool([row('ghost', { school: 'X NHS', commitment: 'Do the thing' })], []);
+    expect(plans[0].entries[0].role).toBeNull();
   });
 });
 

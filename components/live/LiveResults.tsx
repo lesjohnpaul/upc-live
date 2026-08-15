@@ -9,6 +9,7 @@ import ConfidenceShiftLive, { SliderAverageLive } from './ConfidenceShiftLive';
 import QnAWall from './QnAWall';
 import FeedbackLive from './FeedbackLive';
 import ToleranceLive from './ToleranceLive';
+import PlanWallLive from './PlanWallLive';
 import { useLiveResponses } from './useLiveResponses';
 import AnswerCount from './AnswerCount';
 
@@ -106,5 +107,7 @@ export default function LiveResults({
       return <DragDropLive activity={activity} sessionId={sessionId} />;
     case 'reflection':
       return <LetterCountLive activity={activity} sessionId={sessionId} />;
+    case 'plan':
+      return <PlanWallLive activity={activity} sessionId={sessionId} />;
   }
 }

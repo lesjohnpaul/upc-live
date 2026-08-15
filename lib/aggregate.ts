@@ -98,6 +98,54 @@ export function confidenceShift(
   return { beforeAvg, afterAvg, delta: afterAvg - beforeAvg };
 }
 
+export type SchoolPlan = {
+  /** normalised match key — see groupBySchool */
+  key: string;
+  name: string;
+  entries: { role: Role | null; commitment: string; when: string }[];
+};
+
+/** the pair reads as "we will run X" then "I will unblock it" */
+const planRank = (role: Role | null) =>
+  role === 'student_leader' ? 0 : role === 'adviser' ? 1 : 2;
+
+/**
+ * Build Your Barkada, grouped for the projector wall. The school name is typed
+ * by hand on two different phones, so the match key is case- and
+ * whitespace-insensitive — "Bagong Silang NHS" and "bagong  silang nhs" must
+ * land on one card or the pairing that the whole session is built on breaks.
+ * Rows without a school AND a commitment are drafts, not plans; they are
+ * dropped. Schools sort alphabetically so an arriving row inserts in place
+ * instead of reshuffling the wall.
+ */
+export function groupBySchool(
+  responses: ResponseRow[],
+  participants: ParticipantRow[],
+): SchoolPlan[] {
+  const roleById = new Map(participants.map((p) => [p.id, p.role]));
+  const schools = new Map<string, SchoolPlan>();
+
+  for (const r of responses) {
+    const p = r.payload as { school?: unknown; commitment?: unknown; when?: unknown } | null;
+    if (typeof p?.school !== 'string' || typeof p.commitment !== 'string') continue;
+    const name = p.school.trim().replace(/\s+/g, ' ');
+    const commitment = p.commitment.trim().replace(/\s+/g, ' ');
+    if (!name || !commitment) continue;
+    const key = name.toLowerCase();
+    const school = schools.get(key) ?? { key, name, entries: [] };
+    school.entries.push({
+      role: roleById.get(r.participant_id) ?? null,
+      commitment,
+      when: typeof p.when === 'string' ? p.when.trim() : '',
+    });
+    schools.set(key, school);
+  }
+
+  for (const school of schools.values())
+    school.entries.sort((a, b) => planRank(a.role) - planRank(b.role));
+  return [...schools.values()].sort((a, b) => a.name.localeCompare(b.name));
+}
+
 /**
  * Merge a fetched snapshot with realtime events that were applied while the
  * snapshot query was in flight — events are newer, so they win on key
