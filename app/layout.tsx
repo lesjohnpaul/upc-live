@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Alegreya_Sans, Caveat } from "next/font/google";
+import { Fraunces, Alegreya_Sans, Caveat, Archivo, Inter } from "next/font/google";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -21,6 +21,20 @@ const caveat = Caveat({
   weight: ["600"],
 });
 
+/* The Catalyst — heavy display grotesque; weight+tracking carry rally vs calm */
+const archivo = Archivo({
+  variable: "--font-archivo",
+  subsets: ["latin"],
+  weight: ["400", "600", "800", "900"],
+});
+
+/* The Catalyst — body, and the only face the phone surface loads */
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+});
+
 export const metadata: Metadata = {
   title: "UPC Live — Division Echo Training",
   description:
@@ -35,7 +49,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fraunces.variable} ${alegreya.variable} ${caveat.variable} h-full antialiased`}
+      className={`${fraunces.variable} ${alegreya.variable} ${caveat.variable} ${archivo.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

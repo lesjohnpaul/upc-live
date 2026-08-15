@@ -39,6 +39,40 @@
   --color-spruce-400: oklch(0.70 0.075 200);
   --color-spruce-600: oklch(0.52 0.075 205);
 
+  /* ---- The Catalyst: two-mode system ---- */
+
+  /* RALLY — leadership, NDEP content, games, leaderboards. Never pure black. */
+  --color-ink-950: oklch(0.16 0.021 258);
+  --color-ink-900: oklch(0.215 0.026 256);
+  --color-ink-800: oklch(0.285 0.031 254);
+  --color-ink-700: oklch(0.37 0.034 252);
+  --color-teal-300: oklch(0.855 0.115 188);
+  --color-teal-400: oklch(0.775 0.142 190);
+  --color-teal-500: oklch(0.695 0.155 192);
+  --color-teal-600: oklch(0.60 0.145 195);
+  --color-coral-300: oklch(0.80 0.135 28);
+  --color-coral-400: oklch(0.715 0.178 25);
+  --color-coral-500: oklch(0.635 0.198 25);
+
+  /* CALM — stigma framing, reflection, Q&A. Low contrast, more air. */
+  --color-slate-900: oklch(0.30 0.018 245);
+  --color-slate-700: oklch(0.455 0.02 243);
+  --color-slate-500: oklch(0.60 0.018 241);
+  --color-mist-50: oklch(0.975 0.005 232);
+  --color-mist-100: oklch(0.945 0.009 230);
+  --color-mist-200: oklch(0.90 0.013 228);
+  --color-sage-300: oklch(0.815 0.042 156);
+  --color-sage-500: oklch(0.655 0.052 158);
+
+  /* Catalyst typography */
+  --font-catalyst-display: var(--font-archivo), system-ui, sans-serif;
+  --font-catalyst-body: var(--font-inter), system-ui, sans-serif;
+
+  /* Readability floor — audience feedback was "bigger letters".
+     Nothing on the projector goes below --text-stage-min. */
+  --text-stage-min: clamp(1.5rem, 2.2vw, 2.25rem);
+  --text-stage-body: clamp(2rem, 3vw, 3.25rem);
+
   /* ---- Typography ---- */
   --font-display: var(--font-fraunces), Georgia, serif;
   --font-sans: var(--font-alegreya), system-ui, sans-serif;
@@ -86,4 +120,29 @@ body {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ---- The Catalyst mode swap ----
+   Components read the semantic aliases only. Setting data-mode on any
+   wrapper remaps the whole subtree — never fork a component per mode. */
+[data-mode='rally'] {
+  --bg: var(--color-ink-950);
+  --bg-raised: var(--color-ink-900);
+  --fg: var(--color-mist-50);
+  --fg-muted: color-mix(in oklch, var(--color-mist-50) 68%, transparent);
+  --accent: var(--color-teal-400);
+  --accent-hot: var(--color-coral-400);
+  --motion-fast: 200ms;
+  --motion-slow: 260ms;
+}
+
+[data-mode='calm'] {
+  --bg: var(--color-mist-100);
+  --bg-raised: var(--color-mist-50);
+  --fg: var(--color-slate-900);
+  --fg-muted: var(--color-slate-500);
+  --accent: var(--color-sage-500);
+  --accent-hot: var(--color-sage-500);
+  --motion-fast: 420ms;
+  --motion-slow: 600ms;
 }
