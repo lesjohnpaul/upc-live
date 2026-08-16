@@ -51,6 +51,7 @@ export const module1: Module = {
       kind: 'title',
       kicker: 'Act 0',
       title: 'Alam Mo Ba Talaga?',
+      image: '/catalyst/act0-auditorium.jpg',
       note: 'Say the concession out loud before the slider: "You have all heard the anti-drug talk. Some of you have heard it three times. Today I am not going to exaggerate at you — I am going to show you the actual numbers, and some of them will annoy you." That sentence buys the next 55 minutes.',
     },
     {
@@ -150,12 +151,14 @@ export const module1: Module = {
       kind: 'title',
       kicker: 'Act 2',
       title: 'Why it hooks you',
+      image: '/catalyst/act2-craving.jpg',
       note: 'Transition: "Nobody plans this. So how does anybody end up there?" Act 2 is the science, and it is the part that dismantles the blame.',
     },
     {
       kind: 'bullets',
       title: 'Dopamine',
       bullets: ['The brain’s "do that again" signal.', 'Drugs flood it. Nature loses.'],
+      image: '/catalyst/reward-pathway.jpg',
       note: 'Dopamine is not the pleasure — it is the sticky note that says do that again. It exists to make you repeat things that keep you alive: eating, friendship, winning. Substances release far more of it than any of those, so the brain learns the wrong lesson very fast. Keep this to sixty seconds; the next activity teaches it better than you can.',
     },
     {
@@ -181,6 +184,7 @@ export const module1: Module = {
     {
       kind: 'statement',
       text: 'Addiction is a health condition. Not a character flaw.',
+      image: '/catalyst/calm-portrait.jpg',
       note: 'Slow down. This is the RA 9165 §43 requirement made human: students must be taught the difference between a person with a medical condition and a criminal, precisely so nobody in this room learns to despise a classmate. Say it plainly: nobody ever plans this, and the person it happens to needs a referral, not a rumour.',
     },
 
@@ -189,6 +193,7 @@ export const module1: Module = {
       kind: 'title',
       kicker: 'Act 3',
       title: 'What’s actually out there',
+      image: '/catalyst/act3-vapour.jpg',
       note: 'Transition: "You have heard the myths for years. Ten questions. No score goes on any record." Keep it fast and loud — this is the energy peak before the mandate.',
     },
     {
@@ -268,6 +273,7 @@ export const module1: Module = {
       kind: 'title',
       kicker: 'Act 4',
       title: 'Lead with Purpose',
+      image: '/catalyst/act4-leaders.jpg',
       note: 'The turn. Say it before the next slide: "Here is the part nobody told you. You are not being recruited today. You already have this job, and you have had it your whole life."',
     },
     // The mandate beat, split three ways. BulletsSlide renders its list at a
@@ -346,6 +352,7 @@ export const module1: Module = {
     {
       kind: 'finale',
       headline: 'You Are the Catalyst',
+      image: '/catalyst/finale-catalyst.jpg',
       text: 'Your plan is on that wall. Go.',
       attribution: 'Jessica C. Oliver',
       badge: 'Lead with Purpose',
