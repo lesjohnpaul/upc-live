@@ -1,6 +1,6 @@
 'use client';
 
-import type { Slide } from '@/lib/types';
+import type { Module, Slide, StageMode } from '@/lib/types';
 import type { StageLive } from '@/components/live/useSessionState';
 import WelcomeSlide from './WelcomeSlide';
 import TitleSlide from './TitleSlide';
@@ -19,33 +19,39 @@ export default function SlideView({
   slide,
   code,
   live,
+  course,
 }: {
   slide: Slide;
   code: string;
   live?: StageLive;
+  course: Module['course'];
 }) {
+  // The one place the course turns into a mode. UPC keeps the palette it
+  // shipped with; The Catalyst rallies by default and a slide can opt into calm.
+  const mode: StageMode = course === 'catalyst' ? (slide.mode ?? 'rally') : 'upc';
+
   switch (slide.kind) {
     case 'welcome':
-      return <WelcomeSlide slide={slide} />;
+      return <WelcomeSlide slide={slide} mode={mode} />;
     case 'title':
-      return <TitleSlide slide={slide} />;
+      return <TitleSlide slide={slide} mode={mode} />;
     case 'statement':
-      return <StatementSlide slide={slide} />;
+      return <StatementSlide slide={slide} mode={mode} />;
     case 'finale':
-      return <FinaleSlide slide={slide} />;
+      return <FinaleSlide slide={slide} mode={mode} />;
     case 'stat':
-      return <StatSlide slide={slide} />;
+      return <StatSlide slide={slide} mode={mode} />;
     case 'bullets':
-      return <BulletsSlide slide={slide} />;
+      return <BulletsSlide slide={slide} mode={mode} />;
     case 'image':
-      return <ImageSlide slide={slide} />;
+      return <ImageSlide slide={slide} mode={mode} />;
     case 'analogy':
-      return <AnalogySlide slide={slide} />;
+      return <AnalogySlide slide={slide} mode={mode} />;
     case 'recap':
-      return <RecapSlide slide={slide} />;
+      return <RecapSlide slide={slide} mode={mode} />;
     case 'activity':
-      return <ActivitySlide slide={slide} code={code} live={live} />;
+      return <ActivitySlide slide={slide} code={code} live={live} mode={mode} />;
     case 'qr':
-      return <QrSlide slide={slide} code={code} />;
+      return <QrSlide slide={slide} code={code} mode={mode} />;
   }
 }

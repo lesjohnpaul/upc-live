@@ -1,6 +1,6 @@
 'use client';
 
-import type { Slide } from '@/lib/types';
+import type { Slide, StageMode } from '@/lib/types';
 import SlideShell from '@/components/ui/SlideShell';
 import Kicker from '@/components/ui/Kicker';
 import JoinQr from '@/components/ui/JoinQr';
@@ -8,12 +8,14 @@ import JoinQr from '@/components/ui/JoinQr';
 export default function QrSlide({
   slide,
   code,
+  mode,
 }: {
   slide: Extract<Slide, { kind: 'qr' }>;
   code: string;
+  mode: StageMode;
 }) {
   return (
-    <SlideShell>
+    <SlideShell mode={mode}>
       <Kicker>Session {code}</Kicker>
       {slide.title && (
         <h2 className="mt-6 text-center font-display text-[clamp(2rem,4vw,3.75rem)] font-medium tracking-tight [text-wrap:balance]">

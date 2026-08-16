@@ -186,6 +186,10 @@ export const module1: Module = {
       kind: 'statement',
       text: 'Addiction is a health condition. Not a character flaw.',
       image: '/catalyst/calm-portrait.jpg',
+      // The one beat that stops shouting: mist ground, slate type, slow
+      // motion. Everything either side of it stays rally, so the drop in
+      // volume is the point. The plate was generated for exactly this slide.
+      mode: 'calm',
       note: 'Slow down. This is the RA 9165 §43 requirement made human: students must be taught the difference between a person with a medical condition and a criminal, precisely so nobody in this room learns to despise a classmate. Say it plainly: nobody ever plans this, and the person it happens to needs a referral, not a rumour.',
     },
 

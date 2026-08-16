@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import type { Slide } from '@/lib/types';
+import type { Slide, StageMode } from '@/lib/types';
 
 /* stylized leaf silhouettes (24×24 viewBox), reused by index */
 const LEAF_PATHS = [
@@ -10,8 +10,9 @@ const LEAF_PATHS = [
   'M12 3C5 5 3 12 6 17c2.5 4 7 5 12 4 1-5 0-9.5-2-13-1.5-2.7-2.5-4-4-5z',
 ];
 
-const GOLD = 'oklch(0.775 0.115 79)';
-const CREAM = 'oklch(0.962 0.013 93)';
+/* the mode decides what the sparks and the shimmer are made of */
+const SPARK = 'var(--accent)';
+const PAPER = 'var(--fg)';
 
 /* ponytail: deterministic per-index params (no Math.random) — SSR-safe, stable across renders */
 const PARTICLES = Array.from({ length: 14 }, (_, i) => {
@@ -56,7 +57,13 @@ const CSS = `
  * Slow-drifting forest gradients, floating gold orbs and leaves, gentle
  * Fraunces entrance. prefers-reduced-motion → static gradient, instant text.
  */
-export default function WelcomeSlide({ slide }: { slide: Extract<Slide, { kind: 'welcome' }> }) {
+export default function WelcomeSlide({
+  slide,
+  mode,
+}: {
+  slide: Extract<Slide, { kind: 'welcome' }>;
+  mode: StageMode;
+}) {
   const reduce = useReducedMotion();
 
   const container = {
@@ -69,7 +76,10 @@ export default function WelcomeSlide({ slide }: { slide: Extract<Slide, { kind: 
   };
 
   return (
-    <section className="relative flex min-h-svh w-full flex-col items-center justify-center overflow-hidden bg-forest-950 px-[6vw] py-[8vh] text-cream-100">
+    <section
+      data-mode={mode}
+      className="relative flex min-h-svh w-full flex-col items-center justify-center overflow-hidden bg-[var(--bg)] px-[6vw] py-[8vh] text-[var(--fg)]"
+    >
       {!reduce && <style>{CSS}</style>}
 
       {/* layered slow-drifting radial gradients */}
@@ -77,8 +87,7 @@ export default function WelcomeSlide({ slide }: { slide: Extract<Slide, { kind: 
         aria-hidden
         className="pointer-events-none absolute -inset-[12%]"
         style={{
-          background:
-            'radial-gradient(70rem 50rem at 30% 20%, oklch(0.295 0.052 160 / 0.75), transparent 65%)',
+          background: 'var(--ambient-a)',
           animation: reduce ? undefined : 'welcome-drift-a 46s ease-in-out infinite alternate',
         }}
       />
@@ -86,8 +95,7 @@ export default function WelcomeSlide({ slide }: { slide: Extract<Slide, { kind: 
         aria-hidden
         className="pointer-events-none absolute -inset-[12%]"
         style={{
-          background:
-            'radial-gradient(60rem 45rem at 72% 78%, oklch(0.26 0.05 185 / 0.6), transparent 62%)',
+          background: 'var(--ambient-b)',
           animation: reduce ? undefined : 'welcome-drift-b 58s ease-in-out infinite alternate',
         }}
       />
@@ -95,8 +103,7 @@ export default function WelcomeSlide({ slide }: { slide: Extract<Slide, { kind: 
         aria-hidden
         className="pointer-events-none absolute -inset-[12%]"
         style={{
-          background:
-            'radial-gradient(50rem 36rem at 55% 45%, oklch(0.5 0.09 84 / 0.14), transparent 60%)',
+          background: 'var(--ambient-c)',
           animation: reduce ? undefined : 'welcome-drift-a 34s ease-in-out infinite alternate-reverse',
         }}
       />
@@ -123,14 +130,14 @@ export default function WelcomeSlide({ slide }: { slide: Extract<Slide, { kind: 
             }
           >
             {p.isLeaf ? (
-              <svg viewBox="0 0 24 24" fill={p.gold ? GOLD : CREAM} className="size-full">
+              <svg viewBox="0 0 24 24" fill={p.gold ? SPARK : PAPER} className="size-full">
                 <path d={LEAF_PATHS[Math.floor(i / 4) % LEAF_PATHS.length]} />
               </svg>
             ) : (
               <span
                 className="block size-full rounded-full"
                 style={{
-                  background: p.gold ? GOLD : CREAM,
+                  background: p.gold ? SPARK : PAPER,
                   filter: `blur(${p.size > 14 ? 3 : 1.5}px)`,
                 }}
               />
@@ -149,9 +156,9 @@ export default function WelcomeSlide({ slide }: { slide: Extract<Slide, { kind: 
           className="font-sans text-[clamp(1rem,1.6vw,1.5rem)] font-bold uppercase tracking-[0.32em]"
           style={
             reduce
-              ? { color: GOLD }
+              ? { color: SPARK }
               : {
-                  background: `linear-gradient(90deg, ${GOLD}, ${CREAM}, ${GOLD})`,
+                  background: `linear-gradient(90deg, ${SPARK}, ${PAPER}, ${SPARK})`,
                   backgroundSize: '200% auto',
                   WebkitBackgroundClip: 'text',
                   backgroundClip: 'text',
@@ -178,7 +185,7 @@ export default function WelcomeSlide({ slide }: { slide: Extract<Slide, { kind: 
         )}
         <motion.p
           variants={item}
-          className="mt-10 font-display text-[clamp(1.2rem,2vw,2rem)] italic text-cream-200/85"
+          className="mt-10 font-display text-[clamp(1.2rem,2vw,2rem)] italic text-[var(--fg-muted)]/85"
         >
           {slide.presenter}
         </motion.p>

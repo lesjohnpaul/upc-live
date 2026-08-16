@@ -11,8 +11,11 @@ export default function AnswerCount({
   label?: string;
 }) {
   return (
-    <p className="font-sans text-[clamp(0.95rem,1.3vw,1.2rem)] text-cream-100/60">
-      <span className="font-bold text-gold-300">{answered}</span>/{total} {label}
+    /* size via --text-meta: this label sat below --text-stage-min, the token
+       that exists to be a floor. UPC keeps its shipped metric; Catalyst gets
+       the floor. */
+    <p className="font-sans text-[length:var(--text-meta)] text-[var(--fg)]/60">
+      <span className="font-bold text-[var(--accent-soft)]">{answered}</span>/{total} {label}
     </p>
   );
 }

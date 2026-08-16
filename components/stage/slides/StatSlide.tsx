@@ -1,12 +1,18 @@
 'use client';
 
-import type { Slide } from '@/lib/types';
+import type { Slide, StageMode } from '@/lib/types';
 import SlideShell from '@/components/ui/SlideShell';
 import StatBlock from '@/components/ui/StatBlock';
 
-export default function StatSlide({ slide }: { slide: Extract<Slide, { kind: 'stat' }> }) {
+export default function StatSlide({
+  slide,
+  mode,
+}: {
+  slide: Extract<Slide, { kind: 'stat' }>;
+  mode: StageMode;
+}) {
   return (
-    <SlideShell>
+    <SlideShell mode={mode}>
       <StatBlock
         value={slide.value}
         label={slide.label}

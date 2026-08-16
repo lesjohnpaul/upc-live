@@ -116,9 +116,16 @@ export default function StageDeck({ code, modules }: { code: string; modules: Mo
   const pos = flat[index];
   const mod = modules[pos.m];
   const slide = mod.slides[pos.s];
+  // Mode for the deck chrome behind and around the slide (the backdrop that
+  // shows during the slide transition, and the progress rail). A slide's own
+  // calm override stays inside SlideShell — the rail should not flip with it.
+  const chromeMode = mod.course === 'catalyst' ? 'rally' : 'upc';
 
   return (
-    <main className="relative h-svh w-full overflow-hidden bg-forest-950 text-cream-100">
+    <main
+      data-mode={chromeMode}
+      className="relative h-svh w-full overflow-hidden bg-[var(--bg)] text-[var(--fg)]"
+    >
       <AnimatePresence initial={false} custom={dir}>
         <motion.div
           key={index}
@@ -130,7 +137,7 @@ export default function StageDeck({ code, modules }: { code: string; modules: Mo
           transition={{ duration: reduce ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
           className="absolute inset-0"
         >
-          <SlideView slide={slide} code={code} live={live} />
+          <SlideView slide={slide} code={code} live={live} course={mod.course} />
         </motion.div>
       </AnimatePresence>
 
@@ -154,20 +161,23 @@ export default function StageDeck({ code, modules }: { code: string; modules: Mo
         current={index}
       />
 
-      {/* latecomer-rescue pills — activity slides only, above the click zones */}
+      {/* latecomer-rescue pills — activity slides only, above the click zones.
+          ponytail: the bg stays a literal 10% cream wash rather than --fg. At
+          that alpha it reads as neutral glass in every mode, and swapping the
+          shade would move UPC by a rounding step for no visible gain. */}
       {slide.kind === 'activity' && (
         <div className="absolute bottom-5 right-5 z-40 flex gap-2">
           <button
             type="button"
             onClick={() => setQrOpen(true)}
-            className="rounded-full bg-cream-50/10 px-4 py-1.5 font-sans text-sm text-cream-200/60 ring-1 ring-cream-100/10 backdrop-blur-sm transition hover:bg-cream-50/20 hover:text-cream-100 focus-visible:bg-cream-50/20 focus-visible:text-cream-100 focus-visible:outline-none focus-visible:ring-gold-400/60"
+            className="rounded-full bg-cream-50/10 px-4 py-1.5 font-sans text-sm text-[var(--fg-muted)]/60 ring-1 ring-[var(--fg)]/10 backdrop-blur-sm transition hover:bg-cream-50/20 hover:text-[var(--fg)] focus-visible:bg-cream-50/20 focus-visible:text-[var(--fg)] focus-visible:outline-none focus-visible:ring-[var(--accent)]/60"
           >
             ⊞ QR
           </button>
           <button
             type="button"
             onClick={() => setTimerOpen(true)}
-            className="rounded-full bg-cream-50/10 px-4 py-1.5 font-sans text-sm text-cream-200/60 ring-1 ring-cream-100/10 backdrop-blur-sm transition hover:bg-cream-50/20 hover:text-cream-100 focus-visible:bg-cream-50/20 focus-visible:text-cream-100 focus-visible:outline-none focus-visible:ring-gold-400/60"
+            className="rounded-full bg-cream-50/10 px-4 py-1.5 font-sans text-sm text-[var(--fg-muted)]/60 ring-1 ring-[var(--fg)]/10 backdrop-blur-sm transition hover:bg-cream-50/20 hover:text-[var(--fg)] focus-visible:bg-cream-50/20 focus-visible:text-[var(--fg)] focus-visible:outline-none focus-visible:ring-[var(--accent)]/60"
           >
             ◷ Timer
           </button>

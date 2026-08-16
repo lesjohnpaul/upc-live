@@ -198,9 +198,21 @@ export type Activity =
 
 // --- Slides ---
 
+/**
+ * Which design mode a slide paints in. `upc` restates the palette the
+ * deployed UPC modules already ship; The Catalyst runs `rally` and drops to
+ * `calm` for the beats that must stop shouting.
+ */
+export type StageMode = 'upc' | 'rally' | 'calm';
+
 type SlideBase = {
   /** per-slide presenter note */
   note?: string;
+  /**
+   * Catalyst-only override. Defaults to `rally`; set `calm` on a beat that
+   * needs the mist ground and slow motion. Ignored on UPC slides.
+   */
+  mode?: Exclude<StageMode, 'upc'>;
 };
 
 export type Slide = SlideBase &

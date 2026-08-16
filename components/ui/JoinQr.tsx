@@ -18,7 +18,9 @@ export default function JoinQr({
 
   return (
     <div className="flex flex-col items-center">
-      <div className="rounded-3xl bg-cream-50 p-[3vmin] shadow-2xl shadow-forest-950/60">
+      {/* ponytail: the QR plate stays a light card with dark modules in every
+          mode — that is a scanner requirement, not a palette choice */}
+      <div className="rounded-3xl bg-cream-50 p-[3vmin] shadow-2xl shadow-[color:var(--shadow)]/60">
         <QRCodeSVG
           value={joinUrl}
           className={size}
@@ -27,7 +29,7 @@ export default function JoinQr({
           level="M"
         />
       </div>
-      <p className="mt-6 font-sans text-[clamp(1.1rem,2vw,2rem)] font-bold tracking-wide text-gold-300">
+      <p className="mt-6 font-sans text-[clamp(1.1rem,2vw,2rem)] font-bold tracking-wide text-[var(--accent-soft)]">
         {joinUrl.replace(/^https?:\/\//, '')}
       </p>
     </div>

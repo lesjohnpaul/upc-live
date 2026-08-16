@@ -30,7 +30,7 @@ export default function BigStatement({
           initial={reduce ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.55, duration: 0.7 }}
-          className="mt-8 font-sans text-[clamp(1rem,1.5vw,1.5rem)] tracking-wide text-gold-300"
+          className="mt-8 font-sans text-[clamp(1rem,1.5vw,1.5rem)] tracking-wide text-[var(--accent-soft)]"
         >
           — {attribution}
         </motion.figcaption>

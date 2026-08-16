@@ -122,27 +122,117 @@ body {
   }
 }
 
-/* ---- The Catalyst mode swap ----
+/* ---- Mode swap ----
    Components read the semantic aliases only. Setting data-mode on any
-   wrapper remaps the whole subtree — never fork a component per mode. */
+   wrapper remaps the whole subtree — never fork a component per mode.
+
+   Three modes: `upc` is the palette the 13 deployed UPC modules already
+   ship, restated as aliases so the stage components can be written once;
+   `rally` and `calm` are The Catalyst's two moods.
+
+   Every value here is a literal colour, never a color-mix inside a
+   gradient — a mode swap must be a pure text substitution so the UPC
+   computed values come out byte-identical to what shipped in July. */
+[data-mode='upc'] {
+  --bg: var(--color-forest-950);
+  --bg-raised: var(--color-forest-900);
+  /* one step up again — a row inside a raised card */
+  --bg-raised-2: var(--color-forest-800);
+  --fg: var(--color-cream-100);
+  --fg-muted: var(--color-cream-200);
+  --accent: var(--color-gold-400);
+  --accent-soft: var(--color-gold-300);
+  --accent-pale: var(--color-gold-200);
+  /* the secondary mark — progress ticks already walked past. UPC pairs a
+     green trail against its gold cursor, so this is not just a dim accent. */
+  --accent-dim: var(--color-forest-400);
+  --accent-hot: var(--color-gold-500);
+  --shadow: var(--color-forest-950);
+  --motion-fast: 200ms;
+  --motion-slow: 450ms;
+  /* Ambient decoration belongs to the mode, not the component: only the
+     mode knows what its ground is made of. */
+  --glow: radial-gradient(90rem 55rem at 50% -18%, oklch(0.30 0.05 160 / 0.85), transparent 62%);
+  --scrim: linear-gradient(
+    to top,
+    oklch(0.185 0.032 165 / 0.95),
+    oklch(0.185 0.032 165 / 0.55)
+  );
+  --swell: radial-gradient(
+    circle,
+    oklch(0.845 0.092 84 / 0.11),
+    oklch(0.845 0.092 84 / 0.04) 45%,
+    oklch(0.845 0.092 84 / 0) 70%
+  );
+  --ambient-a: radial-gradient(70rem 50rem at 30% 20%, oklch(0.295 0.052 160 / 0.75), transparent 65%);
+  --ambient-b: radial-gradient(60rem 45rem at 72% 78%, oklch(0.26 0.05 185 / 0.6), transparent 62%);
+  --ambient-c: radial-gradient(50rem 36rem at 55% 45%, oklch(0.5 0.09 84 / 0.14), transparent 60%);
+  /* Small-type sizes that differ per mode. UPC keeps the metrics it shipped
+     with — its slides already run to 995px against a 907px safe box, so a
+     global raise clips deployed content. The Catalyst starts at the floor. */
+  --text-eyebrow: clamp(0.8rem, 1.1vw, 1.15rem);
+  --text-meta: clamp(0.95rem, 1.3vw, 1.2rem);
+}
+
 [data-mode='rally'] {
   --bg: var(--color-ink-950);
   --bg-raised: var(--color-ink-900);
+  --bg-raised-2: var(--color-ink-800);
   --fg: var(--color-mist-50);
   --fg-muted: color-mix(in oklch, var(--color-mist-50) 68%, transparent);
   --accent: var(--color-teal-400);
+  --accent-soft: var(--color-teal-300);
+  --accent-pale: var(--color-teal-300);
+  --accent-dim: var(--color-teal-600);
   --accent-hot: var(--color-coral-400);
+  --shadow: var(--color-ink-950);
   --motion-fast: 200ms;
   --motion-slow: 260ms;
+  --glow: radial-gradient(90rem 55rem at 50% -18%, oklch(0.30 0.045 235 / 0.85), transparent 62%);
+  --scrim: linear-gradient(to top, oklch(0.16 0.021 258 / 0.95), oklch(0.16 0.021 258 / 0.55));
+  --swell: radial-gradient(
+    circle,
+    oklch(0.855 0.115 188 / 0.11),
+    oklch(0.855 0.115 188 / 0.04) 45%,
+    oklch(0.855 0.115 188 / 0) 70%
+  );
+  --ambient-a: radial-gradient(70rem 50rem at 30% 20%, oklch(0.285 0.031 254 / 0.75), transparent 65%);
+  --ambient-b: radial-gradient(60rem 45rem at 72% 78%, oklch(0.28 0.05 205 / 0.6), transparent 62%);
+  --ambient-c: radial-gradient(50rem 36rem at 55% 45%, oklch(0.60 0.145 195 / 0.14), transparent 60%);
+  --text-eyebrow: var(--text-stage-min);
+  --text-meta: var(--text-stage-min);
 }
 
 [data-mode='calm'] {
   --bg: var(--color-mist-100);
   --bg-raised: var(--color-mist-50);
+  --bg-raised-2: var(--color-mist-200);
   --fg: var(--color-slate-900);
   --fg-muted: var(--color-slate-500);
   --accent: var(--color-sage-500);
+  /* a light ground wants its accents darker, not lighter — sage-300 on mist
+     is invisible, so the soft/pale tiers hold instead of stepping up */
+  --accent-soft: var(--color-sage-500);
+  --accent-pale: var(--color-sage-500);
+  --accent-dim: var(--color-sage-300);
   --accent-hot: var(--color-sage-500);
+  --shadow: var(--color-slate-900);
   --motion-fast: 420ms;
   --motion-slow: 600ms;
+  --glow: radial-gradient(90rem 55rem at 50% -18%, oklch(0.985 0.004 230 / 0.9), transparent 62%);
+  /* the plates were composed for a dark ground, so on mist they need a lighter
+     hand than rally's — measured: 9.1:1 worst-case body contrast at 0.86/0.58,
+     against 10.4:1 at 0.96/0.78 where the plate all but disappears */
+  --scrim: linear-gradient(to top, oklch(0.945 0.009 230 / 0.86), oklch(0.945 0.009 230 / 0.58));
+  --swell: radial-gradient(
+    circle,
+    oklch(0.655 0.052 158 / 0.11),
+    oklch(0.655 0.052 158 / 0.04) 45%,
+    oklch(0.655 0.052 158 / 0) 70%
+  );
+  --ambient-a: radial-gradient(70rem 50rem at 30% 20%, oklch(0.90 0.013 228 / 0.75), transparent 65%);
+  --ambient-b: radial-gradient(60rem 45rem at 72% 78%, oklch(0.90 0.02 190 / 0.6), transparent 62%);
+  --ambient-c: radial-gradient(50rem 36rem at 55% 45%, oklch(0.815 0.042 156 / 0.18), transparent 60%);
+  --text-eyebrow: var(--text-stage-min);
+  --text-meta: var(--text-stage-min);
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import type { Slide } from '@/lib/types';
+import type { Slide, StageMode } from '@/lib/types';
 import SlideShell from '@/components/ui/SlideShell';
 
 /** Deterministic pseudo-random in [0,1) — same value on server and client, so no hydration drift. */
@@ -21,20 +21,26 @@ const EMBERS = Array.from({ length: 22 }, (_, i) => ({
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-export default function FinaleSlide({ slide }: { slide: Extract<Slide, { kind: 'finale' }> }) {
+export default function FinaleSlide({
+  slide,
+  mode,
+}: {
+  slide: Extract<Slide, { kind: 'finale' }>;
+  mode: StageMode;
+}) {
   const reduce = useReducedMotion();
   const chars = [...slide.headline];
   const words = slide.text.split(' ');
 
   return (
-    <SlideShell dim={slide.image}>
+    <SlideShell mode={mode} dim={slide.image}>
       {/* rising sampaguita embers */}
       {!reduce && (
         <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
           {EMBERS.map((e, i) => (
             <motion.span
               key={i}
-              className="absolute bottom-[-6vh] rounded-full bg-gold-300"
+              className="absolute bottom-[-6vh] rounded-full bg-[var(--accent-soft)]"
               style={{ left: `${e.left}%`, width: e.size, height: e.size }}
               initial={{ y: 0, x: 0, opacity: 0 }}
               animate={{
@@ -58,10 +64,7 @@ export default function FinaleSlide({ slide }: { slide: Extract<Slide, { kind: '
       <motion.div
         aria-hidden
         className="pointer-events-none absolute left-1/2 top-[18%] -z-0 h-[130vh] w-[130vh] -translate-x-1/2 -translate-y-1/2 rounded-full"
-        style={{
-          background:
-            'radial-gradient(circle, oklch(0.845 0.092 84 / 0.11), oklch(0.845 0.092 84 / 0.04) 45%, oklch(0.845 0.092 84 / 0) 70%)',
-        }}
+        style={{ background: 'var(--swell)' }}
         initial={reduce ? false : { scale: 0.4, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 2.4, ease: EASE }}
@@ -74,7 +77,7 @@ export default function FinaleSlide({ slide }: { slide: Extract<Slide, { kind: '
           className="mx-auto max-w-[14ch] bg-clip-text font-display text-[clamp(3rem,9vw,10rem)] font-medium leading-[1.02] tracking-tight text-transparent [text-wrap:balance]"
           style={{
             backgroundImage:
-              'linear-gradient(100deg, var(--color-cream-100) 0%, var(--color-cream-100) 35%, var(--color-gold-300) 50%, var(--color-cream-100) 65%, var(--color-cream-100) 100%)',
+              'linear-gradient(100deg, var(--fg) 0%, var(--fg) 35%, var(--accent-soft) 50%, var(--fg) 65%, var(--fg) 100%)',
             backgroundSize: '250% 100%',
           }}
           initial={reduce ? false : { backgroundPosition: '150% 0%' }}
@@ -98,14 +101,14 @@ export default function FinaleSlide({ slide }: { slide: Extract<Slide, { kind: '
         {/* gold rule drawing itself outward */}
         <motion.div
           aria-hidden
-          className="mx-auto mt-10 h-px w-[min(34rem,60vw)] origin-center bg-gradient-to-r from-transparent via-gold-400 to-transparent"
+          className="mx-auto mt-10 h-px w-[min(34rem,60vw)] origin-center bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent"
           initial={reduce ? false : { scaleX: 0, opacity: 0 }}
           animate={{ scaleX: 1, opacity: 1 }}
           transition={{ delay: 0.25 + chars.length * 0.045, duration: 1.1, ease: EASE }}
         />
 
         {/* the send-off, word by word */}
-        <p className="mx-auto mt-10 max-w-[26ch] font-display text-[clamp(1.6rem,3.2vw,3.4rem)] font-medium leading-[1.25] tracking-tight text-cream-100/90 [text-wrap:balance]">
+        <p className="mx-auto mt-10 max-w-[26ch] font-display text-[clamp(1.6rem,3.2vw,3.4rem)] font-medium leading-[1.25] tracking-tight text-[var(--fg)]/90 [text-wrap:balance]">
           {words.map((w, i) => (
             <motion.span
               key={i}
@@ -126,7 +129,7 @@ export default function FinaleSlide({ slide }: { slide: Extract<Slide, { kind: '
 
         {slide.attribution && (
           <motion.figcaption
-            className="mt-12 font-sans text-[clamp(1rem,1.5vw,1.5rem)] tracking-wide text-gold-300"
+            className="mt-12 font-sans text-[clamp(1rem,1.5vw,1.5rem)] tracking-wide text-[var(--accent-soft)]"
             initial={reduce ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
@@ -141,7 +144,7 @@ export default function FinaleSlide({ slide }: { slide: Extract<Slide, { kind: '
 
         {slide.badge && (
           <motion.p
-            className="mt-8 inline-block rounded-full px-6 py-2 font-sans text-[clamp(0.8rem,1vw,1.05rem)] uppercase tracking-[0.35em] text-gold-200 ring-1 ring-gold-400/40"
+            className="mt-8 inline-block rounded-full px-6 py-2 font-sans text-[clamp(0.8rem,1vw,1.05rem)] uppercase tracking-[0.35em] text-[var(--accent-pale)] ring-1 ring-[var(--accent)]/40"
             initial={reduce ? false : { opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{

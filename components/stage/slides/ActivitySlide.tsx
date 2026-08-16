@@ -1,6 +1,6 @@
 'use client';
 
-import type { Slide } from '@/lib/types';
+import type { Slide, StageMode } from '@/lib/types';
 import SlideShell from '@/components/ui/SlideShell';
 import Kicker from '@/components/ui/Kicker';
 import JoinQr from '@/components/ui/JoinQr';
@@ -17,10 +17,12 @@ export default function ActivitySlide({
   slide,
   code,
   live,
+  mode,
 }: {
   slide: Extract<Slide, { kind: 'activity' }>;
   code: string;
   live?: StageLive;
+  mode: StageMode;
 }) {
   const { activity } = slide;
   const meta = ACTIVITY_META[activity.kind];
@@ -34,12 +36,12 @@ export default function ActivitySlide({
    */
   if (activity.kind === 'feedback') {
     return (
-      <SlideShell>
+      <SlideShell mode={mode}>
         <Kicker>
           Activity · {meta.label}
           {isOpen && (
-            <span className="inline-flex items-center gap-2 text-gold-300">
-              <span aria-hidden className="size-2.5 animate-breathe rounded-full bg-gold-400" />
+            <span className="inline-flex items-center gap-2 text-[var(--accent-soft)]">
+              <span aria-hidden className="size-2.5 animate-breathe rounded-full bg-[var(--accent)]" />
               LIVE
             </span>
           )}
@@ -53,7 +55,7 @@ export default function ActivitySlide({
             {isOpen && live.sessionId ? (
               <LiveResults activity={activity} sessionId={live.sessionId} />
             ) : (
-              <p className="inline-flex items-center gap-3 rounded-full bg-cream-100/8 px-6 py-3 text-center font-sans text-[clamp(0.95rem,1.4vw,1.3rem)] font-bold tracking-wide text-cream-100/70 ring-1 ring-cream-100/15">
+              <p className="inline-flex items-center gap-3 rounded-full bg-[var(--fg)]/8 px-6 py-3 text-center font-sans text-[clamp(0.95rem,1.4vw,1.3rem)] font-bold tracking-wide text-[var(--fg)]/70 ring-1 ring-[var(--fg)]/15">
                 <span aria-hidden>{live?.offline ? '📡' : '🔒'}</span>
                 {live?.offline
                   ? 'Offline — live results unavailable'
@@ -68,11 +70,11 @@ export default function ActivitySlide({
 
   if (isOpen && live.sessionId) {
     return (
-      <SlideShell>
+      <SlideShell mode={mode}>
         <Kicker>
           Activity · {meta.label}
-          <span className="inline-flex items-center gap-2 text-gold-300">
-            <span aria-hidden className="size-2.5 animate-breathe rounded-full bg-gold-400" />
+          <span className="inline-flex items-center gap-2 text-[var(--accent-soft)]">
+            <span aria-hidden className="size-2.5 animate-breathe rounded-full bg-[var(--accent)]" />
             LIVE
           </span>
         </Kicker>
@@ -87,9 +89,9 @@ export default function ActivitySlide({
   }
 
   return (
-    <SlideShell>
+    <SlideShell mode={mode}>
       <Kicker>Activity · {meta.label}</Kicker>
-      <div className="mt-10 w-full max-w-4xl rounded-3xl bg-forest-900/80 p-[clamp(2rem,4vw,4rem)] text-center shadow-2xl shadow-forest-950/60 ring-1 ring-cream-100/10">
+      <div className="mt-10 w-full max-w-4xl rounded-3xl bg-[var(--bg-raised)]/80 p-[clamp(2rem,4vw,4rem)] text-center shadow-2xl shadow-[color:var(--shadow)]/60 ring-1 ring-[var(--fg)]/10">
         <span aria-hidden className="text-[clamp(3rem,6vw,5rem)]">
           {meta.icon}
         </span>
@@ -101,15 +103,15 @@ export default function ActivitySlide({
             {activity.options.map((option, i) => (
               <li
                 key={i}
-                className="rounded-xl bg-forest-800/70 px-6 py-3 font-sans text-[clamp(1rem,1.6vw,1.4rem)] ring-1 ring-cream-100/10"
+                className="rounded-xl bg-[var(--bg-raised-2)]/70 px-6 py-3 font-sans text-[clamp(1rem,1.6vw,1.4rem)] ring-1 ring-[var(--fg)]/10"
               >
-                <span className="mr-3 font-bold text-gold-400">{String.fromCharCode(65 + i)}</span>
+                <span className="mr-3 font-bold text-[var(--accent)]">{String.fromCharCode(65 + i)}</span>
                 {option}
               </li>
             ))}
           </ul>
         )}
-        <p className="mt-10 inline-flex items-center gap-3 rounded-full bg-cream-100/8 px-6 py-3 font-sans text-[clamp(0.95rem,1.4vw,1.3rem)] font-bold tracking-wide text-cream-100/70 ring-1 ring-cream-100/15">
+        <p className="mt-10 inline-flex items-center gap-3 rounded-full bg-[var(--fg)]/8 px-6 py-3 font-sans text-[clamp(0.95rem,1.4vw,1.3rem)] font-bold tracking-wide text-[var(--fg)]/70 ring-1 ring-[var(--fg)]/15">
           <span aria-hidden>{live?.offline ? '📡' : '🔒'}</span>
           {live?.offline
             ? 'Offline — live results unavailable'

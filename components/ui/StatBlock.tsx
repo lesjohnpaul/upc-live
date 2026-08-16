@@ -51,7 +51,7 @@ export default function StatBlock({
 
   return (
     <div className={`text-center ${className}`}>
-      <p className="font-display text-stat font-semibold tracking-tighter text-gold-300 tabular-nums">
+      <p className="font-display text-stat font-semibold tracking-tighter text-[var(--accent-soft)] tabular-nums">
         {prefix}
         {target !== null && (n ?? target).toFixed(decimals)}
         {suffix}

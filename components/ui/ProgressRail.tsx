@@ -37,16 +37,16 @@ export default function ProgressRail({ groups, current, className = '' }: Progre
           >
             <span
               className={`max-w-full truncate font-sans text-[0.6rem] font-bold uppercase tracking-[0.2em] transition-opacity duration-500 ${
-                groupActive ? 'text-gold-300 opacity-100' : 'text-cream-200 opacity-0'
+                groupActive ? 'text-[var(--accent-soft)] opacity-100' : 'text-[var(--fg-muted)] opacity-0'
               }`}
             >
               {group.label}
             </span>
             {dense ? (
-              <div className="h-1 w-full overflow-hidden rounded-full bg-cream-100/20">
+              <div className="h-1 w-full overflow-hidden rounded-full bg-[var(--fg)]/20">
                 <div
                   className={`h-full rounded-full transition-all duration-500 ${
-                    groupActive ? 'bg-gold-400' : 'bg-forest-400/70'
+                    groupActive ? 'bg-[var(--accent)]' : 'bg-[var(--accent-dim)]/70'
                   }`}
                   style={{
                     width:
@@ -67,10 +67,10 @@ export default function ProgressRail({ groups, current, className = '' }: Progre
                       key={i}
                       className={`h-1 rounded-full transition-all duration-500 ${
                         idx === current
-                          ? 'w-6 bg-gold-400'
+                          ? 'w-6 bg-[var(--accent)]'
                           : idx < current
-                            ? 'w-2 bg-forest-400/70'
-                            : 'w-2 bg-cream-100/20'
+                            ? 'w-2 bg-[var(--accent-dim)]/70'
+                            : 'w-2 bg-[var(--fg)]/20'
                       }`}
                     />
                   );
