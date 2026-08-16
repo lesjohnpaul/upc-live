@@ -112,7 +112,8 @@ export const module1: Module = {
       kind: 'title',
       kicker: 'Act 1',
       title: 'What actually counts',
-      note: 'Transition: "So if the scary list is not the real list, what IS the list?" Keep the pace up — Act 1 is short.',
+      image: '/catalyst/act1-specimens.jpg',
+      note: 'Transition: "So if the scary list is not the real list, what IS the list?" Keep the pace up — Act 1 is short. The four objects behind you are deliberately neutral — a cup, a tin, a bottle, a packet. Nobody can tell which is which, and that is the point you are about to make.',
     },
     {
       kind: 'bullets',
