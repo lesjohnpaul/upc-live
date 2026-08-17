@@ -12,6 +12,7 @@ export const ACTIVITY_META: Record<Activity['kind'], { icon: string; label: stri
   feedback: { icon: '⭐', label: 'Feedback' },
   reflection: { icon: '✉️', label: 'Letter' },
   plan: { icon: '🤝', label: 'Commitment' },
+  pledge: { icon: '✋', label: 'Pledge' },
 };
 
 /** Display prompt for any activity kind (title-bearing kinds use their title). */

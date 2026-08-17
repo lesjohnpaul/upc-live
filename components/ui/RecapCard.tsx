@@ -38,7 +38,7 @@ export default function RecapCard({ title, points, className = '' }: RecapCardPr
             <svg
               aria-hidden
               viewBox="0 0 24 24"
-              className="mt-1 size-[1.1em] shrink-0 text-gold-400"
+              className="mt-1 size-[1.1em] shrink-0 text-[var(--accent)]"
               fill="none"
               stroke="currentColor"
               strokeWidth="2.5"

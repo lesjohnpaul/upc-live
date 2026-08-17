@@ -105,6 +105,16 @@ const SCHOOLS: { school: string; student: string; adviser?: string; when: string
   },
 ];
 
+/** Every pledge line index — the seeded signers all read the whole thing. */
+const ALL_LINES = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+
+const VOICES: { voice: string; school: string }[] = [
+  { voice: 'Hindi ka mahihiya sa akin kung aayaw ka. Ako bahala.', school: 'Bagong Silang National High School' },
+  { voice: 'You are allowed to just leave. That is not being torpe.', school: 'Sto. Niño Integrated School' },
+  { voice: 'Isang beses lang daw. Ganoon din ang sabi sa lahat.', school: 'Mataas na Paaralang Neptali A. Gonzales' },
+  { voice: 'Tell me and I will not tell anyone else. Pero sasamahan kita.', school: 'Kalawaan National High School' },
+];
+
 function buildSeed(client: MockClient) {
   const db = client.db;
 
@@ -168,6 +178,15 @@ function buildSeed(client: MockClient) {
       push(base + 1, 'demo-plan', { school: school.toUpperCase(), commitment: adviser, when }, 1);
     }
   });
+
+  // The pledge. Deliberately mixed: signed rows with a voice, a signed row with
+  // no voice, and one that tapped every line but never hit sign — so the demo
+  // wall shows that the counter tracks signatures, not openings.
+  VOICES.forEach(({ voice, school }, i) =>
+    push(i, 'demo-pledge', { signed: true, lines: ALL_LINES, school, voice }, 1),
+  );
+  push(VOICES.length, 'demo-pledge', { signed: true, lines: ALL_LINES, school: 'Manggahan High School', voice: '' }, 1);
+  push(VOICES.length + 1, 'demo-pledge', { signed: false, lines: ALL_LINES, school: 'Manggahan High School', voice: 'drafted but never signed' }, 1);
 }
 
 let singleton: MockClient | null = null;

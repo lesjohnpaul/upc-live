@@ -39,30 +39,30 @@ export default function PollResults({
           return (
             <li
               key={i}
-              className={`relative overflow-hidden rounded-xl bg-forest-800/70 ring-1 transition-opacity duration-500 ${
-                isCorrect ? 'ring-2 ring-gold-400' : 'ring-cream-100/10'
+              className={`relative overflow-hidden rounded-xl bg-[var(--bg-raised-2)]/70 ring-1 transition-opacity duration-500 ${
+                isCorrect ? 'ring-2 ring-[var(--accent)]' : 'ring-[var(--fg)]/10'
               } ${dimmed ? 'opacity-45' : ''}`}
             >
               <motion.div
                 aria-hidden
                 className={`absolute inset-y-0 left-0 ${
-                  leading || isCorrect ? 'bg-gold-400/25' : 'bg-forest-600/40'
+                  leading || isCorrect ? 'bg-[var(--accent)]/25' : 'bg-forest-600/40'
                 }`}
                 initial={false}
                 animate={{ width: `${total ? (count / total) * 100 : 0}%` }}
                 transition={{ type: 'spring', stiffness: 60, damping: 16 }}
               />
               <div className="relative flex items-center gap-4 px-6 py-3.5 font-sans text-[clamp(1rem,1.6vw,1.4rem)]">
-                <span className={`font-bold ${leading || isCorrect ? 'text-gold-300' : 'text-gold-400/70'}`}>
+                <span className={`font-bold ${leading || isCorrect ? 'text-[var(--accent-soft)]' : 'text-[var(--accent)]/70'}`}>
                   {String.fromCharCode(65 + i)}
                 </span>
                 <span className="flex-1">{option}</span>
                 {isCorrect && (
-                  <span aria-label="Correct answer" className="font-bold text-gold-300">
+                  <span aria-label="Correct answer" className="font-bold text-[var(--accent-soft)]">
                     ✓
                   </span>
                 )}
-                <span className={`tabular-nums ${leading ? 'font-bold text-gold-300' : 'text-cream-100/70'}`}>
+                <span className={`tabular-nums ${leading ? 'font-bold text-[var(--accent-soft)]' : 'text-[var(--fg)]/70'}`}>
                   {count} · {pct}%
                 </span>
               </div>
@@ -77,7 +77,7 @@ export default function PollResults({
           type="button"
           onClick={() => setShowRoles((s) => !s)}
           aria-pressed={showRoles}
-          className="rounded-full bg-cream-100/10 px-4 py-1.5 font-sans text-sm font-bold text-cream-100/80 ring-1 ring-cream-100/20 transition-colors hover:bg-cream-100/15"
+          className="rounded-full bg-[var(--fg)]/10 px-4 py-1.5 font-sans text-sm font-bold text-[var(--fg)]/80 ring-1 ring-[var(--fg)]/20 transition-colors hover:bg-[var(--fg)]/15"
         >
           {showRoles ? 'Hide roles' : 'By role'}
         </button>

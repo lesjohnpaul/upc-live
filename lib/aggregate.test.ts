@@ -6,6 +6,7 @@ import {
   quizLeaderboard,
   confidenceShift,
   groupBySchool,
+  tallyPledge,
   mergeSnapshot,
   type ResponseRow,
   type ParticipantRow,
@@ -234,6 +235,42 @@ describe('groupBySchool', () => {
   it('keeps a commitment whose responder is not in the participants list', () => {
     const plans = groupBySchool([row('ghost', { school: 'X NHS', commitment: 'Do the thing' })], []);
     expect(plans[0].entries[0].role).toBeNull();
+  });
+});
+
+describe('tallyPledge', () => {
+  it('counts only signed rows, and never the half-read ones', () => {
+    const tally = tallyPledge([
+      row('p1', { signed: true, school: 'Angeles NHS', voice: 'You are not alone.' }),
+      row('p2', { signed: false, school: 'Angeles NHS', voice: 'typed but never signed' }),
+      row('p3', { school: 'Zaragoza NHS' }),
+      row('p4', { signed: true, school: 'Zaragoza NHS', voice: 'Ikaw ang catalyst.' }),
+    ]);
+    expect(tally.signed).toBe(2);
+    expect(tally.schools).toEqual(['Angeles NHS', 'Zaragoza NHS']);
+    // unsigned rows contribute no voice, no school, no count
+    expect(tally.voices.map((v) => v.voice)).toEqual(['Ikaw ang catalyst.', 'You are not alone.']);
+  });
+
+  it('matches schools case- and whitespace-insensitively, keeping the first spelling', () => {
+    const tally = tallyPledge([
+      row('p1', { signed: true, school: 'Bagong Silang NHS' }),
+      row('p2', { signed: true, school: 'bagong  silang nhs' }),
+    ]);
+    expect(tally.signed).toBe(2);
+    expect(tally.schools).toEqual(['Bagong Silang NHS']);
+  });
+
+  it('a signature with no school or no voice still counts as a signature', () => {
+    const tally = tallyPledge([row('p1', { signed: true }), row('p2', { signed: true, voice: '  ' })]);
+    expect(tally.signed).toBe(2);
+    expect(tally.schools).toEqual([]);
+    expect(tally.voices).toEqual([]);
+  });
+
+  it('ignores a truthy-but-not-true signed flag', () => {
+    // a stale client writing signed:"yes" must not inflate the wall
+    expect(tallyPledge([row('p1', { signed: 'yes' }), row('p2', { signed: 1 })]).signed).toBe(0);
   });
 });
 

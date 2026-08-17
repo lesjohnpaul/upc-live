@@ -52,16 +52,16 @@ export default function RoleSplit({
           <ul className="mt-2 space-y-1.5">
             {options.map((_, i) => (
               <li key={i} className="flex items-center gap-2">
-                <span className="w-4 font-sans text-xs font-bold text-cream-100/50">
+                <span className="w-4 font-sans text-xs font-bold text-[var(--fg)]/50">
                   {String.fromCharCode(65 + i)}
                 </span>
-                <span className="h-2 flex-1 overflow-hidden rounded-full bg-forest-800/80">
+                <span className="h-2 flex-1 overflow-hidden rounded-full bg-[var(--bg-raised-2)]/80">
                   <span
                     className={`block h-full rounded-full ${roleBar[role]} transition-[width] duration-500`}
                     style={{ width: `${(byRole[role][i] / max) * 100}%` }}
                   />
                 </span>
-                <span className="w-5 text-right font-sans text-xs tabular-nums text-cream-100/60">
+                <span className="w-5 text-right font-sans text-xs tabular-nums text-[var(--fg)]/60">
                   {byRole[role][i]}
                 </span>
               </li>

@@ -65,12 +65,12 @@ export default function StatBlock({
           {label}
         </p>
         {context && (
-          <p className="mx-auto mt-4 max-w-[46ch] font-sans text-[clamp(1rem,1.5vw,1.4rem)] opacity-75 [text-wrap:balance]">
+          <p className="mx-auto mt-4 max-w-[46ch] font-sans text-[length:var(--text-caption)] leading-snug opacity-[var(--dim-sub)] [text-wrap:balance]">
             {context}
           </p>
         )}
         {source && (
-          <p className="mt-6 font-sans text-[clamp(0.75rem,0.95vw,0.95rem)] uppercase tracking-[0.18em] opacity-50">
+          <p className="mt-6 font-sans text-[length:var(--text-source)] uppercase tracking-[0.18em] opacity-[var(--dim-source)]">
             {source}
           </p>
         )}

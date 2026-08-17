@@ -22,7 +22,7 @@ export default function ImageSlide({
           aria-label={slide.caption ?? 'Slide image'}
         />
         {slide.caption && (
-          <figcaption className="mt-6 max-w-[56ch] text-center font-sans text-[clamp(1rem,1.5vw,1.4rem)] opacity-75 [text-wrap:balance]">
+          <figcaption className="mt-6 max-w-[56ch] text-center font-sans text-[length:var(--text-caption)] leading-snug opacity-[var(--dim-sub)] [text-wrap:balance]">
             {slide.caption}
           </figcaption>
         )}

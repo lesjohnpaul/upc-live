@@ -198,6 +198,33 @@ export const demoModule: Module = {
     {
       kind: 'activity',
       activity: {
+        id: 'demo-pledge',
+        kind: 'pledge',
+        title: 'The Lead with Purpose Pledge',
+        intro:
+          'Nine lines. Tap each one you actually mean — the sign button will not unlock until you have read all nine. Then write the one sentence you would say to a friend under pressure.',
+        lines: [
+          'I choose to protect my health.',
+          'I choose to make informed decisions.',
+          'I choose not to pressure anyone into a harmful choice.',
+          'I choose to speak up instead of staying quiet.',
+          'I choose to support a friend who is struggling.',
+          'I choose healthy ways to handle stress.',
+          'I choose to use my influence on purpose.',
+          'I choose to help build a smoke-free, vape-free school.',
+          'I choose to lead with purpose.',
+        ],
+        schoolPrompt: 'Which school are you signing for?',
+        voicePrompt: 'One sentence to someone your age being pressured right now. What do you say?',
+        voicePlaceholder: 'Say it the way you would actually say it.',
+        signLabel: 'Sign the pledge',
+        signedHeadline: 'You signed it.',
+      },
+      note: 'Ask the room to stand before they open this. Then be quiet — nine taps is about forty seconds of reading, and that silence is the activity working.',
+    },
+    {
+      kind: 'activity',
+      activity: {
         id: 'demo-slider-after',
         kind: 'slider',
         phase: 'after',

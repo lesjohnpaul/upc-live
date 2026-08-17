@@ -103,7 +103,7 @@ export default function ActivitySlide({
             {activity.options.map((option, i) => (
               <li
                 key={i}
-                className="rounded-xl bg-[var(--bg-raised-2)]/70 px-6 py-3 font-sans text-[clamp(1rem,1.6vw,1.4rem)] ring-1 ring-[var(--fg)]/10"
+                className="rounded-xl bg-[var(--bg-raised-2)]/70 px-6 py-3 font-sans text-[length:var(--text-option)] leading-snug ring-1 ring-[var(--fg)]/10"
               >
                 <span className="mr-3 font-bold text-[var(--accent)]">{String.fromCharCode(65 + i)}</span>
                 {option}

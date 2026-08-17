@@ -146,6 +146,49 @@ export function groupBySchool(
   return [...schools.values()].sort((a, b) => a.name.localeCompare(b.name));
 }
 
+export type PledgeTally = {
+  /** rows whose `signed` flag is true — the number the room is watching */
+  signed: number;
+  /** distinct schools with at least one signature, alphabetical */
+  schools: string[];
+  /** One Voice lines from signed pledges, newest first (insertion order reversed) */
+  voices: { school: string; voice: string }[];
+};
+
+/**
+ * Lead with Purpose Pledge, tallied for the projector.
+ *
+ * Only signed rows count. Everything before the sign tap is a half-read
+ * pledge, and a wall that inflates its number the moment someone opens the
+ * card would make the ritual a lie. School names are matched the same
+ * case- and whitespace-insensitive way as groupBySchool, since they are typed
+ * by hand on two phones per school; the first spelling seen wins the display.
+ *
+ * Voices are capped by the caller, not here — this returns every one so the
+ * dashboard CSV keeps the full set.
+ */
+export function tallyPledge(responses: ResponseRow[]): PledgeTally {
+  const schools = new Map<string, string>();
+  const voices: { school: string; voice: string }[] = [];
+  let signed = 0;
+
+  for (const r of responses) {
+    const p = r.payload as { signed?: unknown; school?: unknown; voice?: unknown } | null;
+    if (p?.signed !== true) continue;
+    signed++;
+    const name = typeof p.school === 'string' ? p.school.trim().replace(/\s+/g, ' ') : '';
+    if (name && !schools.has(name.toLowerCase())) schools.set(name.toLowerCase(), name);
+    const voice = typeof p.voice === 'string' ? p.voice.trim().replace(/\s+/g, ' ') : '';
+    if (voice) voices.push({ school: name, voice });
+  }
+
+  return {
+    signed,
+    schools: [...schools.values()].sort((a, b) => a.localeCompare(b)),
+    voices: voices.reverse(),
+  };
+}
+
 /**
  * Merge a fetched snapshot with realtime events that were applied while the
  * snapshot query was in flight — events are newer, so they win on key

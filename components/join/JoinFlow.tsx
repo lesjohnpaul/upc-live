@@ -22,6 +22,7 @@ import FeedbackCard from './FeedbackCard';
 import ReflectionCard from './ReflectionCard';
 import ToleranceCard from './ToleranceCard';
 import PlanCard from './PlanCard';
+import PledgeCard from './PledgeCard';
 
 type Session = { id: string; code: string; day: number; active_activity: string | null };
 
@@ -230,6 +231,8 @@ function ActivityCard({
       return <ReflectionCard activity={activity} role={role} {...props} />;
     case 'plan':
       return <PlanCard activity={activity} role={role} {...props} />;
+    case 'pledge':
+      return <PledgeCard activity={activity} {...props} />;
   }
 }
 

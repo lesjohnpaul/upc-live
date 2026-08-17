@@ -18,7 +18,7 @@ export default function TitleSlide({
         {slide.title}
       </h1>
       {slide.subtitle && (
-        <p className="mt-8 max-w-[52ch] text-center font-sans text-[clamp(1.1rem,1.8vw,1.8rem)] leading-relaxed opacity-75 [text-wrap:balance]">
+        <p className="mt-8 max-w-[52ch] text-center font-sans text-[length:var(--text-sub)] leading-relaxed opacity-[var(--dim-sub)] [text-wrap:balance]">
           {slide.subtitle}
         </p>
       )}

@@ -147,6 +147,11 @@ body {
      green trail against its gold cursor, so this is not just a dim accent. */
   --accent-dim: var(--color-forest-400);
   --accent-hot: var(--color-gold-500);
+  /* the SECOND data series — 2nd place on a leaderboard, the "before" bar of a
+     confidence shift. It must read as distinct from --accent at a glance, not
+     as a dimmer version of it, or two series collapse into one on a projector. */
+  --accent-alt: var(--color-clay-400);
+  --accent-alt-soft: var(--color-clay-200);
   --shadow: var(--color-forest-950);
   --motion-fast: 200ms;
   --motion-slow: 450ms;
@@ -172,6 +177,17 @@ body {
      global raise clips deployed content. The Catalyst starts at the floor. */
   --text-eyebrow: clamp(0.8rem, 1.1vw, 1.15rem);
   --text-meta: clamp(0.95rem, 1.3vw, 1.2rem);
+  /* The supporting tiers under a heading: --text-sub is a subheading,
+     --text-caption is body description (a stat's context, an image caption),
+     --text-source is provenance. UPC keeps its shipped clamps exactly. */
+  --text-sub: clamp(1.1rem, 1.8vw, 1.8rem);
+  --text-caption: clamp(1rem, 1.5vw, 1.4rem);
+  --text-source: clamp(0.75rem, 0.95vw, 0.95rem);
+  /* poll options on a locked activity slide — the room reads these aloud
+     before the activity opens, so they are content, not chrome */
+  --text-option: clamp(1rem, 1.6vw, 1.4rem);
+  --dim-sub: 0.75;
+  --dim-source: 0.5;
 }
 
 [data-mode='rally'] {
@@ -185,6 +201,9 @@ body {
   --accent-pale: var(--color-teal-300);
   --accent-dim: var(--color-teal-600);
   --accent-hot: var(--color-coral-400);
+  /* coral against teal is the widest separation this palette offers */
+  --accent-alt: var(--color-coral-400);
+  --accent-alt-soft: var(--color-coral-300);
   --shadow: var(--color-ink-950);
   --motion-fast: 200ms;
   --motion-slow: 260ms;
@@ -201,6 +220,16 @@ body {
   --ambient-c: radial-gradient(50rem 36rem at 55% 45%, oklch(0.60 0.145 195 / 0.14), transparent 60%);
   --text-eyebrow: var(--text-stage-min);
   --text-meta: var(--text-stage-min);
+  /* Subheadings and descriptions carry real content for a teen audience, so
+     they sit on the readability floor and stop being dimmed to a whisper.
+     Provenance is the one deliberate exception — a citation is there to be
+     checkable, not read from the back row. */
+  --text-sub: var(--text-stage-min);
+  --text-caption: var(--text-stage-min);
+  --text-source: clamp(1.125rem, 1.5vw, 1.5rem);
+  --text-option: var(--text-stage-min);
+  --dim-sub: 0.9;
+  --dim-source: 0.75;
 }
 
 [data-mode='calm'] {
@@ -216,6 +245,10 @@ body {
   --accent-pale: var(--color-sage-500);
   --accent-dim: var(--color-sage-300);
   --accent-hot: var(--color-sage-500);
+  /* on a light ground the second series separates by weight, not hue — a
+     second saturated colour would shout, and calm exists to stop shouting */
+  --accent-alt: var(--color-slate-500);
+  --accent-alt-soft: var(--color-slate-700);
   --shadow: var(--color-slate-900);
   --motion-fast: 420ms;
   --motion-slow: 600ms;
@@ -235,4 +268,10 @@ body {
   --ambient-c: radial-gradient(50rem 36rem at 55% 45%, oklch(0.815 0.042 156 / 0.18), transparent 60%);
   --text-eyebrow: var(--text-stage-min);
   --text-meta: var(--text-stage-min);
+  --text-sub: var(--text-stage-min);
+  --text-caption: var(--text-stage-min);
+  --text-source: clamp(1.125rem, 1.5vw, 1.5rem);
+  --text-option: var(--text-stage-min);
+  --dim-sub: 0.9;
+  --dim-source: 0.75;
 }

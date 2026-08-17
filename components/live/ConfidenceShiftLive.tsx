@@ -19,7 +19,7 @@ function BigNumber({ value, gold = false }: { value: number; gold?: boolean }) {
       animate={{ scale: 1, opacity: 1 }}
       transition={{ type: 'spring', stiffness: 120, damping: 14 }}
       className={`block font-display text-[clamp(4rem,9vw,9rem)] font-medium leading-none tabular-nums ${
-        gold ? 'text-gold-300' : 'text-cream-100'
+        gold ? 'text-[var(--accent-soft)]' : 'text-[var(--fg)]'
       }`}
     >
       {value.toFixed(1)}
@@ -39,7 +39,7 @@ export function SliderAverageLive({
   return (
     <div className="flex w-full flex-col items-center text-center">
       <BigNumber value={liveAvg(rows)} gold />
-      <p className="mt-4 font-sans text-[clamp(1rem,1.5vw,1.3rem)] text-cream-100/60">
+      <p className="mt-4 font-sans text-[clamp(1rem,1.5vw,1.3rem)] text-[var(--fg)]/60">
         {activity.min} = {activity.minLabel ?? 'lowest'} · {activity.max} ={' '}
         {activity.maxLabel ?? 'highest'}
       </p>
@@ -72,7 +72,7 @@ export default function ConfidenceShiftLive({
     <div className="flex w-full flex-col items-center text-center">
       <div className="flex items-center justify-center gap-[clamp(2rem,5vw,5rem)]">
         <div>
-          <p className="font-sans text-sm font-bold uppercase tracking-[0.24em] text-cream-100/50">
+          <p className="font-sans text-sm font-bold uppercase tracking-[0.24em] text-[var(--fg)]/50">
             Before
           </p>
           <BigNumber value={shift.beforeAvg} />
@@ -83,13 +83,13 @@ export default function ConfidenceShiftLive({
           aria-hidden
           animate={{ x: [0, 14, 0] }}
           transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
-          className="font-display text-[clamp(2.5rem,5vw,5rem)] text-gold-400"
+          className="font-display text-[clamp(2.5rem,5vw,5rem)] text-[var(--accent)]"
         >
           →
         </motion.span>
 
         <div>
-          <p className="font-sans text-sm font-bold uppercase tracking-[0.24em] text-gold-300/80">
+          <p className="font-sans text-sm font-bold uppercase tracking-[0.24em] text-[var(--accent-soft)]/80">
             After
           </p>
           <BigNumber value={shift.afterAvg} gold />
@@ -103,8 +103,8 @@ export default function ConfidenceShiftLive({
         animate={{ opacity: 1, y: 0 }}
         className={`mt-8 inline-flex items-center gap-2 rounded-full px-6 py-2.5 font-sans text-[clamp(1.1rem,1.8vw,1.6rem)] font-bold ring-1 ${
           rising
-            ? 'bg-gold-400/15 text-gold-300 ring-gold-400/40'
-            : 'bg-clay-400/15 text-clay-200 ring-clay-400/40'
+            ? 'bg-[var(--accent)]/15 text-[var(--accent-soft)] ring-[var(--accent)]/40'
+            : 'bg-[var(--accent-alt)]/15 text-[var(--accent-alt-soft)] ring-[var(--accent-alt)]/40'
         }`}
       >
         {rising ? '▲' : '▼'} {rising ? '+' : ''}

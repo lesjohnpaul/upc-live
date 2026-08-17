@@ -23,7 +23,7 @@ export default function WordCloudLive({
   return (
     <div className="w-full max-w-5xl text-center">
       {words.length === 0 ? (
-        <p className="py-16 font-sans text-[clamp(1.1rem,1.8vw,1.6rem)] text-cream-100/50">
+        <p className="py-16 font-sans text-[clamp(1.1rem,1.8vw,1.6rem)] text-[var(--fg)]/50">
           Waiting for the first words…
         </p>
       ) : (
@@ -39,7 +39,7 @@ export default function WordCloudLive({
                 transition={{ type: 'spring', stiffness: 90, damping: 16 }}
                 style={{ fontSize: `${(1 + 3.5 * scale).toFixed(2)}rem` }}
                 className={`font-display font-medium leading-tight ${
-                  scale > 0.66 ? 'text-gold-300' : scale > 0.33 ? 'text-cream-100' : 'text-cream-100/70'
+                  scale > 0.66 ? 'text-[var(--accent-soft)]' : scale > 0.33 ? 'text-[var(--fg)]' : 'text-[var(--fg)]/70'
                 }`}
               >
                 {word}

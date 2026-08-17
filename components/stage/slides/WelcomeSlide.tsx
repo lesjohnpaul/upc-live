@@ -178,7 +178,7 @@ export default function WelcomeSlide({
         {slide.subtitle && (
           <motion.p
             variants={item}
-            className="mt-7 max-w-[52ch] font-sans text-[clamp(1.1rem,1.8vw,1.8rem)] leading-relaxed opacity-75 [text-wrap:balance]"
+            className="mt-7 max-w-[52ch] font-sans text-[length:var(--text-sub)] leading-relaxed opacity-[var(--dim-sub)] [text-wrap:balance]"
           >
             {slide.subtitle}
           </motion.p>

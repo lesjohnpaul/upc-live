@@ -1,5 +1,6 @@
 // ponytail: one-shot content integrity check, run via `npx tsx scripts/check-content.ts`
 import { days } from '../content/index';
+import { rolesFor } from '../lib/types';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -33,7 +34,9 @@ for (const day of days) {
       }
     });
     if (!mod.notes.processingQuestions.length) err(`${mod.id}: no processing questions`);
-    for (const role of ['head_teacher','nurse_dentist','counselor','admin'] as const)
+    // a module owes an example to the roles ITS OWN course puts in the room —
+    // The Catalyst seats SSLG pairs, not the adult four
+    for (const role of rolesFor(mod.course))
       if (!mod.notes.examples[role]) err(`${mod.id}: missing example for ${role}`);
   }
 }

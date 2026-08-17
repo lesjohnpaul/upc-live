@@ -10,6 +10,7 @@ import QnAWall from './QnAWall';
 import FeedbackLive from './FeedbackLive';
 import ToleranceLive from './ToleranceLive';
 import PlanWallLive from './PlanWallLive';
+import PledgeWallLive from './PledgeWallLive';
 import { useLiveResponses } from './useLiveResponses';
 import AnswerCount from './AnswerCount';
 
@@ -20,7 +21,7 @@ function DragDropLive({ activity, sessionId }: { activity: DragDropActivity; ses
   return (
     <div className="flex flex-col items-center gap-4 py-10 text-center">
       <span aria-hidden className="text-[clamp(2.5rem,5vw,4rem)]">🧩</span>
-      <p className="font-sans text-[clamp(1.1rem,1.8vw,1.6rem)] text-cream-100/70">
+      <p className="font-sans text-[clamp(1.1rem,1.8vw,1.6rem)] text-[var(--fg)]/70">
         Participants are still sorting…
       </p>
       <AnswerCount answered={rows.length} total={participantCount} />
@@ -49,10 +50,10 @@ function LetterCountLive({
   return (
     <div className="flex flex-col items-center gap-6 py-10 text-center">
       <span aria-hidden className="text-[clamp(3rem,7vw,6rem)]">✉️</span>
-      <p className="font-display text-[clamp(2.5rem,6vw,5rem)] font-medium leading-none text-cream-50">
+      <p className="font-display text-[clamp(2.5rem,6vw,5rem)] font-medium leading-none text-[var(--fg)]">
         {written} {written === 1 ? 'letter' : 'letters'} written
       </p>
-      <p className="max-w-[28ch] font-sans text-[clamp(1.1rem,1.8vw,1.6rem)] text-cream-100/70">
+      <p className="max-w-[28ch] font-sans text-[clamp(1.1rem,1.8vw,1.6rem)] text-[var(--fg)]/70">
         Their answers stay private. Each letter is theirs alone.
       </p>
       <AnswerCount answered={rows.length} total={participantCount} label="started" />
@@ -80,7 +81,7 @@ export default function LiveResults({
               type="button"
               onClick={() => setReveal((r) => !r)}
               aria-pressed={reveal}
-              className="mt-5 rounded-full bg-gold-400/15 px-5 py-2 font-sans text-sm font-bold text-gold-300 ring-1 ring-gold-400/40 transition-colors hover:bg-gold-400/25"
+              className="mt-5 rounded-full bg-[var(--accent)]/15 px-5 py-2 font-sans text-sm font-bold text-[var(--accent-soft)] ring-1 ring-[var(--accent)]/40 transition-colors hover:bg-[var(--accent)]/25"
             >
               {reveal ? 'Hide answer' : 'Show correct answer'}
             </button>
@@ -109,5 +110,7 @@ export default function LiveResults({
       return <LetterCountLive activity={activity} sessionId={sessionId} />;
     case 'plan':
       return <PlanWallLive activity={activity} sessionId={sessionId} />;
+    case 'pledge':
+      return <PledgeWallLive activity={activity} sessionId={sessionId} />;
   }
 }

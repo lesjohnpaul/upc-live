@@ -140,6 +140,31 @@ export type PlanActivity = {
   whenOptions: string[];
 };
 
+/**
+ * The Lead with Purpose Pledge — the closing ritual. Every line must be tapped
+ * individually before the sign button unlocks, so the pledge is read rather
+ * than scrolled past; then the participant names their school and writes the
+ * one sentence they would say to a friend under pressure. That last field is
+ * the outline's "One Voice" activity folded into the same card, because both
+ * beats are the same moment and two cards would split the room's attention.
+ * Payload: `{ lines: number[], school, voice, signed }`.
+ */
+export type PledgeActivity = {
+  id: string;
+  kind: 'pledge';
+  title: string;
+  intro?: string;
+  /** the pledge itself, one commitment per line — all must be tapped */
+  lines: string[];
+  schoolPrompt: string;
+  /** "One Voice": one sentence to a young person being pressured */
+  voicePrompt: string;
+  voicePlaceholder?: string;
+  signLabel: string;
+  /** confirmation shown on the phone once signed */
+  signedHeadline: string;
+};
+
 // --- Reflection → personalised letter ---
 
 export type Archetype =
@@ -194,7 +219,8 @@ export type Activity =
   | ToleranceActivity
   | FeedbackActivity
   | ReflectionActivity
-  | PlanActivity;
+  | PlanActivity
+  | PledgeActivity;
 
 // --- Slides ---
 

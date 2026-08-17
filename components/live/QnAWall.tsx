@@ -50,13 +50,13 @@ export default function QnAWall({
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.94 }}
                   transition={{ type: 'spring', stiffness: 90, damping: 18 }}
-                  className="break-inside-avoid rounded-2xl bg-forest-900/80 p-5 ring-1 ring-cream-100/10"
+                  className="break-inside-avoid rounded-2xl bg-[var(--bg-raised)]/80 p-5 ring-1 ring-[var(--fg)]/10"
                 >
                   <p className="font-display text-[clamp(1.05rem,1.6vw,1.4rem)] font-medium leading-snug">
                     {(r.payload as QnaPayload).question as string}
                   </p>
                   {p && (
-                    <p className="mt-3 font-sans text-sm text-cream-100/50">
+                    <p className="mt-3 font-sans text-[length:var(--text-meta)] text-[var(--fg)]/50">
                       {p.nickname || ROLES[p.role]}
                     </p>
                   )}

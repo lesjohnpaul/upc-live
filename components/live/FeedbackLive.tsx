@@ -13,9 +13,9 @@ const avg = (ns: number[]) => (ns.length ? ns.reduce((a, b) => a + b, 0) / ns.le
 function StarMeter({ value }: { value: number }) {
   return (
     <span aria-hidden className="relative inline-block font-sans leading-none">
-      <span className="text-cream-100/20">★★★★★</span>
+      <span className="text-[var(--fg)]/20">★★★★★</span>
       <span
-        className="absolute inset-0 overflow-hidden text-gold-400"
+        className="absolute inset-0 overflow-hidden text-[var(--accent)]"
         style={{ width: `${(value / 5) * 100}%` }}
       >
         ★★★★★
@@ -57,10 +57,10 @@ export default function FeedbackLive({
           initial={reduce ? false : { scale: 0.85, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="font-display text-[clamp(4rem,11vw,9rem)] font-medium leading-none text-cream-50"
+          className="font-display text-[clamp(4rem,11vw,9rem)] font-medium leading-none text-[var(--fg)]"
         >
           {overall ? overall.toFixed(1) : '—'}
-          <span className="text-[0.35em] text-cream-100/40"> / 5</span>
+          <span className="text-[0.35em] text-[var(--fg)]/40"> / 5</span>
         </motion.p>
         <span className="mt-2 text-[clamp(1.5rem,3vw,2.5rem)] tracking-[0.15em]">
           <StarMeter value={overall} />
@@ -70,13 +70,13 @@ export default function FeedbackLive({
       <ul className="w-full max-w-3xl space-y-3">
         {perDimension.map((d) => (
           <li key={d.id} className="flex items-center gap-4">
-            <span className="min-w-0 flex-1 truncate font-sans text-[clamp(0.95rem,1.5vw,1.35rem)] text-cream-100/75">
+            <span className="min-w-0 flex-1 truncate font-sans text-[clamp(0.95rem,1.5vw,1.35rem)] text-[var(--fg)]/75">
               {d.label}
             </span>
             <span className="text-[clamp(1rem,1.7vw,1.5rem)] tracking-[0.12em]">
               <StarMeter value={d.value} />
             </span>
-            <span className="w-12 text-right font-display text-[clamp(1rem,1.7vw,1.5rem)] font-medium text-gold-300">
+            <span className="w-12 text-right font-display text-[clamp(1rem,1.7vw,1.5rem)] font-medium text-[var(--accent-soft)]">
               {d.value ? d.value.toFixed(1) : '—'}
             </span>
           </li>
@@ -85,7 +85,7 @@ export default function FeedbackLive({
 
       <div className="flex flex-col items-center gap-2">
         <AnswerCount answered={rows.length} total={participantCount} />
-        <p className="font-sans text-[clamp(0.85rem,1.2vw,1.1rem)] text-cream-100/50">
+        <p className="font-sans text-[clamp(0.85rem,1.2vw,1.1rem)] text-[var(--fg)]/50">
           {comments === 0
             ? 'Written comments stay private — the trainer reads them after.'
             : `${comments} written ${comments === 1 ? 'comment' : 'comments'} — private, for the trainer only.`}

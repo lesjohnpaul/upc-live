@@ -8,15 +8,15 @@ import { useLiveResponses } from './useLiveResponses';
 import AnswerCount from './AnswerCount';
 
 const medal: Record<number, string> = {
-  0: 'bg-gold-400/15 ring-gold-400/50',
-  1: 'bg-cream-100/10 ring-cream-200/40',
-  2: 'bg-clay-400/15 ring-clay-400/50',
+  0: 'bg-[var(--accent)]/15 ring-[var(--accent)]/50',
+  1: 'bg-[var(--fg)]/10 ring-[var(--fg-muted)]/40',
+  2: 'bg-[var(--accent-alt)]/15 ring-[var(--accent-alt)]/50',
 };
 
 const rankText: Record<number, string> = {
-  0: 'text-gold-300',
-  1: 'text-cream-200',
-  2: 'text-clay-200',
+  0: 'text-[var(--accent-soft)]',
+  1: 'text-[var(--fg-muted)]',
+  2: 'text-[var(--accent-alt-soft)]',
 };
 
 /** Top 10 quiz scores with animated reorder; gold/silver/bronze top 3. */
@@ -34,7 +34,7 @@ export default function QuizLeaderboardLive({
   return (
     <div className="w-full max-w-3xl text-center">
       {board.length === 0 ? (
-        <p className="py-16 font-sans text-[clamp(1.1rem,1.8vw,1.6rem)] text-cream-100/50">
+        <p className="py-16 font-sans text-[clamp(1.1rem,1.8vw,1.6rem)] text-[var(--fg)]/50">
           Waiting for the first answers…
         </p>
       ) : (
@@ -49,12 +49,12 @@ export default function QuizLeaderboardLive({
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ type: 'spring', stiffness: 90, damping: 18 }}
                 className={`flex items-center gap-4 rounded-xl px-5 py-3 ring-1 ${
-                  medal[rank] ?? 'bg-forest-900/70 ring-cream-100/10'
+                  medal[rank] ?? 'bg-[var(--bg-raised)]/70 ring-[var(--fg)]/10'
                 }`}
               >
                 <span
                   className={`w-8 font-display text-[clamp(1.2rem,2vw,1.8rem)] font-medium tabular-nums ${
-                    rankText[rank] ?? 'text-cream-100/50'
+                    rankText[rank] ?? 'text-[var(--fg)]/50'
                   }`}
                 >
                   {rank + 1}
@@ -65,11 +65,11 @@ export default function QuizLeaderboardLive({
                 {p && <RoleBadge role={p.role} className="min-h-7 px-3 !text-xs" />}
                 <span
                   className={`font-display text-[clamp(1.2rem,2vw,1.8rem)] font-medium tabular-nums ${
-                    rankText[rank] ?? 'text-cream-100/80'
+                    rankText[rank] ?? 'text-[var(--fg)]/80'
                   }`}
                 >
                   {score}
-                  <span className="ml-1 font-sans text-sm text-cream-100/50">
+                  <span className="ml-1 font-sans text-sm text-[var(--fg)]/50">
                     /{activity.questions.length}
                   </span>
                 </span>

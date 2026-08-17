@@ -13,7 +13,13 @@ export default function AnalogySlide({
 }) {
   return (
     <SlideShell mode={mode}>
-      <AnalogyCard title={slide.title} front={slide.front} back={slide.back} image={slide.image} />
+      <AnalogyCard
+        title={slide.title}
+        front={slide.front}
+        back={slide.back}
+        image={slide.image}
+        mode={mode}
+      />
     </SlideShell>
   );
 }
