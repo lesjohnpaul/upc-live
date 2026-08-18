@@ -122,6 +122,33 @@ body {
   }
 }
 
+/* The Catalyst's ambient motif layer (components/ui/FloatingMotifs.tsx).
+   The plates are rendered on pure black, so `screen` drops their ground and
+   leaves only the glow — no alpha channel needed, and the soft edges blend
+   far better than a hard matte cutout would. Opacity is deliberately low:
+   this is atmosphere behind the copy, and the standing audience note on these
+   decks is "bigger letters", never "more going on". The reduced-motion reset
+   above already flattens the drift, so there is no second guard here. */
+.catalyst-motif {
+  mix-blend-mode: screen;
+  opacity: 0.24;
+  will-change: transform;
+  transform: rotate(var(--motif-rot));
+  animation-name: catalyst-motif-drift;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes catalyst-motif-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(var(--motif-rot));
+  }
+  50% {
+    transform: translate3d(0, var(--motif-lift), 0) rotate(calc(var(--motif-rot) + 3deg));
+  }
+}
+
 /* ---- Mode swap ----
    Components read the semantic aliases only. Setting data-mode on any
    wrapper remaps the whole subtree — never fork a component per mode.

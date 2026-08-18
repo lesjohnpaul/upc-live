@@ -1,6 +1,7 @@
 'use client';
 
 import type { StageMode } from '@/lib/types';
+import FloatingMotifs from './FloatingMotifs';
 
 type SlideShellProps = {
   children: React.ReactNode;
@@ -39,6 +40,8 @@ export default function SlideShell({ children, mode, dim, className = '' }: Slid
           <div aria-hidden className="absolute inset-0" style={{ background: 'var(--scrim)' }} />
         </>
       )}
+      {/* ambient motif layer — above the ground and the image scrim, below the copy */}
+      <FloatingMotifs mode={mode} />
       <div className="relative z-10 flex w-full max-w-[92rem] flex-col items-center">
         {children}
       </div>
