@@ -245,7 +245,7 @@ export const module1: Module = {
       bullets: [
         'The part that wants the reward is fully online at your age.',
         'The part that stops you is still being built.',
-        'That gap is normal, temporary — and exactly why the first offer usually comes now.',
+        'Normal, temporary — and why the first offer usually comes now.',
       ],
       note: 'The outline\'s "why are young people vulnerable", said without insult. Be careful here: this explains, it never excuses. Say it: "This is not a licence to be reckless. It is the reason you should decide what you will do BEFORE you are standing in the situation — because in the moment, your accelerator is louder than your brakes." That sentence is the bridge into Act 4.',
     },
