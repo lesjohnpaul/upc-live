@@ -190,15 +190,13 @@ export const module1: Module = {
       activity: {
         id: 'catalyst-m1-poll-threat',
         kind: 'poll',
-        prompt: 'Which one is the biggest threat in YOUR school right now?',
-        options: [
-          'Alak (alcohol)',
-          'Vape / sigarilyo',
-          'Marijuana',
-          'Shabu',
-          'Rugby / solvents',
-        ],
+        prompt: 'Biggest threat in YOUR school right now?',
+        options: ['Alak (alcohol)', 'Vape / sigarilyo', 'Shabu', 'Rugby / solvents'],
       },
+      // Four options, not five: at 1920x1080 a five-option poll card runs past
+      // the bottom edge and the shell clips it. Marijuana was the one to drop —
+      // it is the least load-bearing here, since shabu already plays the
+      // "feels most dangerous" role that makes the perception gap land.
       note: 'Opinion poll — there is deliberately no correct answer, and do not let the room think one exists. Read the spread aloud. Whatever wins, name the gap: what feels most dangerous and what is most available are rarely the same thing, and Part 5 will show them the numbers. Reworded from UPC 2 Module 5, which asked staff about "your students" — here the room is answering about itself, which is a very different question. Do not ask who uses. Ever.',
     },
     {
