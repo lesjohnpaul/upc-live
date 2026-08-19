@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import Link from 'next/link';
 import { days } from '@/content';
 
@@ -63,26 +64,29 @@ export default function Home() {
         <Link href="/handbook" className="transition-colors hover:text-gold-300">
           User&apos;s Handbook
         </Link>
-        <span className="flex items-center gap-2">
-          Dashboards:
-          <Link href="/dashboard/UPC1" className="transition-colors hover:text-gold-300">
-            UPC1
-          </Link>
-          ·
-          <Link href="/dashboard/UPC2" className="transition-colors hover:text-gold-300">
-            UPC2
-          </Link>
-        </span>
-        <span className="flex items-center gap-2">
-          Join:
-          <Link href="/join/UPC1" className="transition-colors hover:text-gold-300">
-            UPC1
-          </Link>
-          ·
-          <Link href="/join/UPC2" className="transition-colors hover:text-gold-300">
-            UPC2
-          </Link>
-        </span>
+        {/* Derived from `days`, not hardcoded — these two rows listed UPC1 and
+            UPC2 only, so The Catalyst was reachable on the stage chooser above
+            but had no dashboard or join link anywhere on the site. A fourth
+            course now follows automatically. */}
+        {[
+          { label: 'Dashboards', base: '/dashboard' },
+          { label: 'Join', base: '/join' },
+        ].map(({ label, base }) => (
+          <span key={label} className="flex items-center gap-2">
+            {label}:
+            {days.map((day, i) => (
+              <Fragment key={day.course}>
+                {i > 0 && <span aria-hidden>·</span>}
+                <Link
+                  href={`${base}/${day.course.toUpperCase()}`}
+                  className="transition-colors hover:text-gold-300"
+                >
+                  {day.course.toUpperCase()}
+                </Link>
+              </Fragment>
+            ))}
+          </span>
+        ))}
       </nav>
     </main>
   );
