@@ -26,6 +26,15 @@ export function getStoredParticipant(sessionCode: string): StoredParticipant | n
   }
 }
 
+export function clearStoredParticipant(sessionCode: string): void {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.removeItem(key(sessionCode));
+  } catch {
+    // ignore — worst case the stale id is re-detected next load
+  }
+}
+
 export function storeParticipant(sessionCode: string, participant: StoredParticipant): void {
   if (typeof window === 'undefined') return;
   try {

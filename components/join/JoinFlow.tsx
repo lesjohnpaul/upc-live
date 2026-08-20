@@ -5,6 +5,7 @@ import { getSupabase } from '@/lib/supabase';
 import { resilientChannel } from '@/lib/realtime';
 import { ROLES, rolesFor, type Activity, type Role } from '@/lib/types';
 import {
+  clearStoredParticipant,
   getStoredParticipant,
   storeParticipant,
   type StoredParticipant,
@@ -248,6 +249,35 @@ export default function JoinFlow({ session }: { session: Session }) {
     setParticipant(stored);
     if (stored) setJustReturned(true);
   }, [session.code]);
+
+  // A "fresh run" reset on the dashboard deletes the participant rows. A
+  // stale stored id then makes EVERY send 409 on the participant FK, with
+  // "tap to try again" looping forever. Verify the row still exists — on
+  // mount and on every reconnect/unlock refetch (tick) — and drop back to
+  // onboarding when it is gone.
+  useEffect(() => {
+    if (!participant) return;
+    let on = true;
+    void (async () => {
+      try {
+        const { data, error } = await getSupabase()
+          .from('participants')
+          .select('id')
+          .eq('id', participant.id)
+          .maybeSingle();
+        if (on && !error && data === null) {
+          clearStoredParticipant(session.code);
+          setParticipant(null);
+          setJustReturned(false);
+        }
+      } catch {
+        // weak wifi: keep the stored participant; sends surface their own errors
+      }
+    })();
+    return () => {
+      on = false;
+    };
+  }, [participant, session.code, tick]);
 
   if (participant === undefined) return <main className="min-h-svh bg-cream-50" />;
   if (participant === null) return <Onboarding session={session} onJoined={setParticipant} />;
