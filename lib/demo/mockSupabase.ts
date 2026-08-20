@@ -144,8 +144,17 @@ function buildSeed(client: MockClient) {
   WORDS.forEach((word, i) => push(i, 'demo-wordcloud', { word }, 7));
   QUIZ.forEach((answers, i) => push(i, 'demo-quiz', { answers }, 6));
   BEFORE.forEach((value, i) => push(i, 'demo-slider-before', { value }, 5));
-  // dragdrop is count-only on the stage — a handful of submissions is enough
-  [0, 1, 2, 3, 4, 5, 6].forEach((i) => push(i, 'demo-dragdrop', { placed: true }, 4));
+  // correct key is [0,1,0,1,0,1]; a few wrong placements so the stage's
+  // answer reveal shows a believable per-item % correct
+  [
+    [0, 1, 0, 1, 0, 1],
+    [0, 1, 0, 1, 0, 1],
+    [0, 1, 1, 1, 0, 1],
+    [0, 1, 0, 1, 1, 1],
+    [0, 0, 0, 1, 0, 1],
+    [0, 1, 0, 1, 0, 1],
+    [1, 1, 0, 1, 0, 0],
+  ].forEach((placements, i) => push(i, 'demo-dragdrop', { placements }, 4));
   QUESTIONS.forEach((question, i) => push(i, 'demo-qna', { question, answered: i === 0 }, 3));
   // Beat the Brain writes one row per player, at the reveal — so these are
   // simply the people who tapped all the way through.
